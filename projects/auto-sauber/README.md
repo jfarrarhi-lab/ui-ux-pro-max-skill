@@ -8,7 +8,7 @@ selbst gehostete Fonts (Manrope + Inter). Keine Animations-Library: Reveals,
 Parallaxe und Ken Burns laufen über CSS und IntersectionObserver.
 
 ```bash
-npm install
+npm install      # Node >= 20.19
 npm run images   # Bilder laden + AVIF/WebP in 640/1280/1920 px erzeugen (einmalig)
 npm run dev      # http://localhost:5173
 npm run build    # statischer Build in dist/, auf jedem Webspace hostbar
