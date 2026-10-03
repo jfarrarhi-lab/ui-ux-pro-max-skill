@@ -12,6 +12,7 @@ npm install      # Node >= 20.19
 npm run images   # Bilder laden + AVIF/WebP in 640/1280/1920 px erzeugen (einmalig)
 npm run dev      # http://localhost:5173
 npm run build    # statischer Build in dist/, auf jedem Webspace hostbar
+npm run build:single  # alles in EINER Datei: dist-single/index.html
 ```
 
 `npm run images` ist für die Performance wichtig: Ohne den Schritt lädt die
