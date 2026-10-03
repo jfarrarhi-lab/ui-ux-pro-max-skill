@@ -11,9 +11,10 @@
 import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-const root = path.resolve(import.meta.dirname, "..");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(root, "public/images");
 const cacheDir = path.join(root, ".image-cache");
 const manifestPath = path.join(root, "src/content/images.local.json");
