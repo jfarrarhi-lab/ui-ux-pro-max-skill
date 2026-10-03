@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Car Repair Kampas – Kfz-Werkstatt in Würzburg</title>
+  <meta name="description" content="Car Repair Kampas in Würzburg – professionelle Autoreparatur, Inspektion, Bremsen-, Reifen-, Öl- und Klimaservice sowie TÜV-Vorbereitung für alle Marken.">
+  <meta name="theme-color" content="#07080a">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:title" content="Car Repair Kampas – Kfz-Werkstatt in Würzburg">
+  <meta property="og:description" content="Reparatur, Wartung, Diagnose und Service für alle Marken. Hertzstraße 12, 97076 Würzburg.">
+  <meta property="og:image" content="assets/images/hero.jpg">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2307080a'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23f3f4f6' stroke-width='2'/%3E%3Cpath d='M10 22 22 10' stroke='%23ff5b2e' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+  <!-- Schrift: Inter (einzige externe Abhängigkeit, mit System-Fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Schema.org: LocalBusiness / AutoRepair -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    "name": "Car Repair Kampas",
+    "image": "assets/images/hero.jpg",
+    "telephone": "+49 160 8187040",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Hertzstraße 12",
+      "postalCode": "97076",
+      "addressLocality": "Würzburg",
+      "addressCountry": "DE"
+    },
+    "hasMap": "https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic",
+    "areaServed": { "@type": "City", "name": "Würzburg" },
+    "makesOffer": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Autoreparatur aller Marken" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bremsenservice" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reifenservice" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Inspektion" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ölservice" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Klimaservice" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "TÜV-/HU-Vorbereitung" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Fahrzeugdiagnose und Fehlersuche" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wartung und Instandhaltung" } }
+    ]
+  }
+  </script>
+  <!-- Hinweis: aggregateRating wird bewusst NICHT ins Schema geschrieben.
+       Google wertet selbst eingetragene Bewertungen im LocalBusiness-Markup nicht aus
+       (Richtlinie „self-serving reviews“). Die Sterne erscheinen über das Google-Unternehmensprofil. -->
+
+  <script>
+    // Läuft vor dem Rendern: aktiviert JS-abhängige Animationen + Bild-Fallback-Helfer.
+    document.documentElement.classList.add('js');
+    function imgOk(img) { var m = img.closest('.media'); if (m) m.classList.add('is-loaded'); }
+    function imgFail(img) { var m = img.closest('.media'); if (m) m.classList.add('is-empty'); img.remove(); }
+  </script>
+
+  <style>
+    /* =========================================================
+       1. TOKENS
+       ========================================================= */
+    :root {
+      --bg: #07080a;
+      --bg-2: #0b0d10;
+      --graphite: #121418;
+      --graphite-2: #181b20;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-2: rgba(255, 255, 255, 0.14);
+      --line-3: rgba(255, 255, 255, 0.22);
+      --text: #f3f4f6;
+      --muted: #a1a6ae;
+      --dim: #6c727b;
+      --accent: #ff5b2e;
+      --accent-soft: rgba(255, 91, 46, 0.14);
+      --accent-glow: rgba(255, 91, 46, 0.35);
+      --metal: linear-gradient(180deg, #ffffff 0%, #d9dce1 45%, #8d939c 100%);
+      --glass: rgba(16, 18, 22, 0.58);
+      --glass-strong: rgba(12, 14, 17, 0.82);
+
+      --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+
+      --gutter: clamp(16px, 4vw, 56px);
+      --maxw: 1320px;
+      --section: clamp(88px, 11vw, 168px);
+      --radius: 18px;
+      --radius-sm: 12px;
+
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --nav-h: 76px;
+    }
+
+    /* =========================================================
+       2. BASE
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--nav-h) + 12px);
+      overflow-x: clip;
+      background: var(--bg);
+    }
+    body {
+      margin: 0;
+      overflow-x: clip;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: clamp(15px, 0.35vw + 14px, 17px);
+      line-height: 1.65;
+      font-feature-settings: "cv11", "ss01", "ss03";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    @supports not (overflow: clip) { html, body { overflow-x: hidden; } }
+    html.menu-open, html.menu-open body { overflow: hidden; }
+
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; background: none; border: 0; padding: 0; }
+    h1, h2, h3, p, ul, ol, figure { margin: 0; }
+    ul, ol { padding: 0; list-style: none; }
+    ::selection { background: var(--accent); color: #0b0b0c; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+    .container { width: 100%; max-width: calc(var(--maxw) + var(--gutter) * 2); margin-inline: auto; padding-inline: var(--gutter); }
+    .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip-link { position: fixed; top: 12px; left: 12px; z-index: 200; padding: 10px 16px; border-radius: 10px; background: var(--text); color: var(--bg); font-weight: 600; transform: translateY(-160%); transition: transform .3s var(--ease); }
+    .skip-link:focus { transform: none; }
+    .icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    /* Film grain – sehr dezent, rein CSS */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 150; pointer-events: none; opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* =========================================================
+       3. TYPOGRAFIE
+       ========================================================= */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--muted);
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--accent); }
+    .display {
+      font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: .96;
+      font-size: clamp(2.3rem, 6.2vw, 5.6rem);
+    }
+    .h2 {
+      font-weight: 800; text-transform: uppercase; letter-spacing: .015em; line-height: 1;
+      font-size: clamp(2rem, 4.6vw, 4.1rem);
+    }
+    .metal { background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .accent-dot { color: var(--accent); }
+    .lead { color: var(--muted); font-size: clamp(1.02rem, .5vw + .9rem, 1.2rem); max-width: 650px; line-height: 1.6; }
+    .prose { color: var(--muted); max-width: 650px; }
+    .prose p + p { margin-top: 1.1em; }
+    .prose strong { color: var(--text); font-weight: 600; }
+
+    /* Maskierte Zeilen (Headline-Reveal) */
+    .mask-line { display: block; overflow: hidden; padding: .16em 0 .08em; margin: -.16em 0 -.08em; }
+    .mask-line > span { display: block; }
+    .js .mask-line > span { transform: translate3d(0, 108%, 0); transition: transform 1.1s var(--ease); }
+    .js .in .mask-line > span, .js .in.mask-line > span { transform: none; }
+    .js .in .mask-line:nth-child(2) > span { transition-delay: .09s; }
+    .js .in .mask-line:nth-child(3) > span { transition-delay: .18s; }
+
+    /* Scroll-Reveal */
+    .js .reveal { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity .9s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    /* =========================================================
+       4. BUTTONS
+       ========================================================= */
+    .btn {
+      --btn-bg: transparent; --btn-fg: var(--text); --btn-bd: var(--line-2);
+      position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+      min-height: 54px; padding: 0 26px; border-radius: 999px;
+      background: var(--btn-bg); color: var(--btn-fg); border: 1px solid var(--btn-bd);
+      font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap;
+      overflow: hidden; isolation: isolate;
+      transition: border-color .4s var(--ease), color .4s var(--ease), background-color .4s var(--ease), transform .4s var(--ease);
+    }
+    .btn::before {
+      content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+      background: var(--accent); transform: translate3d(0, 101%, 0); transition: transform .55s var(--ease);
+    }
+    .btn__label { position: relative; display: block; overflow: hidden; line-height: 1.3; }
+    .btn__label > span { display: block; transition: transform .55s var(--ease); }
+    .btn__label > span::after { content: attr(data-text); position: absolute; left: 0; top: 100%; }
+    .btn svg { width: 18px; height: 18px; flex: none; transition: transform .5s var(--ease); }
+    .btn:hover .btn__label > span, .btn:focus-visible .btn__label > span { transform: translate3d(0, -100%, 0); }
+    .btn:hover svg.arrow { transform: translateX(4px); }
+    .btn:active { transform: scale(.98); }
+
+    .btn--primary { --btn-bg: #f3f4f6; --btn-fg: #0a0b0d; --btn-bd: #f3f4f6; }
+    .btn--primary:hover, .btn--primary:focus-visible { --btn-fg: #0a0b0d; --btn-bd: var(--accent); }
+    .btn--primary:hover::before, .btn--primary:focus-visible::before { transform: none; }
+
+    .btn--ghost { --btn-bg: rgba(255,255,255,.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .btn--ghost::before { background: rgba(255,255,255,.08); }
+    .btn--ghost:hover { --btn-bd: var(--line-3); }
+    .btn--ghost:hover::before { transform: none; }
+
+    .btn--accent { --btn-bg: var(--accent); --btn-fg: #0a0b0d; --btn-bd: var(--accent); }
+    .btn--accent::before { background: #f3f4f6; }
+    .btn--accent:hover::before { transform: none; }
+    .btn--sm { min-height: 44px; padding: 0 20px; font-size: 12px; }
+
+    .text-link { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .08em; color: var(--text); }
+    .text-link svg { width: 16px; height: 16px; transition: transform .45s var(--ease); }
+    .text-link:hover svg { transform: translate(3px, -3px); }
+    .text-link span { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .5s var(--ease); }
+    .text-link:hover span { background-size: 100% 1px; }
+
+    /* =========================================================
+       5. NAVIGATION
+       ========================================================= */
+    .nav {
+      position: fixed; inset: 0 0 auto; z-index: 100; height: var(--nav-h);
+      transition: background-color .5s var(--ease), border-color .5s var(--ease), backdrop-filter .5s var(--ease), height .5s var(--ease);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.is-scrolled {
+      --nav-h: 66px;
+      background: rgba(9, 10, 12, .62);
+      backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+      border-bottom-color: var(--line);
+    }
+    .nav__inner { height: 100%; display: flex; align-items: center; gap: 32px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; flex: none; }
+    .brand__mark { width: 34px; height: 34px; }
+    .brand__mark .ring { transition: transform 1.2s var(--ease); transform-origin: 50% 50%; }
+    .brand:hover .brand__mark .ring { transform: rotate(90deg); }
+    .brand__text { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+    .brand__text span { font-weight: 400; color: var(--muted); }
+    .brand__text strong { font-weight: 800; color: var(--text); }
+
+    .nav__links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+    .nav__links a {
+      position: relative; padding: 10px 14px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); transition: color .35s var(--ease);
+    }
+    .nav__links a::after {
+      content: ""; position: absolute; left: 14px; right: 14px; bottom: 4px; height: 1px; background: var(--accent);
+      transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease);
+    }
+    .nav__links a:hover, .nav__links a.is-active { color: var(--text); }
+    .nav__links a:hover::after, .nav__links a.is-active::after { transform: scaleX(1); transform-origin: left; }
+
+    .burger { display: none; position: relative; width: 48px; height: 48px; margin-left: auto; border-radius: 50%; border: 1px solid var(--line-2); background: rgba(255,255,255,.03); }
+    .burger span { position: absolute; left: 14px; right: 14px; height: 1.5px; background: var(--text); border-radius: 2px; transition: transform .55s var(--ease), top .55s var(--ease); }
+    .burger span:nth-child(1) { top: 19px; }
+    .burger span:nth-child(2) { top: 27px; }
+    .menu-open .burger span:nth-child(1) { top: 23px; transform: rotate(45deg); }
+    .menu-open .burger span:nth-child(2) { top: 23px; transform: rotate(-45deg); }
+
+    /* Mobile-Menü */
+    .mmenu {
+      position: fixed; inset: 0; z-index: 90; display: flex; flex-direction: column;
+      padding: calc(var(--nav-h) + 28px) var(--gutter) calc(28px + env(safe-area-inset-bottom));
+      background: radial-gradient(120% 70% at 100% 0%, rgba(255,91,46,.10), transparent 60%), rgba(7, 8, 10, .97);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      clip-path: circle(0% at calc(100% - var(--gutter) - 24px) calc(var(--nav-h) / 2));
+      visibility: hidden;
+      transition: clip-path .8s var(--ease-in-out), visibility 0s linear .8s;
+      overflow-y: auto;
+    }
+    .menu-open .mmenu { clip-path: circle(150% at calc(100% - var(--gutter) - 24px) calc(var(--nav-h) / 2)); visibility: visible; transition: clip-path .9s var(--ease-in-out), visibility 0s; }
+    .mmenu__links { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+    .mmenu__links a {
+      display: flex; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line);
+      font-size: clamp(1.8rem, 8vw, 2.6rem); font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: 1;
+      opacity: 0; transform: translate3d(0, 24px, 0); transition: opacity .5s var(--ease), transform .7s var(--ease), color .3s;
+    }
+    .mmenu__links a small { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: .14em; font-family: var(--mono); }
+    .mmenu__links a:hover { color: var(--accent); }
+    .menu-open .mmenu__links a { opacity: 1; transform: none; transition-delay: calc(.25s + var(--i) * .06s); }
+    .mmenu__foot { margin-top: auto; padding-top: 32px; display: grid; gap: 14px; opacity: 0; transition: opacity .6s var(--ease); }
+    .menu-open .mmenu__foot { opacity: 1; transition-delay: .55s; }
+    .mmenu__foot .btn { width: 100%; }
+    .mmenu__meta { color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+    /* =========================================================
+       6. MEDIA + PLATZHALTER
+       ========================================================= */
+    .media { position: relative; overflow: hidden; background: var(--graphite); isolation: isolate; }
+    .media__inner { position: absolute; inset: -8% 0; will-change: transform; }
+    .media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s var(--ease); }
+    .media.is-loaded img { opacity: 1; }
+    .media.is-loaded .ph { opacity: 0; }
+
+    .ph {
+      position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .8s var(--ease);
+      background:
+        radial-gradient(70% 60% at 72% 28%, rgba(255, 91, 46, .10), transparent 60%),
+        radial-gradient(60% 50% at 20% 85%, rgba(140, 160, 190, .08), transparent 60%),
+        linear-gradient(160deg, #181b20 0%, #0d0f12 55%, #08090b 100%);
+    }
+    .ph::before {
+      content: ""; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 30%, transparent 85%);
+              mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 30%, transparent 85%);
+    }
+    .ph::after { /* Lichtkante */
+      content: ""; position: absolute; left: -10%; right: -10%; top: 62%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), rgba(255,91,46,.5), transparent);
+      filter: blur(.3px);
+    }
+    .ph svg { position: relative; width: 78%; max-width: 820px; height: auto; color: rgba(235, 238, 243, .32); overflow: visible; }
+    .ph__tag {
+      position: absolute; left: 16px; bottom: 16px; z-index: 2;
+      padding: 6px 10px; border: 1px solid var(--line-2); border-radius: 6px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5);
+      background: rgba(0,0,0,.35); backdrop-filter: blur(6px);
+    }
+
+    /* =========================================================
+       7. HERO
+       ========================================================= */
+    .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; isolation: isolate; }
+    .hero__bg { position: absolute; inset: -4%; z-index: -3; will-change: transform; }
+    .hero__zoom { position: absolute; inset: 0; transform: scale(1.14); transition: transform 2.8s var(--ease); }
+    .is-ready .hero__zoom { transform: scale(1.04); }
+    .hero__bg .media { position: absolute; inset: 0; }
+    .hero__bg .ph svg { width: 92%; transform: translate(6%, 10%); color: rgba(235, 238, 243, .26); }
+    .hero__bg .ph__tag { left: auto; right: calc(var(--gutter) + 8%); bottom: auto; top: calc(var(--nav-h) + 72px); }
+    .hero__shade {
+      position: absolute; inset: 0; z-index: -2; pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(7,8,10,.72) 0%, rgba(7,8,10,.12) 30%, rgba(7,8,10,.35) 58%, rgba(7,8,10,.96) 100%),
+        linear-gradient(90deg, rgba(7,8,10,.82) 0%, rgba(7,8,10,.25) 55%, rgba(7,8,10,0) 100%);
+    }
+    .hero__glow { position: absolute; z-index: -1; right: -10%; top: 10%; width: 60vw; height: 60vw; max-width: 900px; max-height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(255,91,46,.13), transparent 62%); filter: blur(10px); pointer-events: none; }
+
+    /* Animierter Rahmen (Stratum-Referenz) */
+    .hero__frame { position: absolute; inset: clamp(8px, 1.3vw, 18px); z-index: 1; pointer-events: none; }
+    .hero__frame i { position: absolute; background: var(--line-2); transition: transform 1.6s var(--ease-in-out); }
+    .hero__frame i:nth-child(1) { top: 0; left: 0; right: 0; height: 1px; transform-origin: left; transform: scaleX(0); }
+    .hero__frame i:nth-child(2) { top: 0; right: 0; bottom: 0; width: 1px; transform-origin: top; transform: scaleY(0); transition-delay: .25s; }
+    .hero__frame i:nth-child(3) { bottom: 0; left: 0; right: 0; height: 1px; transform-origin: right; transform: scaleX(0); transition-delay: .5s; }
+    .hero__frame i:nth-child(4) { top: 0; left: 0; bottom: 0; width: 1px; transform-origin: bottom; transform: scaleY(0); transition-delay: .75s; }
+    .is-ready .hero__frame i { transform: none; }
+    .hero__frame b { position: absolute; width: 14px; height: 14px; border-color: var(--text); border-style: solid; border-width: 0; opacity: 0; transition: opacity .8s var(--ease) 1.4s; }
+    .hero__frame b:nth-of-type(1) { top: -1px; left: -1px; border-top-width: 1px; border-left-width: 1px; }
+    .hero__frame b:nth-of-type(2) { top: -1px; right: -1px; border-top-width: 1px; border-right-width: 1px; }
+    .hero__frame b:nth-of-type(3) { bottom: -1px; right: -1px; border-bottom-width: 1px; border-right-width: 1px; }
+    .hero__frame b:nth-of-type(4) { bottom: -1px; left: -1px; border-bottom-width: 1px; border-left-width: 1px; }
+    .is-ready .hero__frame b { opacity: .7; }
+    .hero__side {
+      position: absolute; right: clamp(20px, 2.4vw, 34px); top: 50%; z-index: 2; transform: translateY(-50%) rotate(180deg);
+      writing-mode: vertical-rl; font-family: var(--mono); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--dim);
+      opacity: 0; transition: opacity 1s var(--ease) 1.6s;
+    }
+    .is-ready .hero__side { opacity: 1; }
+
+    .hero__content { position: relative; z-index: 2; padding-top: calc(var(--nav-h) + 48px); padding-bottom: clamp(40px, 7vh, 88px); }
+    .hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 48px; }
+    .hero__title { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: .94; font-size: clamp(2.5rem, 12vw, 7.25rem); margin-top: 22px; }
+    .hero__title .mask-line > span { transition-duration: 1.25s; }
+    .hero__title .mask-line:nth-child(1) > span { transition-delay: .35s; }
+    .hero__title .mask-line:nth-child(2) > span { transition-delay: .47s; }
+    .is-ready .hero__title .mask-line > span { transform: none; }
+    .hero__lead { margin-top: 28px; font-size: clamp(1.05rem, .6vw + .9rem, 1.3rem); color: #d7dade; max-width: 560px; }
+    .hero__tags { margin-top: 10px; font-size: 12px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--dim); }
+    .hero__ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .js .hero-in { opacity: 0; transform: translate3d(0, 18px, 0); transition: opacity 1s var(--ease), transform 1.1s var(--ease); }
+    .js.is-ready .hero-in { opacity: 1; transform: none; }
+    .js .hero-in.d1 { transition-delay: .15s; } .js .hero-in.d2 { transition-delay: .7s; } .js .hero-in.d3 { transition-delay: .82s; }
+    .js .hero-in.d4 { transition-delay: .95s; } .js .hero-in.d5 { transition-delay: 1.1s; }
+    .js .nav .brand, .js .nav__links, .js .nav__cta, .js .burger { opacity: 0; transition: opacity 1s var(--ease) .1s; }
+    .js.is-ready .nav .brand, .js.is-ready .nav__links, .js.is-ready .nav__cta, .js.is-ready .burger { opacity: 1; }
+
+    /* Google-Trust-Chip */
+    .rating-chip {
+      position: relative; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; align-items: center;
+      width: min(100%, 320px); padding: 20px 22px; border-radius: var(--radius);
+      background: var(--glass); border: 1px solid var(--line-2);
+      backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: 0 30px 60px -30px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.06);
+      transition: transform .6s var(--ease), border-color .5s var(--ease), background-color .5s var(--ease);
+    }
+    .rating-chip:hover { transform: translateY(-4px); border-color: var(--line-3); background: rgba(22, 24, 29, .66); }
+    .g-badge { grid-row: span 2; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: #fff; }
+    .g-badge svg { width: 24px; height: 24px; }
+    .rating-chip__top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .rating-chip__score { font-weight: 800; font-size: 20px; letter-spacing: .01em; }
+    .rating-chip__score small { font-weight: 500; font-size: 14px; color: var(--muted); }
+    .rating-chip__count { font-size: 13px; color: var(--muted); }
+    .rating-chip__link { grid-column: 1 / -1; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; letter-spacing: .04em; }
+    .rating-chip__link svg { width: 16px; height: 16px; transition: transform .5s var(--ease); color: var(--accent); }
+    .rating-chip:hover .rating-chip__link svg { transform: translate(3px, -3px); }
+
+    .stars { position: relative; display: inline-flex; gap: 2px; color: rgba(255,255,255,.18); }
+    .stars svg { width: 16px; height: 16px; }
+    .stars__fill { position: absolute; inset: 0 auto 0 0; display: inline-flex; gap: 2px; overflow: hidden; color: #ffb21e; width: var(--fill, 100%); white-space: nowrap; }
+    .stars--xl svg { width: clamp(26px, 3.4vw, 40px); height: clamp(26px, 3.4vw, 40px); }
+    .stars--xl, .stars--xl .stars__fill { gap: 6px; }
+
+    .hero__scroll {
+      position: absolute; left: 50%; bottom: 22px; z-index: 2; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--dim);
+    }
+    .hero__scroll i { width: 1px; height: 40px; background: linear-gradient(var(--line-3), transparent); position: relative; overflow: hidden; }
+    .hero__scroll i::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--accent); animation: scrollcue 2.4s var(--ease-in-out) infinite 2s; }
+    @keyframes scrollcue { to { top: 110%; } }
+
+    /* =========================================================
+       8. SECTIONS – gemeinsam
+       ========================================================= */
+    .section { position: relative; padding-block: var(--section); }
+    .section--line { border-top: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(24px, 5vw, 80px); align-items: end; margin-bottom: clamp(48px, 6vw, 88px); }
+    .section-head .h2 { margin-top: 20px; }
+    .section-head .lead { justify-self: end; }
+    .index-num { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--dim); }
+
+    /* =========================================================
+       9. LEISTUNGEN
+       ========================================================= */
+    .services { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .svc {
+      --mx: 50%; --my: 0%;
+      position: relative; display: flex; flex-direction: column; min-height: 300px; padding: clamp(24px, 2.4vw, 34px);
+      background: var(--bg-2); isolation: isolate; cursor: default; outline: none;
+      transition: background-color .6s var(--ease), transform .6s var(--ease), box-shadow .6s var(--ease);
+    }
+    .svc::before {
+      content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .6s var(--ease);
+      background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255,91,46,.10), transparent 55%), linear-gradient(180deg, rgba(255,255,255,.035), transparent);
+    }
+    .svc::after { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease); }
+    .svc__top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .svc__icon {
+      width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+      border: 1px solid var(--line-2); background: rgba(255,255,255,.025);
+      transition: transform .6s var(--ease), border-color .6s var(--ease), color .6s var(--ease), background-color .6s var(--ease);
+    }
+    .svc__icon svg { width: 24px; height: 24px; }
+    .svc h3 { margin-top: auto; padding-top: 48px; font-size: clamp(1.05rem, .5vw + .95rem, 1.25rem); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; line-height: 1.2; }
+    .svc__desc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s var(--ease); }
+    .svc__desc > div { overflow: hidden; }
+    .svc__desc p { padding-top: 12px; color: var(--muted); font-size: 15px; line-height: 1.55; opacity: 0; transform: translateY(8px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+    .svc__link {
+      margin-top: 20px; display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+      font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); transition: color .4s var(--ease);
+    }
+    .svc__link i { position: relative; width: 22px; height: 1px; background: currentColor; transition: width .55s var(--ease); }
+    .svc__link i::after { content: ""; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+
+    .svc:hover, .svc:focus-within, .svc.is-open { background: var(--graphite); }
+    .svc:hover::before, .svc:focus-within::before, .svc.is-open::before { opacity: 1; }
+    .svc:hover::after, .svc:focus-within::after, .svc.is-open::after { transform: scaleX(1); }
+    .svc:hover .svc__icon, .svc:focus-within .svc__icon, .svc.is-open .svc__icon { transform: translateY(-3px) rotate(-6deg); border-color: rgba(255,91,46,.5); color: var(--accent); background: var(--accent-soft); }
+    .svc:hover .svc__desc, .svc:focus-within .svc__desc, .svc.is-open .svc__desc { grid-template-rows: 1fr; }
+    .svc:hover .svc__desc p, .svc:focus-within .svc__desc p, .svc.is-open .svc__desc p { opacity: 1; transform: none; transition-delay: .08s; }
+    .svc:hover .svc__link, .svc:focus-within .svc__link, .svc.is-open .svc__link { color: var(--text); }
+    .svc:hover .svc__link i, .svc:focus-within .svc__link i, .svc.is-open .svc__link i { width: 38px; }
+    @media (hover: hover) { .svc:hover { box-shadow: 0 40px 80px -40px rgba(0,0,0,.9); transform: translateY(-4px); z-index: 2; } }
+    /* Touch-Geräte: Beschreibung immer sichtbar */
+    @media (hover: none) {
+      .svc__desc { grid-template-rows: 1fr; }
+      .svc__desc p { opacity: 1; transform: none; }
+    }
+
+    /* Galerie */
+    .gallery { margin-top: clamp(16px, 2vw, 24px); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(150px, 16vw, 230px); gap: clamp(12px, 1.4vw, 20px); }
+    .gallery .media { border-radius: var(--radius); border: 1px solid var(--line); }
+    .gallery .g1 { grid-column: span 7; grid-row: span 2; }
+    .gallery .g2 { grid-column: span 5; }
+    .gallery .g3 { grid-column: span 5; }
+    .gallery .g4 { grid-column: span 4; }
+    .gallery .g5 { grid-column: span 4; }
+    .gallery .g6 { grid-column: span 4; }
+    .media figcaption {
+      position: absolute; left: 16px; right: 16px; bottom: 14px; z-index: 3; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+    }
+    .gallery .media::after { content: ""; position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.6)); pointer-events: none; }
+    .gallery .media .ph__tag { top: 14px; bottom: auto; left: 14px; }
+    .gallery .media img { transition: opacity 1s var(--ease), transform 1.2s var(--ease); }
+    .gallery .media:hover img { transform: scale(1.04); }
+
+    /* =========================================================
+       10. WARUM / ÜBER UNS
+       ========================================================= */
+    .why { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: clamp(40px, 7vw, 120px); align-items: start; }
+    .why__sticky { position: sticky; top: calc(var(--nav-h) + 40px); }
+    .why__title { margin-top: 22px; font-size: clamp(2.2rem, 4.3vw, 3.9rem); }
+    .why__title .mask-line:nth-child(3) > span { color: var(--accent); }
+    .why__media { margin-top: clamp(32px, 4vw, 56px); aspect-ratio: 4 / 3; border-radius: var(--radius); border: 1px solid var(--line); }
+    .why__media .ph svg { width: 70%; }
+    .questions { margin-top: clamp(40px, 5vw, 64px); display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .q { padding: clamp(22px, 2.4vw, 32px); background: var(--bg); transition: background-color .5s var(--ease); }
+    .q:hover { background: var(--graphite); }
+    .q span { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: .14em; }
+    .q h3 { margin-top: 18px; font-size: clamp(1.1rem, .6vw + 1rem, 1.35rem); font-weight: 700; letter-spacing: -.005em; line-height: 1.25; }
+    .q p { margin-top: 8px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+    /* =========================================================
+       11. MARKEN
+       ========================================================= */
+    .brands { overflow: hidden; }
+    .brands__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); align-items: end; }
+    .marquee {
+      margin-top: clamp(48px, 6vw, 80px); display: grid; gap: 14px;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    }
+    .marquee__row { display: flex; width: max-content; animation: marquee 48s linear infinite; }
+    .marquee__row--rev { animation-direction: reverse; animation-duration: 56s; }
+    .marquee:hover .marquee__row { animation-play-state: paused; }
+    .marquee__row ul { display: flex; gap: 14px; padding-right: 14px; }
+    .marquee__row li {
+      flex: none; padding: 18px 30px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.015);
+      font-size: clamp(1rem, 1.4vw, 1.35rem); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #bfc3c9; white-space: nowrap;
+      transition: color .4s var(--ease), border-color .4s var(--ease), background-color .4s var(--ease);
+    }
+    .marquee__row li:hover { color: var(--text); border-color: var(--line-3); background: rgba(255,255,255,.04); }
+    @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+    .brands__note { margin-top: 28px; font-size: 13px; color: var(--dim); max-width: 650px; }
+
+    /* =========================================================
+       12. PROZESS
+       ========================================================= */
+    .process { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); }
+    .process::before, .process::after { content: ""; position: absolute; left: 0; right: 0; top: 27px; height: 1px; background: var(--line-2); }
+    .process::after { background: linear-gradient(90deg, var(--accent), #ffa07a); transform: scaleX(0); transform-origin: left; transition: transform 2.2s var(--ease-in-out) .2s; box-shadow: 0 0 12px var(--accent-glow); }
+    .process.in::after { transform: scaleX(1); }
+    .step { position: relative; z-index: 1; }
+    .step__dot {
+      position: relative; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--bg); border: 1px solid var(--line-2);
+      font-family: var(--mono); font-size: 13px; letter-spacing: .06em; color: var(--muted);
+      transition: border-color .6s var(--ease), color .6s var(--ease), box-shadow .6s var(--ease), background-color .6s var(--ease);
+      transition-delay: calc(.3s + var(--i) * .4s);
+    }
+    .process.in .step__dot { border-color: var(--accent); color: var(--text); background: #120c0a; box-shadow: 0 0 0 6px rgba(255,91,46,.07); }
+    .step h3 { margin-top: 28px; font-size: clamp(1rem, .5vw + .9rem, 1.15rem); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; line-height: 1.25; }
+    .step p { margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 240px; }
+
+    /* =========================================================
+       13. BEWERTUNGEN
+       ========================================================= */
+    .reviews { position: relative; overflow: hidden; }
+    .reviews__card {
+      position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 80px); align-items: center;
+      min-width: 0;
+      padding: clamp(28px, 5vw, 80px); border-radius: calc(var(--radius) + 8px);
+      background: radial-gradient(80% 120% at 0% 0%, rgba(255,91,46,.12), transparent 55%), linear-gradient(160deg, #15181c, #0b0c0f 70%);
+      border: 1px solid var(--line-2); overflow: hidden; isolation: isolate;
+    }
+    .reviews__orbit { position: absolute; z-index: -1; left: -12%; top: 50%; width: 70%; aspect-ratio: 1; transform: translateY(-50%); border-radius: 50%; border: 1px solid var(--line); pointer-events: none; }
+    .reviews__orbit::before, .reviews__orbit::after { content: ""; position: absolute; inset: 14%; border-radius: 50%; border: 1px solid var(--line); }
+    .reviews__orbit::after { inset: 30%; border-style: dashed; }
+    .score { display: flex; flex-direction: column; gap: 18px; }
+    .score__num { display: flex; align-items: baseline; gap: 14px; line-height: .8; }
+    .score__num strong { font-size: clamp(5.5rem, 15vw, 12.5rem); font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    .score__num span { font-size: clamp(1.4rem, 2.6vw, 2.2rem); font-weight: 600; color: var(--muted); }
+    .score__meta { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 15px; }
+    .score__meta .g-badge { width: 36px; height: 36px; border-radius: 10px; grid-row: auto; }
+    .score__meta .g-badge svg { width: 20px; height: 20px; }
+    .score__meta b { color: var(--text); font-weight: 700; }
+    .reviews__text .h2 { margin-top: 20px; }
+    .reviews__text .lead { margin-top: 22px; }
+    .reviews__text .btn { margin-top: 34px; }
+    .reviews__fine { margin-top: 18px; font-size: 12px; color: var(--dim); }
+
+    /* =========================================================
+       14. CTA
+       ========================================================= */
+    .cta { position: relative; padding-block: clamp(96px, 13vw, 200px); text-align: center; overflow: hidden; isolation: isolate; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .cta::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 100%; width: 120vw; aspect-ratio: 2 / 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(255,91,46,.22), rgba(255,91,46,.04) 60%, transparent); }
+    .cta::after { content: ""; position: absolute; z-index: -1; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 80px 80px; -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 100%, #000, transparent 75%); mask-image: radial-gradient(ellipse 60% 70% at 50% 100%, #000, transparent 75%); opacity: .7; }
+    .cta .display { max-width: 18ch; margin: 22px auto 0; }
+    .cta .lead { margin: 26px auto 0; }
+    .cta__btns { margin-top: 42px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+    /* =========================================================
+       15. KONTAKT + FORMULAR
+       ========================================================= */
+    .contact { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+    .contact__title { margin-top: 20px; }
+    .info { margin-top: clamp(32px, 4vw, 48px); display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .info__row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 20px clamp(18px, 2vw, 26px); background: var(--bg); transition: background-color .4s var(--ease); }
+    a.info__row:hover { background: var(--graphite); }
+    .info__ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; border: 1px solid var(--line-2); }
+    .info__ic svg { width: 20px; height: 20px; }
+    .info__label { font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+    .info__value { font-size: clamp(1rem, .4vw + .92rem, 1.12rem); font-weight: 600; line-height: 1.4; }
+    .info__go { width: 18px; height: 18px; color: var(--dim); transition: transform .45s var(--ease), color .45s var(--ease); }
+    a.info__row:hover .info__go { transform: translate(3px, -3px); color: var(--accent); }
+
+    .map { position: relative; display: block; margin-top: 16px; aspect-ratio: 16 / 10; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #0c0e11; isolation: isolate; }
+    .map svg.map__streets { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .map__pin { position: absolute; left: 56%; top: 46%; transform: translate(-50%, -100%); display: grid; justify-items: center; gap: 8px; }
+    .map__pin span { padding: 8px 12px; border-radius: 10px; background: var(--glass-strong); border: 1px solid var(--line-2); font-size: 12px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; backdrop-filter: blur(10px); }
+    .map__pin i { position: relative; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(255,91,46,.25); }
+    .map__pin i::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; border: 1px solid var(--accent); animation: ping 2.6s var(--ease) infinite; }
+    @keyframes ping { from { transform: scale(.4); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
+    .map__cta { position: absolute; right: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: #f3f4f6; color: #0a0b0d; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; transition: background-color .4s var(--ease); }
+    .map__cta svg { width: 14px; height: 14px; }
+    .map:hover .map__cta { background: var(--accent); }
+    .map__tag { position: absolute; left: 14px; top: 14px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--dim); text-transform: uppercase; }
+
+    .form {
+      position: relative; padding: clamp(24px, 3.4vw, 48px); border-radius: calc(var(--radius) + 6px);
+      background: linear-gradient(160deg, rgba(24,27,32,.7), rgba(12,13,16,.7)); border: 1px solid var(--line-2);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 40px 80px -50px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .form h3 { font-size: clamp(1.3rem, 1vw + 1rem, 1.7rem); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .form > p { margin-top: 8px; color: var(--muted); font-size: 15px; }
+    .form__grid { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: grid; gap: 8px; min-width: 0; }
+    .field--full { grid-column: 1 / -1; }
+    .field label { font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+    .field label em { font-style: normal; color: var(--accent); }
+    .field input, .field select, .field textarea {
+      width: 100%; min-height: 52px; padding: 14px 16px; border-radius: var(--radius-sm);
+      background: rgba(0,0,0,.35); border: 1px solid var(--line-2); color: var(--text); font-size: 16px; line-height: 1.4;
+      transition: border-color .35s var(--ease), background-color .35s var(--ease), box-shadow .35s var(--ease);
+      -webkit-appearance: none; appearance: none;
+    }
+    .field textarea { min-height: 128px; resize: vertical; }
+    .field select { padding-right: 44px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a6ae' stroke-width='1.6'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 18px; }
+    .field select option { background: #121418; color: var(--text); }
+    .field input::placeholder, .field textarea::placeholder { color: #5d636b; }
+    .field input:hover, .field select:hover, .field textarea:hover { border-color: var(--line-3); }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); background: rgba(0,0,0,.5); box-shadow: 0 0 0 4px rgba(255,91,46,.12); }
+    .field.is-invalid input, .field.is-invalid select { border-color: #ff6b6b; }
+    .consent { grid-column: 1 / -1; display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-size: 14px; color: var(--muted); line-height: 1.5; cursor: pointer; }
+    .consent input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--accent); }
+    .consent button { color: var(--text); text-decoration: underline; text-underline-offset: 3px; font-size: inherit; }
+    .form__submit { grid-column: 1 / -1; margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px; }
+    .form__submit .btn { flex: 1 1 auto; }
+    .form__hint { font-size: 12px; color: var(--dim); }
+    .form__status { grid-column: 1 / -1; display: none; padding: 18px 20px; border-radius: var(--radius-sm); border: 1px solid rgba(255,91,46,.35); background: var(--accent-soft); font-size: 15px; line-height: 1.55; }
+    .form__status.is-visible { display: block; animation: fadeUp .6s var(--ease); }
+    .form__status strong { display: block; margin-bottom: 4px; }
+    .form__status .row { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    /* =========================================================
+       16. FOOTER
+       ========================================================= */
+    .footer { padding-block: clamp(64px, 8vw, 110px) 40px; border-top: 1px solid var(--line); }
+    .footer__top { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: 40px; }
+    .footer__word { font-size: clamp(2.2rem, 7vw, 6rem); font-weight: 800; letter-spacing: .01em; text-transform: uppercase; line-height: .9; }
+    .footer__word span { display: block; color: transparent; -webkit-text-stroke: 1px var(--line-3); }
+    .footer h2 { font-size: 11px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+    .footer address { font-style: normal; color: var(--muted); line-height: 1.8; }
+    .footer address a:hover { color: var(--text); }
+    .footer ul { display: grid; gap: 10px; }
+    .footer ul a, .footer ul button { color: var(--muted); font-size: 15px; transition: color .3s var(--ease); text-align: left; }
+    .footer ul a:hover, .footer ul button:hover { color: var(--text); }
+    .footer__bottom { margin-top: clamp(48px, 6vw, 80px); padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--dim); }
+    .to-top { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
+    .to-top svg { width: 14px; height: 14px; transform: rotate(-90deg); transition: transform .4s var(--ease); }
+    .to-top:hover svg { transform: rotate(-90deg) translateX(3px); }
+
+    /* =========================================================
+       17. MOBILE CTA-LEISTE + DIALOG
+       ========================================================= */
+    .mcta { display: none; }
+    .legal { width: min(560px, calc(100vw - 32px)); padding: 0; border-radius: var(--radius); border: 1px solid var(--line-2); background: #0f1114; color: var(--text); }
+    .legal::backdrop { background: rgba(0,0,0,.7); backdrop-filter: blur(6px); }
+    .legal__in { padding: 32px; }
+    .legal h2 { font-size: 1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .legal p { margin-top: 14px; color: var(--muted); }
+    .legal .btn { margin-top: 26px; }
+
+    /* =========================================================
+       18. RESPONSIVE
+       ========================================================= */
+    @media (max-width: 1180px) {
+      .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .svc { min-height: 260px; }
+    }
+    @media (max-width: 1024px) {
+      .nav__links a { padding: 10px 10px; letter-spacing: .12em; }
+      .nav__links a::after { left: 10px; right: 10px; }
+      .hero__side { display: none; }
+      .section-head, .brands__head { grid-template-columns: 1fr; align-items: start; }
+      .section-head .lead { justify-self: start; }
+      .why, .contact { grid-template-columns: 1fr; }
+      .why__sticky { position: static; }
+      .reviews__card { grid-template-columns: minmax(0, 1fr); }
+      .footer__top { grid-template-columns: 1fr 1fr; }
+      .footer__word { grid-column: 1 / -1; }
+    }
+    @media (max-width: 900px) {
+      .nav__links, .nav__cta { display: none; }
+      .burger { display: block; }
+      .hero__grid { grid-template-columns: 1fr; gap: 32px; }
+      .process { grid-template-columns: 1fr; gap: 0; padding-left: 0; }
+      .process::before, .process::after { left: 27px; right: auto; top: 28px; bottom: 28px; width: 1px; height: auto; }
+      .process::after { transform: scaleY(0); transform-origin: top; background: linear-gradient(180deg, var(--accent), #ffa07a); }
+      .process.in::after { transform: scaleY(1); }
+      .step { display: grid; grid-template-columns: 56px 1fr; column-gap: 24px; padding-bottom: 36px; }
+      .step:last-child { padding-bottom: 0; }
+      .step h3 { margin-top: 0; align-self: center; min-height: 56px; display: flex; align-items: center; }
+      .step p { grid-column: 2; margin-top: 0; max-width: 46ch; }
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: clamp(160px, 34vw, 260px); }
+      .gallery .g1 { grid-column: 1 / -1; grid-row: span 1; }
+      .gallery .g2, .gallery .g3, .gallery .g4, .gallery .g5 { grid-column: span 1; }
+      .gallery .g6 { grid-column: 1 / -1; }
+    }
+    @media (max-width: 767px) {
+      :root { --nav-h: 68px; }
+      .nav.is-scrolled { --nav-h: 62px; }
+      body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+      .hero__ctas .btn { flex: 1 1 100%; }
+      .rating-chip { width: 100%; }
+      .hero__scroll { display: none; }
+      .hero__bg .ph svg { width: 150%; transform: translate(14%, 18%); }
+      .hero__bg .ph__tag { top: auto; bottom: 16px; right: 16px; }
+      .services { grid-template-columns: 1fr; }
+      .svc { min-height: 0; }
+      .svc h3 { padding-top: 28px; }
+      .questions { grid-template-columns: 1fr; }
+      .form__grid { grid-template-columns: 1fr; }
+      .cta__btns .btn { flex: 1 1 100%; }
+      .reviews__text .btn, .cta__btns .btn, .hero__ctas .btn { width: 100%; padding: 0 18px; letter-spacing: .1em; white-space: normal; text-align: center; }
+      .btn__label > span::after { width: 100%; }
+      .footer__top { grid-template-columns: 1fr; }
+      .marquee__row li { padding: 14px 22px; }
+
+      .mcta {
+        position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 80;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; border-radius: 20px;
+        background: rgba(12, 13, 16, .78); border: 1px solid var(--line-2);
+        backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,.7);
+        transform: translate3d(0, 140%, 0); transition: transform .7s var(--ease);
+      }
+      .mcta.is-visible { transform: none; }
+      .menu-open .mcta { transform: translate3d(0, 140%, 0); }
+      .mcta a { min-height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+      .mcta a svg { width: 18px; height: 18px; }
+      .mcta__call { background: var(--accent); color: #0a0b0d; }
+      .mcta__book { background: rgba(255,255,255,.06); border: 1px solid var(--line-2); }
+    }
+    @media (max-width: 380px) {
+      .brand__text { font-size: 11px; letter-spacing: .14em; }
+      .brand { gap: 10px; }
+      .btn { padding: 0 18px; letter-spacing: .1em; }
+      .rating-chip { padding: 16px; gap: 6px 12px; }
+      .info__row { grid-template-columns: 40px minmax(0, 1fr); }
+      .info__go { display: none; }
+      .info__ic { width: 40px; height: 40px; }
+    }
+
+    /* =========================================================
+       19. REDUCED MOTION
+       ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; transition-delay: 0s !important; }
+      .js .reveal, .js .hero-in { opacity: 1; transform: none; }
+      .js .mask-line > span { transform: none; }
+      .hero__frame i { transform: none; } .hero__frame b { opacity: .7; }
+      .hero__zoom { transform: scale(1.04); }
+      .media__inner, .hero__bg { transform: none !important; }
+      .marquee { -webkit-mask-image: none; mask-image: none; }
+      .marquee__row { animation: none; width: auto; }
+      .marquee__row ul { flex-wrap: wrap; }
+      .marquee__row[aria-hidden="true"], .marquee__row ul[aria-hidden="true"] { display: none; }
+      .map__pin i::after, .hero__scroll i::after { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <!-- =====================================================
+       SVG-SPRITE: Icons + Platzhalter-Grafiken
+       ===================================================== -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.2 4.2 0 0 0-5.5 5.2l-5.6 5.6a1.9 1.9 0 0 0 2.7 2.7l5.6-5.6a4.2 4.2 0 0 0 5.2-5.5l-2.5 2.5-2.3-.6-.6-2.3z"/></symbol>
+      <symbol id="i-brake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="6.6" r=".6" fill="currentColor"/><circle cx="17.4" cy="12" r=".6" fill="currentColor"/><circle cx="12" cy="17.4" r=".6" fill="currentColor"/><circle cx="6.6" cy="12" r=".6" fill="currentColor"/><path d="M16.6 3.6a10 10 0 0 1 3.8 3.8" stroke-width="3"/></symbol>
+      <symbol id="i-inspect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 4.5V3h6v1.5"/><path d="M8.5 13l2.3 2.3 4.7-4.8"/></symbol>
+      <symbol id="i-oil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s-5.6 6.1-5.6 10.3a5.6 5.6 0 0 0 11.2 0C17.6 9.3 12 3.2 12 3.2z"/><path d="M9.4 14.2A2.7 2.7 0 0 0 12 17"/></symbol>
+      <symbol id="i-climate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/><path d="M9.6 4.4L12 6.2l2.4-1.8M9.6 19.6L12 17.8l2.4 1.8M4.6 10.6l2.8-.9-.6-2.9M17.2 16.9l-.6-2.9 2.8-.9M4.6 13.4l2.8.9-.6 2.9M17.2 7.1l-.6 2.9 2.8.9"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.8v5.4c0 4.4-2.9 8.2-7 9.8-4.1-1.6-7-5.4-7-9.8V5.8z"/><path d="M9 12l2.1 2.1L15.2 10"/></symbol>
+      <symbol id="i-diag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="13" rx="2"/><path d="M6 11h2.6l1.4-3 2.6 6 1.6-3H18M9 21h6M12 17.5V21"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-arrow-ur" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 3.5h3.1l1.6 4.4-2.1 1.4a11.3 11.3 0 0 0 6.9 6.9l1.4-2.1 4.4 1.6v3.1a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.2 5.7a2 2 0 0 1 2-2.2z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.6l2.85 5.9 6.45.85-4.72 4.5 1.2 6.4L12 17.1l-5.78 3.15 1.2-6.4L2.7 9.35l6.45-.85z"/></symbol>
+      <symbol id="g-logo" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></symbol>
+
+      <!-- Platzhalter-Grafik: Fahrzeug-Seitenprofil -->
+      <symbol id="ph-car" viewBox="0 0 800 300" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M40 214h18a62 62 0 0 1 124 0h378a62 62 0 0 1 124 0h66c10 0 16-8 14-18l-6-24c-4-12-16-18-32-21l-88-13c-50-34-120-56-200-58-70-1-140 12-204 48l-86 18c-54 10-88 20-102 36-8 10-10 22-8 32z"/>
+        <path d="M252 132c58-30 118-40 186-40 62 1 118 16 162 44z" opacity=".7"/>
+        <path d="M430 93v43" opacity=".6"/>
+        <path d="M150 168h560" opacity=".25" stroke-dasharray="2 6"/>
+        <circle cx="120" cy="214" r="48"/><circle cx="120" cy="214" r="30" opacity=".7"/><circle cx="120" cy="214" r="40" stroke-dasharray="3 7" opacity=".5"/>
+        <circle cx="622" cy="214" r="48"/><circle cx="622" cy="214" r="30" opacity=".7"/><circle cx="622" cy="214" r="40" stroke-dasharray="3 7" opacity=".5"/>
+        <path d="M724 162l36 4" stroke="#ff5b2e" stroke-width="2.4" opacity=".9"/>
+        <path d="M44 186l22-2" stroke="#ff5b2e" stroke-width="2" opacity=".7"/>
+        <path d="M0 264h800" opacity=".35"/>
+        <path d="M70 276h660" opacity=".15"/>
+      </symbol>
+      <!-- Platzhalter-Grafik: Bremsscheibe -->
+      <symbol id="ph-disc" viewBox="0 0 800 300" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <circle cx="400" cy="150" r="128"/><circle cx="400" cy="150" r="106" opacity=".6"/>
+        <circle cx="400" cy="150" r="117" stroke-dasharray="1 13" stroke-width="5" opacity=".5"/>
+        <circle cx="400" cy="150" r="52"/><circle cx="400" cy="150" r="18" opacity=".7"/>
+        <circle cx="400" cy="115" r="6"/><circle cx="433" cy="139" r="6"/><circle cx="421" cy="178" r="6"/><circle cx="379" cy="178" r="6"/><circle cx="367" cy="139" r="6"/>
+        <path d="M478 46a140 140 0 0 1 56 70" stroke="#ff5b2e" stroke-width="16" opacity=".75"/>
+        <path d="M120 150h120M560 150h120" opacity=".25" stroke-dasharray="2 6"/>
+      </symbol>
+      <!-- Platzhalter-Grafik: Diagnose -->
+      <symbol id="ph-gauge" viewBox="0 0 800 300" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M260 230a140 140 0 1 1 280 0" />
+        <path d="M285 230a115 115 0 1 1 230 0" stroke-dasharray="2 10" stroke-width="6" opacity=".5"/>
+        <path d="M400 230l70-84" stroke="#ff5b2e" stroke-width="2.4"/><circle cx="400" cy="230" r="8"/>
+        <path d="M40 120h70l18-34 26 70 20-36h60" opacity=".55"/>
+        <path d="M580 150h40l14-26 22 52 16-26h88" opacity=".55"/>
+        <path d="M0 262h800" opacity=".3"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- =====================================================
+       NAVIGATION
+       ===================================================== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner container">
+      <a class="brand" href="#start" aria-label="Car Repair Kampas – zur Startseite">
+        <svg class="brand__mark" viewBox="0 0 34 34" aria-hidden="true">
+          <rect x=".5" y=".5" width="33" height="33" rx="9.5" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.16)"/>
+          <g class="ring" fill="none" stroke="#f3f4f6" stroke-width="1.6"><circle cx="17" cy="17" r="8.5"/><circle cx="17" cy="17" r="2.6"/><path d="M17 8.5v3M25.5 17h-3M17 25.5v-3M8.5 17h3" stroke-width="1.2"/></g>
+          <path d="M10 24 24 10" stroke="#ff5b2e" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="brand__text"><span>Car Repair </span><strong>Kampas</strong></span>
+      </a>
+
+      <nav class="nav__links" aria-label="Hauptnavigation">
+        <a href="#leistungen">Leistungen</a>
+        <a href="#ueber-uns">Über uns</a>
+        <a href="#bewertungen">Bewertungen</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+
+      <a class="btn btn--primary btn--sm nav__cta" href="#termin">
+        <span class="btn__label"><span data-text="Termin anfragen">Termin anfragen</span></span>
+      </a>
+
+      <button class="burger" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mmenu" id="mobile-menu" aria-hidden="true" inert>
+    <nav class="mmenu__links" aria-label="Mobile Navigation">
+      <a href="#leistungen" style="--i:0"><small>01</small>Leistungen</a>
+      <a href="#ueber-uns" style="--i:1"><small>02</small>Über uns</a>
+      <a href="#bewertungen" style="--i:2"><small>03</small>Bewertungen</a>
+      <a href="#kontakt" style="--i:3"><small>04</small>Kontakt</a>
+    </nav>
+    <div class="mmenu__foot">
+      <a class="btn btn--accent" href="#termin"><span class="btn__label"><span data-text="Termin anfragen">Termin anfragen</span></span></a>
+      <a class="btn btn--ghost" href="tel:+491608187040" data-tel>
+        <svg aria-hidden="true"><use href="#i-phone"/></svg>
+        <span class="btn__label"><span data-text="+49 160 8187040" data-phone-text>+49 160 8187040</span></span>
+      </a>
+      <div class="mmenu__meta">
+        <span>Hertzstraße 12 · 97076 Würzburg</span>
+        <span>★ <span data-rating>5,0</span> / 5 auf Google</span>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+    <section class="hero" id="start" aria-labelledby="hero-title">
+      <div class="hero__bg" id="hero-bg">
+        <div class="hero__zoom">
+          <div class="media">
+            <div class="ph" aria-hidden="true">
+              <svg viewBox="0 0 800 300"><use href="#ph-car"/></svg>
+              <span class="ph__tag">Image placeholder · assets/images/hero.jpg</span>
+            </div>
+            <!-- HIER EIGENES HERO-FOTO EINFÜGEN: Datei unter assets/images/hero.jpg ablegen (Querformat, ca. 2400 × 1500 px) -->
+            <img src="assets/images/hero.jpg" alt="Fahrzeug in der Werkstatt von Car Repair Kampas in Würzburg" fetchpriority="high" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+          </div>
+        </div>
+      </div>
+      <div class="hero__shade"></div>
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b><b></b><b></b><b></b></div>
+      <p class="hero__side" aria-hidden="true">Hertzstraße 12 — 97076 Würzburg</p>
+
+      <div class="hero__content container">
+        <div class="hero__grid">
+          <div>
+            <p class="eyebrow hero-in d1">Kfz-Service · Würzburg</p>
+            <h1 class="hero__title" id="hero-title">
+              <span class="mask-line"><span>Ihr Auto.</span></span>
+              <span class="mask-line"><span class="metal">Unser Anspruch.</span></span>
+            </h1>
+            <p class="hero__lead hero-in d2">Professioneller Kfz-Service für alle Marken in Würzburg.</p>
+            <p class="hero__tags hero-in d3">Reparatur · Wartung · Diagnose · Service</p>
+            <div class="hero__ctas hero-in d4">
+              <a class="btn btn--primary" href="#termin">
+                <span class="btn__label"><span data-text="Termin anfragen">Termin anfragen</span></span>
+                <svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+              </a>
+              <a class="btn btn--ghost" href="#leistungen">
+                <span class="btn__label"><span data-text="Leistungen entdecken">Leistungen entdecken</span></span>
+              </a>
+            </div>
+          </div>
+
+          <a class="rating-chip hero-in d5" href="https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic" target="_blank" rel="noopener" data-maps aria-label="Google-Bewertung: 5,0 von 5 Sternen bei 12 Bewertungen – auf Google Maps ansehen" data-rating-aria>
+            <span class="g-badge" aria-hidden="true"><svg><use href="#g-logo"/></svg></span>
+            <span class="rating-chip__top">
+              <span class="stars" aria-hidden="true" data-stars>
+                <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
+                <span class="stars__fill"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+              </span>
+              <span class="rating-chip__score"><span data-rating>5,0</span> <small>/ 5</small></span>
+            </span>
+            <span class="rating-chip__count"><span data-review-count>12</span> Google <span data-review-word>Bewertungen</span></span>
+            <span class="rating-chip__link">Auf Google ansehen <svg aria-hidden="true"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__scroll hero-in d5" aria-hidden="true"><span>Scroll</span><i></i></div>
+    </section>
+
+    <!-- =====================================================
+         LEISTUNGEN
+         ===================================================== -->
+    <section class="section" id="leistungen" aria-labelledby="leistungen-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow reveal">Leistungen</p>
+            <h2 class="h2" id="leistungen-title" data-reveal-mask>
+              <span class="mask-line"><span>Unser</span></span>
+              <span class="mask-line"><span class="metal">Service<span class="accent-dot">.</span></span></span>
+            </h2>
+          </div>
+          <p class="lead reveal">Alles, was Ihr Fahrzeug braucht – aus einer Hand. Von der Inspektion bis zur Reparatur, für Fahrzeuge aller Marken.</p>
+        </div>
+
+        <div class="services" data-stagger>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-wrench"/></svg></span><span class="index-num">01</span></div>
+            <h3>Autoreparatur</h3>
+            <div class="svc__desc"><div><p>Reparaturen für Fahrzeuge aller Marken – fachgerecht und transparent.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Autoreparatur">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-brake"/></svg></span><span class="index-num">02</span></div>
+            <h3>Bremsen &amp; Reifen</h3>
+            <div class="svc__desc"><div><p>Bremsenprüfung, Bremsenservice, Reifenwechsel und Reifenservice.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Bremsen &amp; Reifen">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-inspect"/></svg></span><span class="index-num">03</span></div>
+            <h3>Inspektion</h3>
+            <div class="svc__desc"><div><p>Wartung und Inspektion nach Herstellervorgaben.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Inspektion">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-oil"/></svg></span><span class="index-num">04</span></div>
+            <h3>Ölservice</h3>
+            <div class="svc__desc"><div><p>Professioneller Öl- und Filterwechsel für eine zuverlässige Motorleistung.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Ölservice">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-climate"/></svg></span><span class="index-num">05</span></div>
+            <h3>Klimaservice</h3>
+            <div class="svc__desc"><div><p>Prüfung, Wartung und Service der Klimaanlage.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Klimaservice">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span><span class="index-num">06</span></div>
+            <h3>TÜV-Vorbereitung</h3>
+            <div class="svc__desc"><div><p>Fahrzeugcheck und Vorbereitung auf HU/TÜV.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="TÜV-Vorbereitung">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-diag"/></svg></span><span class="index-num">07</span></div>
+            <h3>Diagnose</h3>
+            <div class="svc__desc"><div><p>Moderne Fahrzeugdiagnose und präzise Fehlersuche.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Diagnose">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+          <article class="svc reveal" tabindex="0" data-card>
+            <div class="svc__top"><span class="svc__icon" aria-hidden="true"><svg><use href="#i-gear"/></svg></span><span class="index-num">08</span></div>
+            <h3>Wartung</h3>
+            <div class="svc__desc"><div><p>Regelmäßige Wartung zur Erhaltung von Sicherheit und Fahrzeugwert.</p></div></div>
+            <a class="svc__link" href="#termin" data-service="Wartung">Anfragen <i aria-hidden="true"></i></a>
+          </article>
+        </div>
+
+        <!-- Werkstatt-Galerie: eigene Fotos einfach unter den angegebenen Dateinamen ablegen -->
+        <div class="gallery" data-stagger>
+          <figure class="media g1 reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-car"/></svg><span class="ph__tag">Image placeholder · workshop.jpg</span></div>
+              <!-- HIER EIGENES WERKSTATT-FOTO EINFÜGEN: assets/images/workshop.jpg -->
+              <img src="assets/images/workshop.jpg" alt="Blick in die Werkstatt von Car Repair Kampas" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+            <figcaption><span>Werkstatt</span><span class="index-num">Würzburg</span></figcaption>
+          </figure>
+          <figure class="media g2 reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-disc"/></svg><span class="ph__tag">Image placeholder · brakes.jpg</span></div>
+              <!-- HIER EIGENES BREMSEN-FOTO EINFÜGEN: assets/images/brakes.jpg -->
+              <img src="assets/images/brakes.jpg" alt="Bremsscheibe und Bremssattel beim Bremsenservice" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+            <figcaption><span>Bremsen</span></figcaption>
+          </figure>
+          <figure class="media g3 reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-gauge"/></svg><span class="ph__tag">Image placeholder · diagnostics.jpg</span></div>
+              <!-- HIER EIGENES DIAGNOSE-FOTO EINFÜGEN: assets/images/diagnostics.jpg -->
+              <img src="assets/images/diagnostics.jpg" alt="Elektronische Fahrzeugdiagnose mit Diagnosegerät" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+            <figcaption><span>Diagnose</span></figcaption>
+          </figure>
+          <figure class="media g4 reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-disc"/></svg><span class="ph__tag">Image placeholder · tyres.jpg</span></div>
+              <!-- HIER EIGENES REIFEN-FOTO EINFÜGEN: assets/images/tyres.jpg -->
+              <img src="assets/images/tyres.jpg" alt="Reifenwechsel und Reifenservice" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+            <figcaption><span>Reifen</span></figcaption>
+          </figure>
+          <figure class="media g5 reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-car"/></svg><span class="ph__tag">Image placeholder · service.jpg</span></div>
+              <!-- HIER EIGENES SERVICE-FOTO EINFÜGEN: assets/images/service.jpg -->
+              <img src="assets/images/service.jpg" alt="Fahrzeug beim Kfz-Service auf der Hebebühne" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+            <figcaption><span>Service</span></figcaption>
+          </figure>
+          <figure class="media g6 reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-gauge"/></svg><span class="ph__tag">Image placeholder · car-service.jpg</span></div>
+              <!-- HIER EIGENES FOTO EINFÜGEN: assets/images/car-service.jpg -->
+              <img src="assets/images/car-service.jpg" alt="Wartungsarbeiten am Fahrzeug" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+            <figcaption><span>Wartung</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         WARUM CAR REPAIR KAMPAS / ÜBER UNS
+         ===================================================== -->
+    <section class="section section--line" id="ueber-uns" aria-labelledby="why-title">
+      <div class="container why">
+        <div class="why__sticky">
+          <p class="eyebrow reveal">Warum Car Repair Kampas</p>
+          <h2 class="display why__title" id="why-title" data-reveal-mask>
+            <span class="mask-line"><span>Präzise Arbeit.</span></span>
+            <span class="mask-line"><span class="metal">Klare Worte.</span></span>
+            <span class="mask-line"><span>Faire Lösungen.</span></span>
+          </h2>
+          <figure class="media why__media reveal" data-parallax>
+            <div class="media__inner">
+              <div class="ph" aria-hidden="true"><svg viewBox="0 0 800 300"><use href="#ph-car"/></svg><span class="ph__tag">Image placeholder · team.jpg</span></div>
+              <!-- HIER EIGENES TEAM-FOTO EINFÜGEN: assets/images/team.jpg -->
+              <img src="assets/images/team.jpg" alt="Das Team von Car Repair Kampas in der Werkstatt" loading="lazy" decoding="async" onload="imgOk(this)" onerror="imgFail(this)">
+            </div>
+          </figure>
+        </div>
+
+        <div>
+          <div class="prose reveal">
+            <p class="lead" style="color: var(--text)">Bei Car Repair Kampas steht nicht der schnelle Austausch möglichst vieler Teile im Vordergrund, sondern eine nachvollziehbare Diagnose und eine fachgerechte Reparatur.</p>
+            <p>Wir sehen uns Ihr Fahrzeug genau an, erklären den Befund verständlich und besprechen mit Ihnen, was sinnvoll ist. <strong>Sie entscheiden – mit allen Informationen auf dem Tisch.</strong></p>
+          </div>
+
+          <ul class="questions" data-stagger aria-label="Was Sie bei uns erfahren">
+            <li class="q reveal"><span>01 —</span><h3>Was ist kaputt?</h3><p>Ein klarer Befund statt Vermutungen.</p></li>
+            <li class="q reveal"><span>02 —</span><h3>Was muss gemacht werden?</h3><p>Notwendige Arbeiten – nachvollziehbar begründet.</p></li>
+            <li class="q reveal"><span>03 —</span><h3>Was kann warten?</h3><p>Eine ehrliche Einschätzung, was noch Zeit hat.</p></li>
+            <li class="q reveal"><span>04 —</span><h3>Was kostet es?</h3><p>Die Kosten besprechen wir mit Ihnen, bevor wir anfangen.</p></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         ALLE MARKEN
+         ===================================================== -->
+    <section class="section section--line brands" aria-labelledby="brands-title">
+      <div class="container">
+        <div class="brands__head">
+          <div>
+            <p class="eyebrow reveal">Markenunabhängig</p>
+            <h2 class="h2" id="brands-title" style="margin-top:20px" data-reveal-mask>
+              <span class="mask-line"><span>Service für</span></span>
+              <span class="mask-line"><span class="metal">alle Marken.</span></span>
+            </h2>
+          </div>
+          <p class="lead reveal">Ob Kleinwagen, Familienfahrzeug, SUV oder Transporter – wir kümmern uns markenunabhängig um Wartung, Reparatur und Service.</p>
+        </div>
+      </div>
+
+      <div class="marquee reveal">
+        <div class="marquee__row">
+          <ul aria-label="Beispiele für Fahrzeugmarken, die wir warten und reparieren">
+            <li>VW</li><li>BMW</li><li>Mercedes-Benz</li><li>Audi</li><li>Opel</li><li>Ford</li>
+          </ul>
+          <ul aria-hidden="true">
+            <li>VW</li><li>BMW</li><li>Mercedes-Benz</li><li>Audi</li><li>Opel</li><li>Ford</li>
+          </ul>
+        </div>
+        <div class="marquee__row marquee__row--rev">
+          <ul aria-label="Weitere Beispiele">
+            <li>Skoda</li><li>Seat</li><li>Toyota</li><li>Renault</li><li>Peugeot</li><li>Hyundai</li>
+          </ul>
+          <ul aria-hidden="true">
+            <li>Skoda</li><li>Seat</li><li>Toyota</li><li>Renault</li><li>Peugeot</li><li>Hyundai</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <p class="brands__note reveal">Die genannten Marken dienen nur als Beispiele. Car Repair Kampas ist eine freie Werkstatt und kein Vertragspartner der genannten Hersteller. Markennamen sind Eigentum der jeweiligen Inhaber.</p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         PROZESS
+         ===================================================== -->
+    <section class="section section--line" id="ablauf" aria-labelledby="process-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow reveal">Ablauf</p>
+            <h2 class="h2" id="process-title" data-reveal-mask>
+              <span class="mask-line"><span>So läuft</span></span>
+              <span class="mask-line"><span class="metal">es ab.</span></span>
+            </h2>
+          </div>
+          <p class="lead reveal">Fünf klare Schritte – damit Sie jederzeit wissen, woran Sie sind.</p>
+        </div>
+
+        <ol class="process" data-process>
+                    <li class="step" style="--i:0"><span class="step__dot">01</span><h3>Termin vereinbaren</h3><p>Telefonisch oder über das Anfrageformular.</p></li>
+          <li class="step" style="--i:1"><span class="step__dot">02</span><h3>Fahrzeug prüfen</h3><p>Wir sehen uns Ihr Anliegen genau an und stellen die Ursache fest.</p></li>
+          <li class="step" style="--i:2"><span class="step__dot">03</span><h3>Transparent besprechen</h3><p>Befund, notwendige Arbeiten und Kosten – bevor wir starten.</p></li>
+          <li class="step" style="--i:3"><span class="step__dot">04</span><h3>Reparieren</h3><p>Fachgerecht und sorgfältig ausgeführt.</p></li>
+          <li class="step" style="--i:4"><span class="step__dot">05</span><h3>Fahrzeug abholen</h3><p>Wir erklären Ihnen, was gemacht wurde.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         GOOGLE-BEWERTUNGEN
+         ===================================================== -->
+    <section class="section reviews" id="bewertungen" aria-labelledby="reviews-title">
+      <div class="container">
+        <div class="reviews__card reveal">
+          <div class="reviews__orbit" aria-hidden="true"></div>
+          <div class="score">
+            <span class="stars stars--xl" aria-hidden="true" data-stars>
+              <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
+              <span class="stars__fill"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+            </span>
+            <p class="score__num"><strong class="metal" data-rating data-countup>5,0</strong><span>/ 5</span></p>
+            <p class="score__meta">
+              <span class="g-badge" aria-hidden="true"><svg><use href="#g-logo"/></svg></span>
+              <span><b><span data-review-count>12</span> <span data-review-word>Bewertungen</span></b> auf Google</span>
+            </p>
+          </div>
+
+          <div class="reviews__text">
+            <p class="eyebrow"><span data-rating>5,0</span> Sterne auf Google</p>
+            <h2 class="h2" id="reviews-title">Echte Erfahrungen. <span class="metal">Echtes Vertrauen.</span></h2>
+            <p class="lead">Was Kundinnen und Kunden über ihre Erfahrung mit uns schreiben, lesen Sie direkt und ungefiltert in unserem Google-Eintrag.</p>
+            <a class="btn btn--primary" href="https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic" target="_blank" rel="noopener" data-maps>
+              <span class="btn__label"><span data-text="Alle Google-Bewertungen">Alle Google-Bewertungen</span></span>
+              <svg class="arrow" aria-hidden="true"><use href="#i-arrow-ur"/></svg>
+            </a>
+            <p class="reviews__fine">Quelle: Google-Maps-Eintrag von Car Repair Kampas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CTA
+         ===================================================== -->
+    <section class="cta" aria-labelledby="cta-title">
+      <div class="container">
+        <p class="eyebrow reveal">Termin</p>
+        <h2 class="display" id="cta-title" data-reveal-mask>
+          <span class="mask-line"><span>Ihr Auto braucht</span></span>
+          <span class="mask-line"><span class="metal">Service?</span></span>
+        </h2>
+        <p class="lead reveal">Sprechen Sie uns an. Wir schauen uns Ihr Anliegen an.</p>
+        <div class="cta__btns reveal">
+          <a class="btn btn--primary" href="#termin">
+            <span class="btn__label"><span data-text="Termin anfragen">Termin anfragen</span></span>
+            <svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="tel:+491608187040" data-tel>
+            <svg aria-hidden="true"><use href="#i-phone"/></svg>
+            <span class="btn__label"><span data-text="Anrufen">Anrufen</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         KONTAKT + TERMINANFRAGE
+         ===================================================== -->
+    <section class="section" id="kontakt" aria-labelledby="contact-title">
+      <div class="container contact">
+        <div>
+          <p class="eyebrow reveal">Kontakt</p>
+          <h2 class="h2 contact__title" id="contact-title" data-reveal-mask>
+            <span class="mask-line"><span>Car Repair</span></span>
+            <span class="mask-line"><span class="metal">Kampas<span class="accent-dot">.</span></span></span>
+          </h2>
+
+          <div class="info reveal">
+            <a class="info__row" href="tel:+491608187040" data-tel>
+              <span class="info__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span>
+              <span><span class="info__label">Telefon</span><br><span class="info__value" data-phone-text>+49 160 8187040</span></span>
+              <svg class="info__go" aria-hidden="true"><use href="#i-arrow-ur"/></svg>
+            </a>
+            <a class="info__row" href="https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic" target="_blank" rel="noopener" data-maps>
+              <span class="info__ic" aria-hidden="true"><svg><use href="#i-pin"/></svg></span>
+              <span><span class="info__label">Adresse</span><br><span class="info__value">Hertzstraße 12<br>97076 Würzburg</span></span>
+              <svg class="info__go" aria-hidden="true"><use href="#i-arrow-ur"/></svg>
+            </a>
+            <!-- Öffnungszeiten / E-Mail hier ergänzen, sobald bekannt (bewusst nicht erfunden). -->
+          </div>
+
+          <!-- Karten-Platzhalter. Optional später durch ein Google-Maps-iframe ersetzen
+               (Achtung DSGVO: iframe erst nach Einwilligung laden). -->
+          <a class="map reveal" href="https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic" target="_blank" rel="noopener" data-maps aria-label="Route zu Car Repair Kampas, Hertzstraße 12, Würzburg, in Google Maps planen">
+            <svg class="map__streets" viewBox="0 0 600 375" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs>
+                <pattern id="mgrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0v24" fill="none" stroke="rgba(255,255,255,.035)"/></pattern>
+                <radialGradient id="mglow" cx="56%" cy="42%" r="45%"><stop offset="0" stop-color="rgba(255,91,46,.16)"/><stop offset="1" stop-color="rgba(255,91,46,0)"/></radialGradient>
+              </defs>
+              <rect width="600" height="375" fill="url(#mgrid)"/>
+              <rect width="600" height="375" fill="url(#mglow)"/>
+              <g fill="none" stroke="rgba(255,255,255,.10)" stroke-linecap="round">
+                <path d="M-20 300C120 270 210 250 330 170S520 60 640 40" stroke-width="14"/>
+                <path d="M-20 300C120 270 210 250 330 170S520 60 640 40" stroke="rgba(0,0,0,.6)" stroke-width="11"/>
+                <path d="M60 -20L150 400" stroke-width="7"/>
+                <path d="M-20 120H640" stroke-width="5"/>
+                <path d="M250 -20C280 120 330 200 336 400" stroke-width="6"/>
+                <path d="M420 -20L470 400" stroke-width="4"/>
+                <path d="M-20 210C150 200 400 230 640 250" stroke-width="4"/>
+                <path d="M520 120L600 330" stroke-width="3"/>
+                <path d="M150 40L250 60M180 330L320 300M360 300L560 340" stroke-width="2.5"/>
+              </g>
+              <g fill="rgba(255,255,255,.035)">
+                <rect x="290" y="128" width="58" height="40" rx="4"/><rect x="360" y="132" width="44" height="64" rx="4"/>
+                <rect x="160" y="140" width="70" height="52" rx="4"/><rect x="460" y="150" width="54" height="40" rx="4"/>
+                <rect x="80" y="40" width="60" height="58" rx="4"/><rect x="360" y="250" width="80" height="36" rx="4"/>
+              </g>
+            </svg>
+            <span class="map__tag">Karte · Platzhalter</span>
+            <span class="map__pin"><span>Hertzstraße 12</span><i></i></span>
+            <span class="map__cta">Route planen <svg aria-hidden="true"><use href="#i-arrow-ur"/></svg></span>
+          </a>
+        </div>
+
+        <!-- ===== Terminanfrage =====
+             Es gibt noch KEIN Backend. Das Formular versendet nichts von selbst.
+             Siehe JavaScript-Abschnitt "FORMULAR" für die Stelle, an der später eine API angeschlossen wird. -->
+        <form class="form reveal" id="termin" novalidate aria-labelledby="form-title">
+          <h3 id="form-title">Terminanfrage</h3>
+          <p>Schildern Sie kurz Ihr Anliegen – wir melden uns bei Ihnen.</p>
+
+          <div class="form__grid">
+            <div class="field">
+              <label for="f-name">Name <em>*</em></label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required placeholder="Vor- und Nachname">
+            </div>
+            <div class="field">
+              <label for="f-phone">Telefonnummer <em>*</em></label>
+              <input id="f-phone" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required placeholder="z. B. 0931 …" pattern="[0-9+()/\s-]{6,}">
+            </div>
+            <div class="field">
+              <label for="f-mail">E-Mail</label>
+              <input id="f-mail" name="email" type="email" autocomplete="email" placeholder="optional">
+            </div>
+            <div class="field">
+              <label for="f-car">Fahrzeug</label>
+              <input id="f-car" name="fahrzeug" type="text" placeholder="Marke, Modell, Baujahr">
+            </div>
+            <div class="field field--full">
+              <label for="f-service">Gewünschte Leistung</label>
+              <select id="f-service" name="leistung">
+                <option value="">Bitte auswählen</option>
+                <option>Autoreparatur</option>
+                <option>Bremsen &amp; Reifen</option>
+                <option>Inspektion</option>
+                <option>Ölservice</option>
+                <option>Klimaservice</option>
+                <option>TÜV-Vorbereitung</option>
+                <option>Diagnose</option>
+                <option>Wartung</option>
+                <option>Sonstiges</option>
+              </select>
+            </div>
+            <div class="field field--full">
+              <label for="f-msg">Nachricht</label>
+              <textarea id="f-msg" name="nachricht" placeholder="Was ist Ihnen aufgefallen? Wann passt Ihnen ein Termin?"></textarea>
+            </div>
+            <label class="consent">
+              <input type="checkbox" name="einwilligung" required>
+              <span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden. Hinweise in der <button type="button" data-legal="datenschutz">Datenschutzerklärung</button>. <em style="color:var(--accent);font-style:normal">*</em></span>
+            </label>
+
+            <div class="form__submit">
+              <button class="btn btn--accent" type="submit">
+                <span class="btn__label"><span data-text="Terminanfrage senden">Terminanfrage senden</span></span>
+                <svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+              </button>
+              <span class="form__hint">* Pflichtfelder</span>
+            </div>
+
+            <div class="form__status" id="form-status" role="status" aria-live="polite"></div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <p class="footer__word" aria-label="Car Repair Kampas">Car Repair<span>Kampas</span></p>
+        <div>
+          <h2>Adresse</h2>
+          <address>
+            Car Repair Kampas<br>
+            Hertzstraße 12<br>
+            97076 Würzburg<br>
+            <a href="tel:+491608187040" data-tel data-phone-text>+49 160 8187040</a>
+          </address>
+        </div>
+        <nav aria-label="Footer-Navigation">
+          <h2>Links</h2>
+          <ul>
+            <li><a href="#leistungen">Leistungen</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+            <li><a href="https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic" target="_blank" rel="noopener" data-maps>Google Maps</a></li>
+            <!-- Impressum & Datenschutz: Platzhalter – vor Veröffentlichung durch echte Seiten ersetzen (z. B. impressum.html) -->
+            <li><button type="button" data-legal="impressum">Impressum</button></li>
+            <li><button type="button" data-legal="datenschutz">Datenschutz</button></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span id="year">2026</span> Car Repair Kampas · Würzburg</span>
+        <a class="to-top" href="#start">Nach oben <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile CTA-Leiste (nur Smartphone) -->
+  <div class="mcta" id="mcta" aria-label="Schnellkontakt">
+    <a class="mcta__call" href="tel:+491608187040" data-tel><svg aria-hidden="true"><use href="#i-phone"/></svg>Anrufen</a>
+    <a class="mcta__book" href="#termin"><svg aria-hidden="true"><use href="#i-calendar"/></svg>Termin</a>
+  </div>
+
+  <!-- Platzhalter-Dialog für Impressum / Datenschutz -->
+  <dialog class="legal" id="legal" aria-labelledby="legal-title">
+    <div class="legal__in">
+      <h2 id="legal-title">Impressum</h2>
+      <p id="legal-text"></p>
+      <form method="dialog"><button class="btn btn--ghost btn--sm" type="submit"><span class="btn__label"><span data-text="Schließen">Schließen</span></span></button></form>
+    </div>
+  </dialog>
+
+  <script>
+  /* =============================================================
+     ZENTRALE DATEN – hier später einfach anpassen
+     ============================================================= */
+  const GOOGLE_RATING = "5,0";        // Sternebewertung laut Google (mit Komma)
+  const GOOGLE_REVIEW_COUNT = 12;     // Anzahl Google-Bewertungen
+  const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/EAj2bngpa44UDALf8?g_st=ic";
+  const PHONE_DISPLAY = "+49 160 8187040";
+  const PHONE_TEL = "tel:+491608187040";
+  const CONTACT_EMAIL = "";           // Noch keine E-Mail bekannt. Wenn eingetragen, nutzt das Formular einen mailto:-Fallback.
+
+  (function () {
+    "use strict";
+
+    const root = document.documentElement;
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    /* ---------- 1. Zentrale Daten ins Markup schreiben ---------- */
+    const ratingNum = parseFloat(GOOGLE_RATING.replace(",", ".")) || 0;
+    const reviewWord = GOOGLE_REVIEW_COUNT === 1 ? "Bewertung" : "Bewertungen";
+    $$("[data-rating]").forEach(el => { el.textContent = GOOGLE_RATING; });
+    $$("[data-review-count]").forEach(el => { el.textContent = GOOGLE_REVIEW_COUNT; });
+    $$("[data-review-word]").forEach(el => { el.textContent = reviewWord; });
+    $$("[data-stars]").forEach(el => el.style.setProperty("--fill", Math.max(0, Math.min(100, ratingNum / 5 * 100)) + "%"));
+    $$("[data-rating-aria]").forEach(el => el.setAttribute("aria-label", `Google-Bewertung: ${GOOGLE_RATING} von 5 Sternen bei ${GOOGLE_REVIEW_COUNT} ${reviewWord} – auf Google Maps ansehen`));
+    $$("[data-maps]").forEach(el => { el.href = GOOGLE_MAPS_URL; });
+    $$("[data-tel]").forEach(el => { el.href = PHONE_TEL; });
+    $$("[data-phone-text]").forEach(el => { el.textContent = PHONE_DISPLAY; if (el.dataset.text !== undefined) el.dataset.text = PHONE_DISPLAY; });
+    const year = $("#year"); if (year) year.textContent = new Date().getFullYear();
+
+    /* ---------- 2. Intro-Animation ---------- */
+    const start = () => requestAnimationFrame(() => root.classList.add("is-ready"));
+    if (document.fonts && document.fonts.ready) {
+      Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 700))]).then(start);
+    } else { start(); }
+
+    /* ---------- 3. Navigation: Glas-Effekt + aktiver Link ---------- */
+    const nav = $("#nav");
+    const mcta = $("#mcta");
+    const onScroll = () => {
+      const y = window.scrollY;
+      nav.classList.toggle("is-scrolled", y > 24);
+      if (mcta) mcta.classList.toggle("is-visible", y > window.innerHeight * 0.55);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const navLinks = $$(".nav__links a");
+    if ("IntersectionObserver" in window) {
+      const spy = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          navLinks.forEach(a => a.classList.toggle("is-active", a.getAttribute("href") === "#" + e.target.id));
+        });
+      }, { rootMargin: "-45% 0px -50% 0px" });
+      ["leistungen", "ueber-uns", "bewertungen", "kontakt"].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+    }
+
+    /* ---------- 4. Mobile-Menü ---------- */
+    const burger = $(".burger");
+    const menu = $("#mobile-menu");
+    const setMenu = open => {
+      root.classList.toggle("menu-open", open);
+      burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+      menu.setAttribute("aria-hidden", String(!open));
+      if (open) { menu.removeAttribute("inert"); setTimeout(() => { const f = $("a", menu); if (f) f.focus({ preventScroll: true }); }, 350); }
+      else { menu.setAttribute("inert", ""); }
+    };
+    burger.addEventListener("click", () => setMenu(!root.classList.contains("menu-open")));
+    $$("a", menu).forEach(a => a.addEventListener("click", () => setMenu(false)));
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && root.classList.contains("menu-open")) { setMenu(false); burger.focus(); }
+    });
+    window.matchMedia("(min-width: 901px)").addEventListener("change", e => { if (e.matches) setMenu(false); });
+
+    /* ---------- 5. Scroll-Reveals (gestaffelt) ---------- */
+    $$("[data-stagger]").forEach(group => {
+      $$(":scope > .reveal", group).forEach((el, i) => el.style.setProperty("--i", i % 4));
+    });
+    const revealTargets = $$(".reveal, [data-reveal-mask], [data-process]");
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      revealTargets.forEach(el => el.classList.add("in"));
+    } else {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+      revealTargets.forEach(el => io.observe(el));
+    }
+
+    /* ---------- 6. Bewertung hochzählen ---------- */
+    const counter = $("[data-countup]");
+    if (counter && !reduceMotion && "IntersectionObserver" in window) {
+      const decimals = (GOOGLE_RATING.split(",")[1] || "").length;
+      counter.textContent = (0).toFixed(decimals).replace(".", ",");
+      const cio = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        cio.disconnect();
+        const t0 = performance.now(), dur = 1400;
+        const tick = now => {
+          const p = Math.min(1, (now - t0) / dur), eased = 1 - Math.pow(1 - p, 4);
+          counter.textContent = (ratingNum * eased).toFixed(decimals).replace(".", ",");
+          if (p < 1) requestAnimationFrame(tick); else counter.textContent = GOOGLE_RATING;
+        };
+        requestAnimationFrame(tick);
+      }, { threshold: 0.4 });
+      cio.observe(counter);
+    }
+
+    /* ---------- 7. Service-Karten: Spotlight, Tap, Vorauswahl ---------- */
+    const serviceSelect = $("#f-service");
+    $$("[data-card]").forEach(card => {
+      if (finePointer) {
+        card.addEventListener("pointermove", e => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+          card.style.setProperty("--my", (e.clientY - r.top) + "px");
+        });
+      }
+      card.addEventListener("click", e => {
+        if (e.target.closest("a")) return;
+        const wasOpen = card.classList.contains("is-open");
+        $$("[data-card].is-open").forEach(c => c.classList.remove("is-open"));
+        if (!wasOpen) card.classList.add("is-open");
+      });
+    });
+    $$("[data-service]").forEach(link => link.addEventListener("click", () => {
+      if (serviceSelect) serviceSelect.value = link.dataset.service;
+    }));
+
+    /* ---------- 8. Parallax (Maus im Hero + Scroll bei Bildern) ---------- */
+    const heroBg = $("#hero-bg");
+    const hero = $(".hero");
+    const parallaxEls = $$("[data-parallax] .media__inner");
+    if (!reduceMotion) {
+      let mx = 0, my = 0, cx = 0, cy = 0, ticking = false;
+      const allowMouse = finePointer && window.innerWidth > 900;
+
+      if (allowMouse && hero) {
+        hero.addEventListener("pointermove", e => {
+          const r = hero.getBoundingClientRect();
+          mx = ((e.clientX - r.left) / r.width - 0.5) * -2;   // gegen die Mausrichtung
+          my = ((e.clientY - r.top) / r.height - 0.5) * -2;
+          request();
+        });
+        hero.addEventListener("pointerleave", () => { mx = 0; my = 0; request(); });
+      }
+
+      const frame = () => {
+        ticking = false;
+        const vh = window.innerHeight;
+        cx += (mx - cx) * 0.07;
+        cy += (my - cy) * 0.07;
+        const sy = window.scrollY;
+        if (heroBg && sy < vh * 1.2) {
+          heroBg.style.transform = `translate3d(${(cx * 14).toFixed(2)}px, ${(cy * 10 + sy * 0.16).toFixed(2)}px, 0)`;
+        }
+        parallaxEls.forEach(el => {
+          const r = el.parentElement.getBoundingClientRect();
+          if (r.bottom < -100 || r.top > vh + 100) return;
+          const progress = (r.top + r.height / 2 - vh / 2) / vh; // -1 … 1
+          el.style.transform = `translate3d(0, ${(progress * -6).toFixed(2)}%, 0)`;
+        });
+        if (Math.abs(mx - cx) > 0.001 || Math.abs(my - cy) > 0.001) request();
+      };
+      const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+      window.addEventListener("scroll", request, { passive: true });
+      window.addEventListener("resize", request);
+      request();
+    }
+
+    /* ---------- 9. Impressum / Datenschutz (Platzhalter) ---------- */
+    const legal = $("#legal");
+    const legalCopy = {
+      impressum: ["Impressum", "Das Impressum wird in Kürze ergänzt. Bis dahin erreichen Sie Car Repair Kampas unter Hertzstraße 12, 97076 Würzburg, Telefon " + PHONE_DISPLAY + "."],
+      datenschutz: ["Datenschutz", "Die Datenschutzerklärung wird in Kürze ergänzt. Diese Website setzt keine Tracking-Cookies. Das Anfrageformular überträgt derzeit keine Daten an einen Server."]
+    };
+    $$("[data-legal]").forEach(btn => btn.addEventListener("click", e => {
+      e.preventDefault();
+      const [title, text] = legalCopy[btn.dataset.legal];
+      $("#legal-title").textContent = title;
+      $("#legal-text").textContent = text;
+      if (legal && typeof legal.showModal === "function") legal.showModal();
+      else alert(title + "\n\n" + text);
+    }));
+    if (legal) legal.addEventListener("click", e => { if (e.target === legal) legal.close(); });
+
+    /* ---------- 10. FORMULAR ---------- */
+    const form = $("#termin");
+    const status = $("#form-status");
+
+    const buildText = data =>
+      "Terminanfrage – Car Repair Kampas\n\n" +
+      "Name: " + data.name + "\n" +
+      "Telefon: " + data.telefon + "\n" +
+      (data.email ? "E-Mail: " + data.email + "\n" : "") +
+      (data.fahrzeug ? "Fahrzeug: " + data.fahrzeug + "\n" : "") +
+      (data.leistung ? "Leistung: " + data.leistung + "\n" : "") +
+      (data.nachricht ? "\nNachricht:\n" + data.nachricht + "\n" : "");
+
+    const copyText = async text => {
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch (_) {
+        const ta = document.createElement("textarea");
+        ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        let ok = false; try { ok = document.execCommand("copy"); } catch (__) {}
+        ta.remove(); return ok;
+      }
+    };
+
+    $$("input, select, textarea", form).forEach(f => f.addEventListener("input", () => f.closest(".field")?.classList.remove("is-invalid")));
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      let firstInvalid = null;
+      $$("input, select, textarea", form).forEach(f => {
+        const ok = f.checkValidity();
+        f.closest(".field")?.classList.toggle("is-invalid", !ok);
+        if (!ok && !firstInvalid) firstInvalid = f;
+      });
+      if (firstInvalid) { firstInvalid.reportValidity(); firstInvalid.focus(); return; }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      const text = buildText(data);
+
+      /* ==========================================================
+         >>> HIER SPÄTER ECHTES BACKEND / API ANSCHLIESSEN <<<
+         Beispiel:
+           const res = await fetch("/api/terminanfrage", {
+             method: "POST",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify(data)
+           });
+           if (res.ok) { status.innerHTML = "<strong>Vielen Dank!</strong> Ihre Anfrage ist eingegangen."; ... }
+         Alternativ: Formular-Dienst (z. B. eigener PHP-Mailer) als action-URL.
+         ========================================================== */
+
+      if (CONTACT_EMAIL) {
+        // mailto:-Fallback – öffnet das E-Mail-Programm des Besuchers mit vorausgefüllter Nachricht.
+        window.location.href = "mailto:" + CONTACT_EMAIL +
+          "?subject=" + encodeURIComponent("Terminanfrage: " + (data.leistung || "Kfz-Service")) +
+          "&body=" + encodeURIComponent(text);
+        status.innerHTML = "<strong>Ihr E-Mail-Programm wurde geöffnet.</strong>Bitte senden Sie die vorbereitete Nachricht dort ab.";
+        status.classList.add("is-visible");
+        return;
+      }
+
+      // Kein Backend und keine E-Mail hinterlegt: ehrlich kommunizieren, nichts vortäuschen.
+      status.innerHTML =
+        "<strong>Online-Versand ist noch nicht aktiv.</strong>" +
+        "Ihre Anfrage wurde <u>nicht</u> übermittelt. Rufen Sie uns am besten direkt an – oder kopieren Sie Ihre Angaben, um sie uns z.&nbsp;B. per Nachricht zu schicken." +
+        '<span class="row">' +
+          '<a class="btn btn--primary btn--sm" href="' + PHONE_TEL + '"><span class="btn__label"><span data-text="Jetzt anrufen">Jetzt anrufen</span></span></a>' +
+          '<button class="btn btn--ghost btn--sm" type="button" id="copy-req"><span class="btn__label"><span data-text="Angaben kopieren">Angaben kopieren</span></span></button>' +
+        "</span>";
+      status.classList.add("is-visible");
+      $("#copy-req").addEventListener("click", async ev => {
+        const ok = await copyText(text);
+        const label = ev.currentTarget.querySelector("[data-text]");
+        label.textContent = ok ? "Kopiert ✓" : "Kopieren nicht möglich";
+        label.dataset.text = label.textContent;
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
