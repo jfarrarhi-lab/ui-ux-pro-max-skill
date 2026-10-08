@@ -4,7 +4,8 @@ A single-file website (`index.html`): all HTML, CSS and JavaScript are in that f
 
 ```
 index.html
-assets/frames/f001.jpg … f300.jpg   hero sequence: the 300 frames from the supplied ZIP, unmodified (720×1280)
+assets/hero/frame_000000.jpg … frame_000150.jpg   hero sequence: the 151 frames of the supplied ZIP, unmodified (720×1280)
+assets/frames/f070.jpg, f175.jpg, f270.jpg       stills used in the "Das Haus" and "Restaurants" sections
 assets/offers/offer-genuss.png      transparent arch cut-out (dining room, frame 290)
 assets/offers/offer-golf.png        transparent arch cut-out (portal, frame 95)
 assets/photos/                      put your own photographs here
@@ -56,16 +57,31 @@ The frame sets the aspect ratio and the image fills it (`object-fit: cover`). Pl
 
 ## How the hero works
 
-- **Sequence:** frames 1–120 show the façade and portal, 121–215 the doors, steps and stone arch, and 216–300 the dining room under the glass dome. The frames are used in their original order.
-- **One progress value drives everything:** `p = (scrollY − heroTop) / (heroHeight − viewportHeight)`, computed from the hero's real document position. The frame is `1 + round(p × 299)`, and the three text passages read the same `p` from `HERO_TIMELINE`. Because `p` depends only on scroll position, fast scrolling, scrolling back, reloading or jumping straight to a position all produce the same picture and text.
+- **Sequence:** frames 000–060 show the façade and portal, 061–110 the doors, steps and stone arch, and 111–150 the dining room under the glass dome. The frames are used in their original order and names. If you ever replace the sequence, set `SITE_CONFIG.heroFrameCount` to the new number of files.
+- **One progress value drives everything:** `p = (scrollY − heroTop) / (heroHeight − viewportHeight)`, computed from the hero's real document position. The archive frame is `round(p × 150)`, and the three text passages read the same `p` from `HERO_TIMELINE`. Because `p` depends only on scroll position, fast scrolling, scrolling back, reloading or jumping straight to a position all produce the same picture and text.
 - **Narrative intervals:**
-  - Portal: visible at load, fades out over frames 52–81.
-  - Foyer: builds up over frames 133–165 and fades out over 201–227.
-  - Restaurant: builds up over frames 243–279 and stays to the last frame.
+  - Portal: visible at load, fades out over frames 25–41 (still outside).
+  - Foyer: builds up over frames 66–83 (doors open, steps, stone arch) and fades out over 100–114.
+  - Restaurant: builds up over frames 121–140 (under the dome) and stays to the last frame.
   - Each passage builds up line by line through opacity and a 16px rise, and reverses when you scroll back. The intervals never overlap.
-- **Loading:** frame 1 loads first. The preloader then counts a spread of frames across the whole sequence plus the three narrative frames (33 on desktop) and shows real percentages. The other frames stream in afterwards, and the canvas always draws the nearest decoded frame, so scrolling never waits on the network. Phones load every second frame (150), which halves memory use. A failed frame counts as done, and a 15-second safety limit stops the preloader from hanging. If no frame loads at all, the page switches to the static hero.
+- **Loading:** the first frame loads first. The preloader then counts a spread of frames across the whole sequence plus the three narrative frames (about 18) and shows real percentages. The other frames stream in afterwards, nearest to the current scroll position first, and the canvas always draws the nearest decoded frame, so scrolling never waits on the network or shows a blank. All 151 frames play on phones too (only sequences over 200 frames would be thinned on phones).
+- **No layout shift:** whether the scroll hero runs is decided in the `<head>`, before the first paint, so the page does not jump from the static layout to the live one. A failed frame counts as done, and a 15-second safety limit stops the preloader from hanging. If no frame loads at all, the page switches to the static hero.
 - **Desktop:** the portrait footage is shown as a tall arched panel, with the same frame blurred to fill the stage. **Mobile:** the footage fills the screen.
 - **No JavaScript or reduced motion:** the hero becomes three stacked chapters (frames 1, 185 and 290), each with its text visible. All other scroll effects are skipped, so every element is shown in its final state.
+
+## Cookie consent
+
+The site stores only first-party, technically necessary data in the visitor's browser: the consent choice and the DE/EN choice (`localStorage`), and an unsent enquiry draft for the current tab (`sessionStorage`). The only optional technology is Google Maps ("Externe Medien"). No request goes to Google before consent. There is no analytics, advertising or tracking.
+
+- **First visit:** a dialog at the bottom of the screen offers "Optionale ablehnen", "Alle akzeptieren" and "Einstellungen verwalten". It is first in the keyboard order, does not trap focus and does not block the page.
+- **Changing the choice:** "Cookie-Einstellungen" in the footer reopens the dialog with the preferences expanded. Escape closes it and returns focus to the button. Withdrawing "Externe Medien" removes the map again.
+- **Without JavaScript:** no dialog appears, nothing optional loads, and the map area keeps its "Open in Google Maps" link.
+
+## Map
+
+- **Without an API key** (current state): after consent, the keyless Google embed is shown with a night rendering. CSS re-colours the map's own pixels; it is not a dark layer placed over it. Roads, labels and Google's location pin stay readable.
+- **With an API key:** set `SITE_CONFIG.googleMapsApiKey` (Maps JavaScript API; also the Geocoding API unless you set `SITE_CONFIG.hotelLatLng`). The map is then drawn with a real night style (`MAP_NIGHT_STYLE`) and a "Hotel Rebstock" marker. If the key or script fails, the page falls back to the embed automatically.
+- **Rating:** the area beside the map (below it on mobile) shows no star rating or review count, because none could be verified. To add them, uncomment the marked block in `.rating-card` and enter the values from the Google listing with the date.
 
 ## Scroll triggers
 

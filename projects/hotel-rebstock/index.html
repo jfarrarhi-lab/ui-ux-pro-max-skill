@@ -33,6 +33,9 @@
       else if (!l && /^en\b/i.test(navigator.language || '') ) d.lang = 'en';
     } catch (e) {}
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('rm');
+    // "cine": the scroll-driven hero will run. Decided here, before first paint,
+    // so the hero never renders in its static layout and then jumps (layout shift).
+    else { var c = document.createElement('canvas'); if (c.getContext && c.getContext('2d')) d.classList.add('cine'); }
   })();
 </script>
 <style>
@@ -218,9 +221,13 @@ html:not(.js) .site-header { position: absolute; }
 /* Desktop: the portrait footage becomes a tall arched panel to the right; the
    same frame, blurred, fills the stage behind the text. */
 @media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  /* Explicit height and width: a canvas is a replaced element, so with
+     width/height:auto its box would follow its own pixel buffer and get stuck
+     at the previous size after a resize. */
   .hero--live .hero__canvas {
-    inset: auto; top: calc(var(--header-h) + 2vh); bottom: 4vh; right: clamp(24px, 9vw, 160px);
-    height: auto; width: auto; aspect-ratio: 9 / 16;
+    --panel-h: calc(100svh - var(--header-h) - 6vh);
+    inset: auto; top: calc(var(--header-h) + 2vh); right: clamp(24px, 9vw, 160px);
+    height: var(--panel-h); width: calc(var(--panel-h) * 9 / 16);
     border-radius: 999px 999px var(--r-l) var(--r-l);
     box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .06);
   }
@@ -518,7 +525,26 @@ html:not(.js) .planner form { display: none; }
   position: relative; border-radius: var(--r-l); overflow: hidden; min-height: 420px; background: var(--night-2); color: var(--paper);
   display: grid; isolation: isolate;
 }
-.map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map iframe, .map__canvas { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* Night rendering of the keyless Google embed: the map's own pixels are
+   re-coloured (lightness inverted, hues restored), it is not a tinted layer on
+   top. With SITE_CONFIG.googleMapsApiKey set, the Maps JavaScript API is used
+   instead with a real night style (MAP_NIGHT_STYLE) and no filter. */
+.map iframe { filter: invert(.9) hue-rotate(180deg) saturate(.8) brightness(.95) contrast(.92); background: var(--night-2); }
+.map__canvas { background: var(--night-2); }
+.map-pin { position: absolute; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
+.map-pin__label { background: var(--night); color: var(--paper); font: 600 .75rem/1 var(--f-text); letter-spacing: .04em; padding: 7px 10px; border-radius: 10px; border: 1px solid rgba(230, 196, 44, .5); white-space: nowrap; }
+.map-pin__dot { width: 18px; height: 18px; border-radius: 50%; background: var(--salon); box-shadow: 0 0 0 5px rgba(230, 196, 44, .28), 0 0 0 1px var(--night); }
+.where__info { display: grid; gap: 28px; align-content: start; }
+.rating-card { background: var(--paper-2); border-radius: var(--r-l); padding: clamp(22px, 3vw, 32px); display: grid; gap: 12px; justify-items: start; }
+.rating-card h3 { font-size: clamp(1.5rem, 1.2vw + 1rem, 1.9rem); }
+.rating-card p { margin: 0; }
+.rating { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.rating__value { font: 400 2.6rem/1 var(--f-display); }
+.stars { --r: 0; width: 6.25rem; height: 1.25rem; background: linear-gradient(90deg, var(--gilt) calc(var(--r) / 5 * 100%), rgba(28, 26, 22, .18) 0);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m10 1.5 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z'/%3E%3C/svg%3E") 0 0 / 1.25rem 1.25rem repeat-x;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='m10 1.5 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7z'/%3E%3C/svg%3E") 0 0 / 1.25rem 1.25rem repeat-x; }
+.rating__count { font-size: .875rem; color: var(--ink-3); flex-basis: 100%; }
 .map__gate { position: relative; display: grid; align-content: end; gap: 14px; padding: clamp(24px, 4vw, 44px); }
 .map__gate::before { content: ""; position: absolute; inset: 0; z-index: -1;
   background:
@@ -599,8 +625,12 @@ body.has-view main#home, body.has-view .hero { display: none; }
 .switch input:checked + i::after { transform: translateX(20px); }
 .switch input:disabled + i { opacity: .55; }
 .switch input:focus-visible + i { outline: 2px solid var(--gilt); outline-offset: 2px; }
-.consent .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.consent .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .consent .actions .btn { flex: 1 1 140px; }
+.consent__prefs { border-top: 1px solid var(--line); margin-top: 6px; padding-top: 4px; margin-bottom: 14px; }
+.consent__prefs .btn { width: 100%; }
+.link-btn { flex: 1 1 100%; min-height: 44px; background: none; border: 0; padding: 6px 4px; cursor: pointer; color: var(--ink); font: 600 .875rem/1.2 var(--f-text); text-decoration: underline; text-underline-offset: 3px; }
+.link-btn[aria-expanded="true"] { text-decoration-color: var(--gilt); }
 .consent .links { margin-top: 14px; display: flex; gap: 16px; flex-wrap: wrap; font-size: .8125rem; }
 
 /* ==========================================================================
@@ -679,6 +709,37 @@ body.has-view main#home, body.has-view .hero { display: none; }
 
 <a class="skip" href="#content"><span lang="de">Zum Inhalt springen</span><span lang="en">Skip to content</span></a>
 
+<!-- ============================ COOKIE CONSENT ============================
+     First in the DOM so keyboard users reach it right after the skip link;
+     visually it is fixed to the bottom of the screen and never blocks the page.
+     What this site stores (first-party, in the visitor's browser only):
+       localStorage   rebstock.consent  this choice                         (necessary)
+       localStorage   rebstock.lang     DE/EN choice                        (necessary)
+       sessionStorage rebstock.plan     unsent enquiry draft, this tab only (necessary)
+     Optional: Google Maps ("Externe Medien"). It is not requested before
+     consent. No analytics, advertising or tracking is used on this site.
+     ======================================================================= -->
+<section class="consent" id="consent" role="dialog" aria-modal="false" aria-labelledby="consent-h" aria-describedby="consent-d">
+  <div class="consent__box">
+    <h2 id="consent-h" tabindex="-1"><span lang="de">Ihre Privatsphäre</span><span lang="en">Your privacy</span></h2>
+    <p id="consent-d"><span lang="de">Wir setzen nur technisch notwendige Speicherungen ein (Ihre Sprach- und Cookie-Auswahl). Externe Inhalte wie Google Maps laden wir erst mit Ihrer Zustimmung. Datenschutzerklärung, Impressum und AGB finden Sie unten.</span><span lang="en">We only store what is technically necessary (your language and cookie choice). External content such as Google Maps loads only with your consent. Privacy policy, legal notice and terms (AGB) are linked below.</span></p>
+    <div class="consent__prefs" id="consentPrefs" hidden>
+      <div class="opts">
+        <div class="opt"><b><span lang="de">Notwendig</span><span lang="en">Necessary</span></b><small><span lang="de">Sprach- und Cookie-Auswahl sowie der Entwurf Ihrer Anfrage in diesem Tab. Immer aktiv.</span><span lang="en">Language and cookie choice, plus the draft of your enquiry in this tab. Always on.</span></small><span class="switch"><input type="checkbox" checked disabled aria-label="Notwendig, immer aktiv" data-aria-en="Necessary, always on"><i></i></span></div>
+        <div class="opt"><b><span lang="de">Externe Medien</span><span lang="en">External media</span></b><small><span lang="de">Google Maps (Google Ireland Ltd.). Dabei werden Daten an Google übertragen.</span><span lang="en">Google Maps (Google Ireland Ltd.). Data is transferred to Google.</span></small><span class="switch"><input type="checkbox" id="cMaps" aria-label="Externe Medien (Google Maps) zulassen" data-aria-en="Allow external media (Google Maps)"><i></i></span></div>
+      </div>
+      <button type="button" class="btn" data-consent="save"><span lang="de">Auswahl speichern</span><span lang="en">Save choice</span></button>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn" data-consent="necessary"><span lang="de">Optionale ablehnen</span><span lang="en">Reject optional</span></button>
+      <button type="button" class="btn" data-consent="all"><span lang="de">Alle akzeptieren</span><span lang="en">Accept all</span></button>
+      <button type="button" class="link-btn" id="consentManage" aria-expanded="false" aria-controls="consentPrefs"><span lang="de">Einstellungen verwalten</span><span lang="en">Manage preferences</span></button>
+    </div>
+    <p class="links"><a href="#datenschutz">Datenschutz</a><a href="#impressum">Impressum</a><a href="#agb">AGB</a></p>
+  </div>
+</section>
+<p class="sr-only" id="consentLive" aria-live="polite"></p>
+
 <!-- ============================== PRELOADER ============================== -->
 <div class="loader" id="loader" role="status" aria-live="polite" hidden>
   <div class="loader__inner">
@@ -691,6 +752,7 @@ body.has-view main#home, body.has-view .hero { display: none; }
     </div>
   </div>
 </div>
+<script>if (document.documentElement.classList.contains('cine')) document.getElementById('loader').hidden = false;</script>
 
 <!-- ================================ HEADER ================================ -->
 <header class="site-header is-over" id="siteHeader">
@@ -737,16 +799,17 @@ body.has-view main#home, body.has-view .hero { display: none; }
 </header>
 
 <!-- ================================= HERO =================================
-     Image sequence: assets/frames/f001.jpg … f300.jpg (300 frames from the
-     supplied ZIP, 720×1280, in their original order).
-       f001–f120  façade and portal on Neubaustraße
-       f121–f215  through the doors, up the steps, under the stone arch (foyer)
-       f216–f300  under the glass dome: breakfast and dining room
+     Image sequence: assets/hero/frame_000000.jpg … frame_000150.jpg (151
+     frames from the supplied ZIP, 720×1280, unmodified, in their original order).
+       000–060  façade and portal on Neubaustraße
+       061–110  through the doors, up the steps, under the stone arch (foyer)
+       111–150  under the glass dome: breakfast and dining room
      The three <article class="moment"> passages are tied to hero progress in
      JS (HERO_TIMELINE). The <img class="moment__still"> elements are the
      no-JS / reduced-motion fallback.
      ======================================================================= -->
 <section class="hero" id="top" aria-label="Hotel Rebstock">
+  <script>if (document.documentElement.classList.contains('cine')) document.currentScript.parentNode.classList.add('hero--live');</script>
   <div class="hero__stage" id="heroStage">
     <canvas class="hero__bg" id="heroBg" aria-hidden="true"></canvas>
     <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
@@ -759,7 +822,7 @@ body.has-view main#home, body.has-view .hero { display: none; }
 
     <!-- Moment 1 — the entrance -->
     <article class="moment" data-moment="0">
-      <img class="moment__still" src="assets/frames/f001.jpg" width="720" height="1280" alt="Die Rokokofassade des Hotel Rebstock mit dem Portal und dem goldenen Schriftzug „Hotel Rebstock“" data-alt-en="The Rococo façade of Hotel Rebstock with its portal and gilt “Hotel Rebstock” lettering" fetchpriority="high">
+      <img class="moment__still" src="assets/hero/frame_000000.jpg" width="720" height="1280" alt="Die Rokokofassade des Hotel Rebstock mit dem Portal und dem goldenen Schriftzug „Hotel Rebstock“" data-alt-en="The Rococo façade of Hotel Rebstock with its portal and gilt “Hotel Rebstock” lettering" fetchpriority="high">
       <div class="moment__text">
         <p class="moment__label" data-line><i>01</i><span lang="de">Neubaustraße 7 · Würzburg</span><span lang="en">Neubaustraße 7 · Würzburg</span></p>
         <h1 data-line>
@@ -779,7 +842,7 @@ body.has-view main#home, body.has-view .hero { display: none; }
 
     <!-- Moment 2 — the foyer -->
     <article class="moment" data-moment="1">
-      <img class="moment__still" src="assets/frames/f185.jpg" width="720" height="1280" loading="lazy" alt="Steinerner Torbogen mit Figuren und Stufen hinauf ins Foyer" data-alt-en="Stone archway with statues and steps leading up into the foyer">
+      <img class="moment__still" src="assets/hero/frame_000090.jpg" width="720" height="1280" loading="lazy" alt="Steinerner Torbogen mit Figuren und Stufen hinauf ins Foyer" data-alt-en="Stone archway with statues and steps leading up into the foyer">
       <div class="moment__text">
         <p class="moment__label" data-line><i>02</i><span lang="de">Ankommen</span><span lang="en">Arriving</span></p>
         <h2 data-line>
@@ -795,7 +858,7 @@ body.has-view main#home, body.has-view .hero { display: none; }
 
     <!-- Moment 3 — restaurant & cuisine -->
     <article class="moment" data-moment="2">
-      <img class="moment__still" src="assets/frames/f290.jpg" width="720" height="1280" loading="lazy" alt="Speiseraum unter der Glaskuppel mit gelb leuchtender Theke" data-alt-en="Dining room beneath the glass dome with a glowing yellow counter">
+      <img class="moment__still" src="assets/hero/frame_000145.jpg" width="720" height="1280" loading="lazy" alt="Speiseraum unter der Glaskuppel mit gelb leuchtender Theke" data-alt-en="Dining room beneath the glass dome with a glowing yellow counter">
       <div class="moment__text">
         <p class="moment__label" data-line><i>03</i><span lang="de">Unter der Glaskuppel</span><span lang="en">Beneath the glass dome</span></p>
         <h2 data-line>
@@ -1277,19 +1340,30 @@ body.has-view main#home, body.has-view .hero { display: none; }
           </div>
         </div>
       </div>
-      <div>
+      <div class="where__info">
+        <!-- Rating area: deliberately beside (desktop) / below (mobile) the map, never on top of it. -->
+        <section class="rating-card" aria-labelledby="rating-h">
+          <p class="eyebrow"><span lang="de">Google-Bewertungen</span><span lang="en">Google reviews</span></p>
+          <h3 id="rating-h"><span lang="de">Was Gäste über den Rebstock schreiben</span><span lang="en">What guests write about the Rebstock</span></h3>
+          <!-- VERIFIED GOOGLE RATING: no star rating or review count is shown, because none could be verified.
+               To show one, copy the values from the hotel's Google Maps listing, uncomment this block, keep the date current:
+          <p class="rating"><span class="rating__value">0,0</span><span class="stars" style="--r: 0.0" role="img" aria-label="0,0 von 5 Sternen"></span><span class="rating__count">000 Google-Bewertungen · Stand: MM/JJJJ</span></p>
+          -->
+          <p class="small muted"><span lang="de">Die aktuelle Bewertung und alle Rezensionen finden Sie direkt bei Google.</span><span lang="en">The current rating and all reviews are on Google.</span></p>
+          <a class="btn btn--quiet" href="https://maps.app.goo.gl/MiHbzkv8fiYLyQRH8" target="_blank" rel="noopener"><span lang="de">Bewertungen auf Google</span><span lang="en">Reviews on Google</span><svg class="icon" aria-hidden="true"><use href="#i-ext"/></svg></a>
+        </section>
+        <div>
         <address class="address-block">Best Western Premier<br>Hotel Rebstock<br>Neubaustraße 7<br>97070 Würzburg</address>
         <p style="display:flex;gap:10px;flex-wrap:wrap">
           <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Best%20Western%20Premier%20Hotel%20Rebstock%2C%20Neubaustra%C3%9Fe%207%2C%2097070%20W%C3%BCrzburg" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg><span lang="de">Route planen</span><span lang="en">Get directions</span></a>
-          <a class="btn btn--quiet" href="https://maps.app.goo.gl/MiHbzkv8fiYLyQRH8" target="_blank" rel="noopener"><span lang="de">Bewertungen auf Google</span><span lang="en">Reviews on Google</span><svg class="icon" aria-hidden="true"><use href="#i-ext"/></svg></a>
         </p>
-        <!-- Google rating: intentionally not shown as a number. Only add a star rating / review count if it is verified and kept current. -->
         <ul class="ways" style="margin-top:28px">
           <li><svg class="icon" aria-hidden="true"><use href="#i-train"/></svg><div><h3><span lang="de">Mit der Bahn</span><span lang="en">By train</span></h3><p><span lang="de">Die Straßenbahn hält direkt vor dem Hauptbahnhof. Nach ca. 6 Minuten an der Haltestelle Neubaustraße aussteigen.</span><span lang="en">Trams stop right outside the main station. Get off at Neubaustraße after about 6 minutes.</span></p></div></li>
           <li><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg><div><h3><span lang="de">Mit dem Auto</span><span lang="en">By car</span></h3><p><span lang="de">Über die Neubaustraße: Das Hotel liegt ca. 50 m nach der Einmündung zum Parkhaus auf der rechten Seite.</span><span lang="en">Via Neubaustraße: the hotel is about 50 m past the car-park entrance, on the right.</span></p></div></li>
           <li><svg class="icon" aria-hidden="true"><use href="#i-park"/></svg><div><h3><span lang="de">Eigene Tiefgarage</span><span lang="en">Our underground garage</span></h3><p><span lang="de">30 Stellplätze, Einfahrt per Autoaufzug, 25,00 € pro Nacht. Fahrzeuge bis 2,00 m Höhe, 2,40 m Breite, 5,00 m Länge und 5 t. Die Zufahrtskarte erhalten Sie an der Rezeption. Ein öffentliches Parkhaus liegt direkt hinter dem Hotel.</span><span lang="en">30 spaces, entry by car lift, €25.00 per night. Vehicles up to 2.00 m high, 2.40 m wide, 5.00 m long and 5 t. Collect your access card at reception. A public car park is directly behind the hotel.</span></p></div></li>
           <li><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg><div><h3><span lang="de">E-Mobilität</span><span lang="en">Electric vehicles</span></h3><p><span lang="de">2 Lademöglichkeiten in der Tiefgarage.</span><span lang="en">2 charging points in the garage.</span></p></div></li>
         </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -1391,23 +1465,6 @@ body.has-view main#home, body.has-view .hero { display: none; }
   </div>
 </section>
 
-<!-- ============================ CONSENT DIALOG ============================ -->
-<div class="consent" id="consent" role="dialog" aria-modal="false" aria-labelledby="consent-h">
-  <div class="consent__box">
-    <h2 id="consent-h" tabindex="-1"><span lang="de">Ihre Privatsphäre</span><span lang="en">Your privacy</span></h2>
-    <p><span lang="de">Wir setzen nur technisch notwendige Speicherungen ein (Ihre Sprach- und Cookie-Auswahl). Externe Inhalte wie Google Maps laden wir erst mit Ihrer Zustimmung. Datenschutzerklärung, Impressum und AGB finden Sie unten.</span><span lang="en">We only store what is technically necessary (your language and cookie choice). External content such as Google Maps loads only with your consent. Privacy policy, legal notice and terms (AGB) are linked below.</span></p>
-    <div class="opts">
-      <div class="opt"><b><span lang="de">Notwendig</span><span lang="en">Necessary</span></b><small><span lang="de">Sprache und diese Auswahl. Immer aktiv.</span><span lang="en">Language and this choice. Always on.</span></small><span class="switch"><input type="checkbox" checked disabled aria-label="Notwendig" data-aria-en="Necessary"><i></i></span></div>
-      <div class="opt"><b><span lang="de">Externe Medien</span><span lang="en">External media</span></b><small><span lang="de">Google Maps (Google Ireland Ltd.). Dabei werden Daten an Google übertragen.</span><span lang="en">Google Maps (Google Ireland Ltd.). Data is transferred to Google.</span></small><span class="switch"><input type="checkbox" id="cMaps" aria-label="Externe Medien zulassen" data-aria-en="Allow external media"><i></i></span></div>
-    </div>
-    <div class="actions">
-      <button type="button" class="btn btn--quiet" data-consent="necessary"><span lang="de">Nur notwendige</span><span lang="en">Necessary only</span></button>
-      <button type="button" class="btn btn--quiet" data-consent="save"><span lang="de">Auswahl speichern</span><span lang="en">Save choice</span></button>
-      <button type="button" class="btn" data-consent="all"><span lang="de">Alle akzeptieren</span><span lang="en">Accept all</span></button>
-    </div>
-    <p class="links"><a href="#datenschutz">Datenschutz</a><a href="#impressum">Impressum</a><a href="#agb">AGB</a></p>
-  </div>
-</div>
 
 <script>
 (function () {
@@ -1429,19 +1486,27 @@ body.has-view main#home, body.has-view .hero { display: none; }
     // Optional external links (left empty → link scrolls to the contact block)
     miceExpressUrl: '',
     meetingBookingUrl: '',
-    // Google Maps embed, loaded only after consent
+    // Google Maps, loaded only after consent ("Externe Medien").
+    // With an API key (Maps JavaScript API; Geocoding API too unless hotelLatLng
+    // is set) the map is drawn with a real night style. Without a key, the
+    // keyless embed below is shown with a night rendering (see CSS .map iframe).
+    googleMapsApiKey: '',
+    hotelLatLng: null,            // e.g. { lat: 49.0, lng: 9.0 } – copy from Google Maps; null = geocode mapsQuery
+    mapsQuery: 'Best Western Premier Hotel Rebstock, Neubaustraße 7, 97070 Würzburg',
     mapsEmbedUrl: 'https://www.google.com/maps?q=Best+Western+Premier+Hotel+Rebstock,+Neubaustra%C3%9Fe+7,+97070+W%C3%BCrzburg&hl=de&z=16&output=embed',
-    // Hero frames: 300 frames from the supplied ZIP, numbered f001…f300
-    heroFrameCount: 300,
-    heroFrameSrc: function (n) { return 'assets/frames/f' + ('00' + n).slice(-3) + '.jpg'; }
+    // Hero frames: the 151 frames of the supplied ZIP, kept under their original
+    // names (frame_000000 … frame_000150). n runs from 1 to heroFrameCount.
+    // If you replace the sequence, set heroFrameCount to the new number of files.
+    heroFrameCount: 151,
+    heroFrameSrc: function (n) { return 'assets/hero/frame_' + ('00000' + (n - 1)).slice(-6) + '.jpg'; }
   };
 
   /* Narrative timing, in hero progress (0 = first frame, 1 = last frame).
-     Frame ≈ 1 + progress × 299. Intervals never overlap, so no two passages
-     can be visible at once.
-       Moment 0  entrance   frames   1– 51 fully shown, gone by frame  81
-       Moment 1  foyer      enters 132–165, holds to 200, gone by 227
-       Moment 2  restaurant enters 242–278, holds to the last frame        */
+     Archive frame ≈ progress × 150. Intervals never overlap, so no two
+     passages can be visible at once.
+       Moment 0  entrance   frames   0– 25 fully shown, gone by frame  41 (still outside)
+       Moment 1  foyer      enters  66– 83 (doors open, steps, stone arch), holds to 100, gone by 114
+       Moment 2  restaurant enters 121–140 (under the dome), holds to the last frame        */
   var HERO_TIMELINE = [
     { inn: null,         out: [0.17, 0.27] },
     { inn: [0.44, 0.55], out: [0.67, 0.76] },
@@ -1489,7 +1554,8 @@ body.has-view main#home, body.has-view .hero { display: none; }
       setupH: 'Online-Versand ist noch nicht eingerichtet.', setupP: 'Ihre Anfrage wurde nicht gesendet. Mit einem Klick öffnen Sie eine vorbereitete E-Mail an {mail} mit allen Angaben – oder Sie rufen uns an.',
       mailBtn: 'Per E-Mail senden', retry: 'Erneut versuchen', backReview: 'Zurück zur Übersicht', newReq: 'Neue Anfrage',
       announce: 'Schritt {a} von {b}: {q}',
-      mapTitle: 'Google Maps: Best Western Premier Hotel Rebstock, Neubaustraße 7, Würzburg'
+      mapTitle: 'Google Maps: Best Western Premier Hotel Rebstock, Neubaustraße 7, Würzburg',
+      consentSaved: 'Ihre Cookie-Einstellungen wurden gespeichert.'
     },
     en: {
       next: 'Continue', send: 'Send enquiry', sending: 'Sending …',
@@ -1513,7 +1579,8 @@ body.has-view main#home, body.has-view .hero { display: none; }
       setupH: 'Online sending is not set up yet.', setupP: 'Your enquiry has not been sent. One click opens a prepared email to {mail} with all your details – or give us a call.',
       mailBtn: 'Send by email', retry: 'Try again', backReview: 'Back to summary', newReq: 'New enquiry',
       announce: 'Step {a} of {b}: {q}',
-      mapTitle: 'Google Maps: Best Western Premier Hotel Rebstock, Neubaustraße 7, Würzburg'
+      mapTitle: 'Google Maps: Best Western Premier Hotel Rebstock, Neubaustraße 7, Würzburg',
+      consentSaved: 'Your cookie settings have been saved.'
     }
   };
   function lang() { return root.lang === 'en' ? 'en' : 'de'; }
@@ -1713,16 +1780,25 @@ body.has-view main#home, body.has-view .hero { display: none; }
         img.src = SITE_CONFIG.heroFrameSrc(n);
       });
     }
-    function pool(list, concurrency, onEach) {
-      var i = 0;
+    // nearestFirst: each free slot takes the not-yet-loaded frame closest to the
+    // frame currently on screen, so the background stream follows the visitor's
+    // scroll position instead of loading strictly front to back.
+    function pool(list, concurrency, onEach, nearestFirst) {
+      var queue = list.slice();
       return new Promise(function (resolve) {
         var active = 0;
-        if (!list.length) return resolve();
+        if (!queue.length) return resolve();
+        function take() {
+          if (!nearestFirst) return queue.shift();
+          var target = 1 + Math.round(progress * (total - 1)), best = 0;
+          for (var k = 1; k < queue.length; k++) if (Math.abs(queue[k] - target) < Math.abs(queue[best] - target)) best = k;
+          return queue.splice(best, 1)[0];
+        }
         function next() {
-          if (i >= list.length && active === 0) return resolve();
-          while (active < concurrency && i < list.length) {
+          if (!queue.length && active === 0) return resolve();
+          while (active < concurrency && queue.length) {
             active++;
-            load(list[i++]).then(function (ok) { active--; onEach(ok); next(); });
+            load(take()).then(function (ok) { active--; onEach(ok); next(); });
           }
         }
         next();
@@ -1755,14 +1831,18 @@ body.has-view main#home, body.has-view .hero { display: none; }
       ctx = canvas.getContext('2d'); bgCtx = bg.getContext('2d');
       if (!ctx) return false;
       var small = window.matchMedia('(max-width: 767px), (pointer: coarse) and (max-width: 1024px)').matches;
-      stepN = small ? 2 : 1; // phones: every 2nd frame – half the decode/memory cost, still 150 frames
+      // Phones skip every 2nd frame only for long sequences (>200 frames), to cap
+      // decode/memory cost; the 151-frame archive plays complete everywhere.
+      stepN = (small && total > 200) ? 2 : 1;
       var all = [];
       for (var n = 1; n <= total; n += stepN) all.push(n);
       if (all[all.length - 1] !== total) all.push(total);
       // Frames needed for an understandable first scroll: an even spread through
       // the whole sequence, plus the three narrative anchor frames.
-      var required = all.filter(function (n, i) { return i % Math.round(10 / stepN) === 0; });
-      [1, 165, 278, total].forEach(function (n) { var m = nearestIn(all, n); if (required.indexOf(m) < 0) required.push(m); });
+      var spread = Math.max(1, Math.round(all.length / 15));
+      var required = all.filter(function (n, i) { return i % spread === 0; });
+      var anchors = [0, HERO_TIMELINE[1].inn[1], HERO_TIMELINE[2].inn[1], 1].map(function (p) { return 1 + Math.round(p * (total - 1)); });
+      anchors.forEach(function (n) { var m = nearestIn(all, n); if (required.indexOf(m) < 0) required.push(m); });
       required.sort(function (a, b) { return a - b; });
       var rest = all.filter(function (n) { return required.indexOf(n) < 0; });
 
@@ -1791,7 +1871,7 @@ body.has-view main#home, body.has-view .hero { display: none; }
         finishLoader();
         // Remaining frames stream in the background; drawing always uses the
         // nearest decoded frame, so scrolling never waits on the network.
-        return pool(rest, 4, function () {});
+        return pool(rest, 4, function () {}, true);
       });
       return true;
     }
@@ -1870,19 +1950,38 @@ body.has-view main#home, body.has-view .hero { display: none; }
     });
   }
 
-  /* ============================================================= CONSENT */
-  var consentEl = $('#consent'), cMaps = $('#cMaps');
+  /* ============================================================= CONSENT
+     First visit: the dialog opens without stealing focus (it is non-modal and
+     first in the tab order). Opened from "Cookie-Einstellungen": preferences
+     are expanded, focus moves to the heading, Escape closes and focus returns
+     to the button that opened it. */
+  var consentEl = $('#consent'), cMaps = $('#cMaps'), cPrefs = $('#consentPrefs'), cManage = $('#consentManage');
+  var consentOpener = null;
   var consent = (function () { try { return JSON.parse(store.get('rebstock.consent') || 'null'); } catch (e) { return null; } })();
+  function showPrefs(open) { cPrefs.hidden = !open; cManage.setAttribute('aria-expanded', String(open)); }
+  function closeConsent() {
+    var hadFocus = consentEl.contains(document.activeElement);
+    consentEl.classList.remove('is-open');
+    showPrefs(false);
+    if (hadFocus) {
+      var target = consentOpener && document.body.contains(consentOpener) ? consentOpener : $('.brand');
+      target.focus({ preventScroll: true });
+    }
+    consentOpener = null;
+  }
   function saveConsent(maps) {
     consent = { v: 1, necessary: true, maps: !!maps, at: new Date().toISOString() };
     store.set('rebstock.consent', JSON.stringify(consent));
-    consentEl.classList.remove('is-open');
+    closeConsent();
+    $('#consentLive').textContent = t('consentSaved');
     if (consent.maps) loadMap(); else unloadMap();
   }
-  function openConsent(focus) {
+  function openConsent(opener) {
     cMaps.checked = !!(consent && consent.maps);
+    consentOpener = opener || null;
+    showPrefs(!!opener);
     consentEl.classList.add('is-open');
-    if (focus) $('#consent-h').focus();
+    if (opener) $('#consent-h').focus();
   }
   $$('[data-consent]', consentEl).forEach(function (b) {
     b.addEventListener('click', function () {
@@ -1890,11 +1989,46 @@ body.has-view main#home, body.has-view .hero { display: none; }
       saveConsent(k === 'all' ? true : k === 'save' ? cMaps.checked : false);
     });
   });
-  $$('[data-open-consent]').forEach(function (b) { b.addEventListener('click', function () { openConsent(true); }); });
+  cManage.addEventListener('click', function () {
+    var open = cPrefs.hidden;
+    showPrefs(open);
+    if (open) cMaps.focus();
+  });
+  document.addEventListener('keydown', function (e) {
+    // Escape only dismisses when a choice already exists; a first-time visitor
+    // has to choose, but the page stays fully usable behind the dialog.
+    if (e.key === 'Escape' && consentEl.classList.contains('is-open') && consent) closeConsent();
+  });
+  $$('[data-open-consent]').forEach(function (b) { b.addEventListener('click', function () { openConsent(b); }); });
 
   /* ================================================================= MAP */
+  var MAP_NIGHT_STYLE = [
+    { elementType: 'geometry', stylers: [{ color: '#1f1c17' }] },
+    { elementType: 'labels.text.fill', stylers: [{ color: '#c9bfae' }] },
+    { elementType: 'labels.text.stroke', stylers: [{ color: '#15130f' }] },
+    { featureType: 'administrative', elementType: 'geometry.stroke', stylers: [{ color: '#4b453c' }] },
+    { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#d2ad5c' }] },
+    { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#26221c' }] },
+    { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#22291f' }] },
+    { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#8fa37f' }] },
+    { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#3a352c' }] },
+    { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#15130f' }] },
+    { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#b7ad9c' }] },
+    { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#5a4f3a' }] },
+    { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#e6d6b0' }] },
+    { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2d2922' }] },
+    { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#d2ad5c' }] },
+    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#17232b' }] },
+    { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#7d93a0' }] }
+  ];
   var mapBox = $('#map'), mapGate = $('#mapGate');
   function loadMap() {
+    if (mapBox.classList.contains('is-loaded')) return;
+    mapBox.classList.add('is-loaded');
+    mapGate.hidden = true;
+    if (SITE_CONFIG.googleMapsApiKey) loadStyledMap(); else loadEmbed();
+  }
+  function loadEmbed() {
     if ($('iframe', mapBox)) return;
     var f = document.createElement('iframe');
     f.src = SITE_CONFIG.mapsEmbedUrl;
@@ -1903,9 +2037,69 @@ body.has-view main#home, body.has-view .hero { display: none; }
     f.referrerPolicy = 'no-referrer-when-downgrade';
     f.setAttribute('allowfullscreen', '');
     mapBox.appendChild(f);
-    mapGate.hidden = true;
   }
-  function unloadMap() { var f = $('iframe', mapBox); if (f) f.remove(); mapGate.hidden = false; }
+  function unloadMap() {
+    $$('iframe, .map__canvas', mapBox).forEach(function (n) { n.remove(); });
+    mapBox.classList.remove('is-loaded', 'is-styled');
+    mapGate.hidden = false;
+  }
+  // Any failure of the styled map (script blocked, bad key, geocoding failed)
+  // falls back to the embed, so the location is always shown once consented.
+  function styledMapFailed() {
+    $$('.map__canvas', mapBox).forEach(function (n) { n.remove(); });
+    mapBox.classList.remove('is-styled');
+    if (mapBox.classList.contains('is-loaded')) loadEmbed();
+  }
+  function loadStyledMap() {
+    var el = document.createElement('div');
+    el.className = 'map__canvas';
+    el.setAttribute('role', 'region');
+    el.setAttribute('aria-label', t('mapTitle'));
+    mapBox.appendChild(el);
+    var build = function () { try { buildStyledMap(el); } catch (e) { styledMapFailed(); } };
+    if (window.google && google.maps && google.maps.Map) { build(); return; }
+    window.__rebstockMapReady = build;
+    window.gm_authFailure = styledMapFailed;
+    if ($('script[data-gmaps]')) return;
+    var sc = document.createElement('script');
+    sc.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(SITE_CONFIG.googleMapsApiKey) + '&callback=__rebstockMapReady&loading=async&language=' + lang();
+    sc.async = true;
+    sc.setAttribute('data-gmaps', '');
+    sc.onerror = styledMapFailed;
+    document.head.appendChild(sc);
+  }
+  function buildStyledMap(el) {
+    var gm = google.maps;
+    var map = new gm.Map(el, {
+      zoom: 16, styles: MAP_NIGHT_STYLE, backgroundColor: '#1f1c17',
+      mapTypeControl: false, streetViewControl: false, fullscreenControl: true, gestureHandling: 'cooperative'
+    });
+    mapBox.classList.add('is-styled');
+    function place(pos) {
+      map.setCenter(pos);
+      // Custom overlay instead of google.maps.Marker (deprecated, logs a console
+      // warning) or AdvancedMarkerElement (needs a Map ID, which disables styles).
+      var Pin = function () { this.div = null; };
+      Pin.prototype = new gm.OverlayView();
+      Pin.prototype.onAdd = function () {
+        var d = document.createElement('div');
+        d.className = 'map-pin';
+        d.innerHTML = '<span class="map-pin__label">Hotel Rebstock</span><span class="map-pin__dot"></span>';
+        this.div = d;
+        this.getPanes().overlayMouseTarget.appendChild(d);
+      };
+      Pin.prototype.draw = function () {
+        var pt = this.getProjection().fromLatLngToDivPixel(pos instanceof gm.LatLng ? pos : new gm.LatLng(pos.lat, pos.lng));
+        this.div.style.left = pt.x + 'px'; this.div.style.top = pt.y + 'px';
+      };
+      Pin.prototype.onRemove = function () { if (this.div) this.div.remove(); };
+      new Pin().setMap(map);
+    }
+    if (SITE_CONFIG.hotelLatLng) place(SITE_CONFIG.hotelLatLng);
+    else new gm.Geocoder().geocode({ address: SITE_CONFIG.mapsQuery }, function (res, status) {
+      if (status === 'OK' && res && res[0]) place(res[0].geometry.location); else styledMapFailed();
+    });
+  }
   $('#mapLoad').addEventListener('click', function () { saveConsent(true); });
 
   /* =============================================================== VIEWS */
@@ -2273,6 +2467,7 @@ body.has-view main#home, body.has-view .hero { display: none; }
       if (cur === 'result') { /* keep result in the language it was produced in until the next action */ }
       renderProgress();
       var f = $('iframe', mapBox); if (f) f.title = t('mapTitle');
+      var mc = $('.map__canvas', mapBox); if (mc) mc.setAttribute('aria-label', t('mapTitle'));
     });
 
     var startStep = restoreDraft();
@@ -2291,10 +2486,10 @@ body.has-view main#home, body.has-view .hero { display: none; }
   /* =============================================================== BOOT */
   initLang();
   var heroLive = Hero.start();
-  if (!heroLive) { var l = $('#loader'); if (l) l.hidden = true; }
+  if (!heroLive) { var l = $('#loader'); if (l) l.hidden = true; hero.classList.remove('hero--live'); }
   if (!reducedMotion) { initOffers(); initReveals(); }
   if (consent && consent.maps) loadMap();
-  if (!consent) openConsent(false);
+  if (!consent) openConsent(null);
 
   window.addEventListener('scroll', requestTick, { passive: true });
   var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(measureAll, 120); });
