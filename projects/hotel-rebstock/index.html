@@ -1,0 +1,2310 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hotel Rebstock Würzburg – Best Western Premier</title>
+<meta name="description" content="Best Western Premier Hotel Rebstock, Neubaustraße 7, 97070 Würzburg: 125 Zimmer und Suiten hinter einer Rokokofassade, Gourmetrestaurant KUNO 1408 und SALON mit Bistro und Bar.">
+<meta name="theme-color" content="#15130f">
+<!--
+  ============================================================================
+  HOTEL REBSTOCK – SINGLE-FILE WEBSITE
+  ----------------------------------------------------------------------------
+  Everything (HTML, CSS, JS) lives in this file. Images live next to it:
+
+    index.html
+    assets/frames/f001.jpg … f300.jpg   hero image sequence (from the supplied ZIP, unmodified)
+    assets/offers/offer-*.png           transparent arch cut-outs for the offer cards
+    assets/photos/                      put your own photographs here (see "REPLACE WITH" comments)
+
+  Configuration (enquiry endpoint, booking engine URL) → search for "SITE_CONFIG".
+  ============================================================================
+-->
+<script>
+  /* Runs before first paint: marks JS support, restores language, flags reduced motion.
+     Everything that hides content for animation is scoped to .js so the page stays
+     fully readable with JavaScript disabled. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    try {
+      var l = localStorage.getItem('rebstock.lang');
+      if (l === 'en' || l === 'de') d.lang = l;
+      else if (!l && /^en\b/i.test(navigator.language || '') ) d.lang = 'en';
+    } catch (e) {}
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('rm');
+  })();
+</script>
+<style>
+/* ==========================================================================
+   1. TOKENS
+   Palette taken from the building itself: grey stone portal and marble floors, wrought-iron
+   lanterns, gilt portal lettering, marble floors and the yellow glow of the
+   SALON counter under the glass dome.
+   ========================================================================== */
+:root {
+  --paper: #eeedea;          /* marble floor / Muschelkalk stone */
+  --paper-2: #e3e1dc;
+  --paper-3: #d6d2c9;
+  --stone: #8c8478;
+  --ink: #1c1a16;            /* wrought iron */
+  --ink-2: #4b453c;
+  --ink-3: #6b6457;
+  --night: #15130f;
+  --night-2: #221f19;
+  --gilt: #b38a3c;           /* portal lettering – large text / ornaments only */
+  --gilt-ink: #7d5c1f;       /* gilt dark enough for small text on paper (5.6:1) */
+  --salon: #e6c42c;          /* SALON counter */
+  --ok: #2e7d4f;
+  --err: #a3322a;
+  --line: rgba(28, 26, 22, .14);
+  --line-night: rgba(244, 239, 231, .16);
+
+  --f-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052, Georgia, serif;
+  --f-text: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --r-s: 10px; --r-m: 18px; --r-l: 30px;
+  --arch: 999px 999px var(--r-m) var(--r-m);   /* the Rococo portal, reused as an image frame */
+
+  --gut: clamp(16px, 5vw, 72px);
+  --max: 1320px;
+  --header-h: 68px;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 12px); }
+html:not(.rm) { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--f-text);
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+}
+img, svg, canvas { display: block; max-width: 100%; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+a:hover { text-decoration-color: var(--gilt); }
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 400; line-height: 1.08; margin: 0; letter-spacing: -.01em; }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 2px solid var(--gilt); outline-offset: 3px; border-radius: 4px; }
+.night :focus-visible, .hero :focus-visible, .site-header.is-over :focus-visible { outline-color: var(--salon); }
+.sr-only { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 200; background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: var(--r-s); }
+.skip:focus { top: 12px; }
+
+/* Bilingual content: both languages are in the markup, CSS shows one. */
+html[lang="de"] [lang="en"]:not(html), html[lang="en"] [lang="de"]:not(html) { display: none !important; }
+
+.wrap { width: min(100% - 2 * var(--gut), var(--max)); margin-inline: auto; }
+.eyebrow {
+  font: 600 .75rem/1.3 var(--f-text); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gilt-ink); display: inline-flex; gap: .7em; align-items: center;
+}
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
+.night .eyebrow { color: var(--salon); }
+.lede { font-size: clamp(1.125rem, 1.3vw + .7rem, 1.375rem); line-height: 1.5; color: var(--ink-2); max-width: 36ch; }
+.night .lede { color: rgba(244, 239, 231, .78); }
+.muted { color: var(--ink-3); }
+.small { font-size: .875rem; }
+.note-verify { font-size: .8125rem; color: var(--ink-3); border-left: 2px solid var(--gilt); padding-left: .75em; }
+
+.icon { width: 1.15em; height: 1.15em; flex: none; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Buttons: soft, rounded, restrained */
+.btn {
+  --bg: var(--ink); --fg: var(--paper);
+  display: inline-flex; align-items: center; gap: .6em; justify-content: center;
+  min-height: 48px; padding: .75em 1.35em; border-radius: 14px; border: 1px solid transparent;
+  background: var(--bg); color: var(--fg); font: 600 .9375rem/1.2 var(--f-text); letter-spacing: .01em;
+  text-decoration: none; cursor: pointer; transition: background .2s, color .2s, transform .2s var(--ease), border-color .2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn--gilt { --bg: var(--salon); --fg: var(--ink); }
+.btn--ghost { --bg: transparent; --fg: currentColor; border-color: currentColor; }
+.btn--quiet { --bg: var(--paper-2); --fg: var(--ink); }
+.btn .icon { width: 1.1em; height: 1.1em; }
+.link-arrow { display: inline-flex; align-items: center; gap: .45em; font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.link-arrow .icon { transition: transform .2s var(--ease); }
+.link-arrow:hover .icon { transform: translateX(3px); }
+
+/* ==========================================================================
+   3. HEADER
+   ========================================================================== */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h);
+  display: flex; align-items: center; gap: 20px; padding: 0 var(--gut);
+  color: var(--ink); background: rgba(238, 237, 234, .92); backdrop-filter: saturate(1.2) blur(10px); -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid var(--line);
+  transition: background .35s, color .35s, border-color .35s;
+}
+.site-header.is-over { background: transparent; color: var(--paper); border-color: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+html:not(.js) .site-header { position: absolute; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
+.brand svg { width: 30px; height: 34px; }
+.brand b { font: 400 1.5rem/1 var(--f-display); letter-spacing: .02em; display: block; }
+.brand small { display: block; font: 600 .625rem/1.3 var(--f-text); letter-spacing: .18em; text-transform: uppercase; opacity: .72; margin-top: 3px; }
+.nav-main { display: none; }
+.nav-main ul { display: flex; gap: clamp(14px, 1.6vw, 28px); list-style: none; margin: 0; padding: 0; }
+.nav-main a { text-decoration: none; font-size: .9375rem; padding: 6px 0; border-bottom: 1px solid transparent; }
+.nav-main a:hover { border-color: currentColor; }
+.lang { display: inline-flex; border: 1px solid currentColor; border-radius: 12px; padding: 2px; opacity: .9; }
+.lang button, .lang a {
+  font: 600 .75rem/1 var(--f-text); letter-spacing: .08em; padding: 9px 10px; min-width: 40px; min-height: 36px; border: 0; border-radius: 9px;
+  background: none; color: inherit; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+}
+.lang [aria-pressed="true"] { background: currentColor; }
+.lang [aria-pressed="true"] span { color: var(--paper); }
+.site-header.is-over .lang [aria-pressed="true"] span { color: var(--ink); }
+.header-cta { display: none; }
+.menu-toggle { position: relative; }
+.menu-toggle > summary {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 4px;
+  font: 600 .875rem/1 var(--f-text);
+}
+.menu-toggle > summary::-webkit-details-marker { display: none; }
+.menu-toggle[open] > summary .i-open, .menu-toggle:not([open]) > summary .i-close { display: none; }
+.menu-panel {
+  position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0; overflow: auto;
+  background: var(--paper); color: var(--ink); padding: 24px var(--gut) 40px; border-top: 1px solid var(--line);
+}
+.menu-panel ul { list-style: none; margin: 0 0 28px; padding: 0; }
+.menu-panel li a { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); font: 400 1.6rem/1.2 var(--f-display); text-decoration: none; }
+@media (min-width: 1080px) {
+  .nav-main { display: block; }
+  .menu-toggle { display: none; }
+  .header-cta { display: inline-flex; min-height: 42px; padding: .6em 1.1em; }
+  .site-header.is-over .header-cta { --bg: var(--paper); --fg: var(--ink); }
+}
+
+/* ==========================================================================
+   4. HERO – scroll-driven image sequence
+   Static layout (no JS / reduced motion): three stacked chapters, each a still
+   with its text. Cinematic layout (.hero--live): one sticky stage, canvas
+   frames, the three passages overlaid lower-left.
+   ========================================================================== */
+.hero { position: relative; background: var(--night); color: var(--paper); }
+.hero__stage { position: relative; }
+.hero__canvas, .hero__bg, .hero__progress, .hero__hint, .loader { display: none; }
+.moment { position: relative; min-height: 100svh; display: flex; align-items: flex-end; padding: calc(var(--header-h) + 24px) var(--gut) clamp(40px, 10vh, 96px); overflow: hidden; isolation: isolate; }
+.moment__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.moment::before { content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(15, 13, 10, .82) 0%, rgba(15, 13, 10, .5) 38%, rgba(15, 13, 10, 0) 68%); }
+.moment__text { max-width: 34rem; }
+.moment__label { font: 600 .75rem/1.3 var(--f-text); letter-spacing: .18em; text-transform: uppercase; color: var(--salon); display: flex; gap: .9em; align-items: center; margin-bottom: 18px; }
+.moment__label i { font-style: normal; font-family: var(--f-display); font-size: 1rem; letter-spacing: 0; color: var(--paper); opacity: .8; }
+.moment h1, .moment h2 { font-size: clamp(2.4rem, 4.6vw + .8rem, 5rem); line-height: 1.02; margin-bottom: 22px; text-wrap: balance; }
+.moment h1 em, .moment h2 em { font-style: italic; color: #f1dca6; }
+.moment p { font-size: clamp(1rem, .5vw + .9rem, 1.1875rem); line-height: 1.55; max-width: 32rem; color: rgba(244, 239, 231, .9); }
+.moment .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.moment .btn--ghost { color: var(--paper); }
+
+/* Live mode */
+.hero--live { height: var(--hero-h, 420vh); }
+.hero--live .hero__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.hero--live .hero__canvas, .hero--live .hero__bg { display: block; position: absolute; }
+.hero--live .hero__bg { inset: -40px; width: calc(100% + 80px); height: calc(100% + 80px); filter: blur(22px) brightness(.62) saturate(1.1); transform: translateZ(0); }
+.hero--live .hero__canvas { inset: 0; width: 100%; height: 100%; }
+.hero--live .moment { position: absolute; inset: 0; min-height: 0; padding-bottom: clamp(48px, 11vh, 120px); pointer-events: none; background: none; }
+.hero--live .moment::before { background: radial-gradient(120% 70% at 0% 100%, rgba(12, 10, 8, .74) 0%, rgba(12, 10, 8, .38) 45%, rgba(12, 10, 8, 0) 75%); opacity: var(--scrim, 0); }
+.hero--live .moment__still { display: none; }
+.hero--live .moment.is-on { pointer-events: auto; }
+.hero--live [data-line] { will-change: opacity, transform; }
+.hero--live .hero__progress, .hero--live .hero__hint { display: flex; }
+
+/* Desktop: the portrait footage becomes a tall arched panel to the right; the
+   same frame, blurred, fills the stage behind the text. */
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .hero--live .hero__canvas {
+    inset: auto; top: calc(var(--header-h) + 2vh); bottom: 4vh; right: clamp(24px, 9vw, 160px);
+    height: auto; width: auto; aspect-ratio: 9 / 16;
+    border-radius: 999px 999px var(--r-l) var(--r-l);
+    box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .06);
+  }
+  .hero--live .moment { padding-left: clamp(24px, 7vw, 120px); padding-right: calc(clamp(24px, 9vw, 160px) + (100svh - var(--header-h) - 6vh) * 9 / 16 + 48px); }
+  .hero--live .moment::before { opacity: 0; }
+}
+
+.hero__progress {
+  position: absolute; z-index: 3; left: var(--gut); top: calc(var(--header-h) + 22px);
+  gap: 18px; font: 600 .6875rem/1 var(--f-text); letter-spacing: .14em; text-transform: uppercase; color: rgba(244, 239, 231, .55);
+  list-style: none; margin: 0; padding: 0;
+}
+.hero__progress li { display: flex; align-items: center; gap: 8px; transition: color .3s; }
+.hero__progress li::before { content: ""; width: 22px; height: 2px; border-radius: 2px; background: currentColor; opacity: .5; transition: width .4s var(--ease), opacity .3s; }
+.hero__progress li.is-on { color: var(--paper); }
+.hero__progress li.is-on::before { width: 40px; opacity: 1; background: var(--salon); }
+.hero__hint { position: absolute; z-index: 3; left: 50%; bottom: 18px; transform: translateX(-50%); flex-direction: column; align-items: center; gap: 6px; font: 600 .6875rem/1 var(--f-text); letter-spacing: .16em; text-transform: uppercase; color: rgba(244, 239, 231, .75); }
+.hero__hint span.bar { width: 1px; height: 34px; background: linear-gradient(var(--paper), transparent); }
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) { .hero__hint { left: clamp(24px, 7vw, 120px); transform: none; align-items: flex-start; } }
+
+/* Preloader – only exists for the JS experience */
+.js .loader:not([hidden]) {
+  display: grid; place-items: center; position: fixed; inset: 0; z-index: 90; background: var(--night); color: var(--paper);
+  transition: opacity .7s var(--ease), visibility .7s;
+}
+.loader.is-done { opacity: 0; visibility: hidden; }
+.loader__inner { width: min(78vw, 360px); text-align: left; }
+.loader__mark { width: 44px; height: 50px; margin-bottom: 26px; color: var(--gilt); }
+.loader__title { font: 400 2rem/1.1 var(--f-display); margin-bottom: 26px; }
+.loader__bar { height: 2px; background: rgba(244, 239, 231, .16); border-radius: 2px; overflow: hidden; }
+.loader__bar i { display: block; height: 100%; width: 100%; background: var(--salon); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform .25s linear; }
+.loader__meta { display: flex; justify-content: space-between; margin-top: 12px; font: 600 .75rem/1 var(--f-text); letter-spacing: .12em; text-transform: uppercase; color: rgba(244, 239, 231, .6); font-variant-numeric: tabular-nums; }
+
+/* ==========================================================================
+   5. SECTIONS
+   ========================================================================== */
+section[id] { position: relative; }
+.sec { padding: clamp(80px, 12vw, 168px) 0; }
+.sec-head { display: grid; gap: 22px; margin-bottom: clamp(40px, 6vw, 80px); }
+.sec-head h2 { font-size: clamp(2.25rem, 4.2vw + .6rem, 4.25rem); text-wrap: balance; max-width: 16ch; }
+.night { background: var(--night); color: var(--paper); }
+.night .muted { color: rgba(244, 239, 231, .64); }
+.night a:hover { text-decoration-color: var(--salon); }
+
+/* Arched photo frames + placeholders */
+.photo { position: relative; margin: 0; overflow: hidden; border-radius: var(--r-m); background: var(--paper-3); }
+.photo--arch { border-radius: var(--arch); }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+.photo.is-placeholder {
+  display: grid; place-items: center; text-align: center; padding: 24px;
+  background:
+    repeating-linear-gradient(135deg, rgba(28, 26, 22, .045) 0 1px, transparent 1px 14px),
+    linear-gradient(160deg, var(--paper-2), var(--paper-3));
+  color: var(--ink-3); border: 1px dashed rgba(28, 26, 22, .22);
+}
+.night .photo.is-placeholder { background: repeating-linear-gradient(135deg, rgba(244, 239, 231, .05) 0 1px, transparent 1px 14px), var(--night-2); color: rgba(244, 239, 231, .6); border-color: rgba(244, 239, 231, .2); }
+.photo.is-placeholder .ph { display: grid; gap: 8px; justify-items: center; font-size: .8125rem; line-height: 1.35; max-width: 22ch; }
+.photo.is-placeholder .ph svg { width: 28px; height: 28px; opacity: .7; }
+.photo.is-placeholder .ph b { font: 400 1.0625rem/1.2 var(--f-display); color: inherit; }
+.photo figcaption { position: absolute; left: 14px; bottom: 12px; font: 600 .6875rem/1 var(--f-text); letter-spacing: .14em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+
+/* --- Das Haus / history --- */
+.house { display: grid; gap: clamp(40px, 6vw, 96px); align-items: start; }
+.house__num { font: 400 clamp(6rem, 18vw, 15rem)/.8 var(--f-display); color: var(--gilt); letter-spacing: -.04em; margin: 0 0 14px -.04em; }
+.house__intro h2 { font-size: clamp(2.1rem, 3.6vw + .6rem, 3.6rem); max-width: 14ch; margin-bottom: 24px; }
+.house__media { display: grid; grid-template-columns: 1fr .72fr; gap: 16px; align-items: end; }
+.house__media .photo:first-child { aspect-ratio: 3 / 4.4; }
+.house__media .photo:last-child { aspect-ratio: 3 / 4; margin-bottom: 18%; }
+.timeline { list-style: none; margin: 32px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.timeline li { display: grid; grid-template-columns: 5.2rem 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.timeline time { font: 400 1.375rem/1.2 var(--f-display); color: var(--gilt-ink); }
+.timeline p { margin: 0; color: var(--ink-2); font-size: .975rem; }
+@media (min-width: 960px) {
+  .house { grid-template-columns: 1.05fr 1fr; }
+  .house__media { position: sticky; top: calc(var(--header-h) + 32px); }
+}
+
+/* --- Facts band --- */
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: clamp(56px, 8vw, 110px); }
+.facts div { padding: 22px 18px 22px 0; }
+.facts div + div { border-left: 1px solid var(--line); padding-left: 18px; }
+.facts div:nth-child(3) { border-left: 0; padding-left: 0; }
+.facts dt { font: 400 clamp(2rem, 3vw + .6rem, 3.25rem)/1 var(--f-display); }
+.facts dd { margin: 8px 0 0; font-size: .875rem; color: var(--ink-3); }
+@media (min-width: 760px) { .facts { grid-template-columns: repeat(4, 1fr); } .facts div:nth-child(3) { border-left: 1px solid var(--line); padding-left: 18px; } }
+
+/* --- Rooms --- */
+.rooms { background: var(--paper-2); }
+.rooms__grid { display: grid; gap: clamp(48px, 6vw, 80px); }
+.house-block h3 { font-size: clamp(1.75rem, 2vw + .8rem, 2.4rem); display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.house-block h3 small { font: 600 .75rem/1 var(--f-text); letter-spacing: .14em; text-transform: uppercase; color: var(--gilt-ink); }
+.house-block > p { color: var(--ink-2); margin-top: 12px; max-width: 46ch; }
+.room-list { list-style: none; margin: 22px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.room { border-bottom: 1px solid var(--line); }
+.room details > summary {
+  list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; padding: 18px 2px; min-height: 56px;
+}
+.room details > summary::-webkit-details-marker { display: none; }
+.room__name { font: 400 1.25rem/1.25 var(--f-display); }
+.room__size { font-variant-numeric: tabular-nums; font-weight: 600; font-size: .9375rem; }
+.room__chev { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; transition: transform .3s var(--ease), background .2s; }
+.room details[open] .room__chev { transform: rotate(45deg); background: var(--ink); color: var(--paper); }
+.room__body { padding: 0 2px 20px; color: var(--ink-2); font-size: .975rem; }
+.room__body ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.room__body li { background: var(--paper); border-radius: 8px; padding: 4px 10px; font-size: .8125rem; }
+.amenities { margin-top: clamp(56px, 7vw, 96px); display: grid; gap: 22px; }
+.amenities h3 { font-size: 1.6rem; }
+.amenities ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.amenities li { display: flex; gap: 12px; align-items: center; padding: 14px 8px 14px 0; border-bottom: 1px solid var(--line); font-size: .9375rem; }
+.amenities li .icon { color: var(--gilt-ink); width: 1.3em; height: 1.3em; }
+.rooms__photos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: clamp(48px, 6vw, 80px); }
+.rooms__photos .photo:nth-child(1) { grid-column: 1 / 4; aspect-ratio: 4 / 3; }
+.rooms__photos .photo:nth-child(2) { grid-column: 4 / 7; aspect-ratio: 4 / 3; margin-top: 18%; }
+.rooms__photos .photo:nth-child(3) { grid-column: 2 / 6; aspect-ratio: 16 / 8; }
+@media (min-width: 960px) {
+  .rooms__grid { grid-template-columns: 1fr 1fr; }
+  .rooms__photos { grid-template-columns: 1.2fr 1fr .8fr; align-items: start; }
+  .rooms__photos .photo:nth-child(n) { grid-column: auto; margin-top: 0; }
+  .rooms__photos .photo:nth-child(2) { margin-top: 70px; aspect-ratio: 3 / 4; }
+  .rooms__photos .photo:nth-child(3) { margin-top: 160px; aspect-ratio: 3 / 4; }
+}
+
+/* --- Restaurants --- */
+.dine { overflow: hidden; }
+.dine__kuno { display: grid; gap: clamp(40px, 6vw, 96px); align-items: center; }
+.kuno-word { font: 400 clamp(4.2rem, 13vw, 11rem)/.86 var(--f-display); letter-spacing: -.035em; margin-bottom: 26px; }
+.kuno-word span { display: block; color: var(--gilt); font-style: italic; }
+.dine__media { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dine__media .photo:first-child { grid-column: 1 / -1; aspect-ratio: 4 / 3.4; }
+.dine__media .photo:not(:first-child) { aspect-ratio: 1; }
+.hours { display: grid; gap: 0; margin: 28px 0; border-top: 1px solid var(--line-night); max-width: 30rem; }
+.hours div { display: flex; justify-content: space-between; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--line-night); font-size: .9375rem; }
+.hours dt { color: rgba(244, 239, 231, .66); }
+.hours dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.salon { margin-top: clamp(80px, 11vw, 150px); display: grid; gap: clamp(32px, 5vw, 72px); align-items: start; }
+.salon__card { background: var(--salon); color: var(--ink); border-radius: var(--r-l); padding: clamp(28px, 4vw, 52px); position: relative; overflow: hidden; }
+.salon__card h3 { font-size: clamp(2.6rem, 5vw, 4.6rem); line-height: .95; margin-bottom: 18px; }
+.salon__card .hours { border-color: rgba(28, 26, 22, .2); }
+.salon__card .hours div { border-color: rgba(28, 26, 22, .2); }
+.salon__card .hours dt { color: rgba(28, 26, 22, .72); }
+.salon__card .btn { --bg: var(--ink); --fg: var(--paper); }
+.salon__card::after { content: ""; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; border-radius: 50%; border: 1px solid rgba(28, 26, 22, .18); box-shadow: 0 0 0 40px rgba(28,26,22,.04), 0 0 0 80px rgba(28,26,22,.03); }
+@media (min-width: 960px) {
+  .dine__kuno { grid-template-columns: 1fr 1fr; }
+  .salon { grid-template-columns: .9fr 1.1fr; }
+  .salon__media { margin-top: 90px; }
+}
+
+/* --- Offers --- */
+.offers { overflow: clip; }
+.offer-list { display: grid; gap: clamp(64px, 9vw, 140px); }
+.offer-slot { position: relative; }             /* untransformed: used to measure trigger positions */
+.offer {
+  position: relative; display: grid; gap: 28px; align-items: end;
+  background: #f8f7f4; border-radius: var(--r-l); padding: clamp(24px, 4vw, 56px);
+  box-shadow: 0 1px 0 rgba(28,26,22,.06), 0 30px 60px -36px rgba(28, 26, 22, .35);
+  overflow: hidden; isolation: isolate;
+}
+.offer__wm { position: absolute; z-index: -1; pointer-events: none; color: var(--gilt); opacity: .13; }
+.offer__wm svg { width: 100%; height: 100%; }
+.offer__img { width: min(100%, 420px); justify-self: center; filter: drop-shadow(0 26px 30px rgba(28, 26, 22, .28)); }
+.offer__img img { width: 100%; height: auto; }
+.offer__tag { font: 600 .75rem/1 var(--f-text); letter-spacing: .14em; text-transform: uppercase; color: var(--gilt-ink); }
+.offer h3 { font-size: clamp(2rem, 3vw + .7rem, 3.4rem); margin: 14px 0 16px; }
+.offer p { color: var(--ink-2); max-width: 40ch; }
+.offer__kw { display: inline-flex; gap: 8px; align-items: center; background: var(--paper-2); border-radius: 10px; padding: 8px 12px; font-size: .875rem; margin: 6px 0 22px; }
+.offer__kw code { font: 600 .875rem/1 var(--f-text); color: var(--ink); }
+@media (min-width: 900px) {
+  .offer { grid-template-columns: 1fr 1fr; padding: 56px 64px; align-items: center; }
+  .offer-slot--right .offer__img { order: 2; }
+}
+
+/* --- People / photo placeholders --- */
+.people__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.people__grid .photo { aspect-ratio: 3 / 4; }
+.people__grid .photo:nth-child(1) { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+@media (min-width: 900px) {
+  .people__grid { grid-template-columns: repeat(12, 1fr); gap: 18px; }
+  .people__grid .photo:nth-child(1) { grid-column: 1 / 7; grid-row: span 2; aspect-ratio: auto; }
+  .people__grid .photo:nth-child(2) { grid-column: 7 / 10; }
+  .people__grid .photo:nth-child(3) { grid-column: 10 / 13; margin-top: 60px; }
+  .people__grid .photo:nth-child(4) { grid-column: 7 / 10; }
+  .people__grid .photo:nth-child(5) { grid-column: 10 / 13; margin-top: 60px; }
+  .people__grid .photo:nth-child(6) { grid-column: 3 / 9; aspect-ratio: 16 / 9; }
+}
+
+/* --- Meetings & partners --- */
+.meet { display: grid; gap: clamp(40px, 6vw, 96px); }
+.meet__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.meet__list li { padding: 22px 0; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+.meet__list h3 { font-size: 1.5rem; }
+.meet__list p { margin: 0; color: var(--ink-2); }
+.partners { margin-top: clamp(72px, 9vw, 120px); }
+.partners ul { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.partners li { border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; font: 400 1.0625rem/1.2 var(--f-display); }
+@media (min-width: 960px) { .meet { grid-template-columns: .9fr 1.1fr; } }
+
+/* ==========================================================================
+   6. PLANNER (step-by-step enquiry)
+   ========================================================================== */
+.plan { background: var(--paper-2); }
+.plan__shell { display: grid; gap: clamp(32px, 5vw, 72px); }
+.plan__aside h2 { font-size: clamp(2.4rem, 4vw + .5rem, 4rem); margin: 18px 0 20px; max-width: 12ch; }
+.plan__aside .direct { margin-top: 30px; display: grid; gap: 10px; font-size: .9375rem; }
+.plan__aside .direct a { display: inline-flex; gap: 10px; align-items: center; text-decoration: none; }
+.plan__aside .direct a:hover span { text-decoration: underline; }
+.planner { background: #f8f7f4; border-radius: var(--r-l); padding: clamp(22px, 4vw, 52px); box-shadow: 0 30px 60px -40px rgba(28, 26, 22, .35); min-height: 520px; display: flex; flex-direction: column; }
+html:not(.js) .planner form { display: none; }
+.planner noscript p { margin-bottom: .6em; }
+
+.steps-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; font-size: .8125rem; color: var(--ink-3); margin-bottom: 12px; }
+.steps-meta strong { color: var(--ink); font-weight: 600; }
+.steps { list-style: none; display: flex; align-items: center; margin: 0 0 34px; padding: 0; }
+.steps li { flex: 1; display: flex; align-items: center; min-width: 0; }
+.steps li:last-child { flex: none; }
+.steps li .dot {
+  width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1.5px solid rgba(28, 26, 22, .25); display: grid; place-items: center; background: #f8f7f4;
+  transition: background .25s, border-color .25s;
+}
+.steps li .dot svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; fill: none; opacity: 0; }
+.steps li .bar { flex: 1; height: 1.5px; background: rgba(28, 26, 22, .18); margin: 0 3px; position: relative; overflow: hidden; }
+.steps li .bar::after { content: ""; position: absolute; inset: 0; background: var(--ok); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+.steps li.is-done .dot { background: var(--ok); border-color: var(--ok); }
+.steps li.is-done .dot svg { opacity: 1; }
+.steps li.is-done .bar::after { transform: scaleX(1); }
+.steps li.is-current .dot { border-color: var(--ink); box-shadow: inset 0 0 0 4px #f8f7f4, inset 0 0 0 11px var(--ink); }
+
+.step { border: 0; margin: 0; padding: 0; min-width: 0; }
+.js .step:not(.is-active) { display: none; }
+.step legend { padding: 0; margin-bottom: 8px; }
+.step legend h3 { font-size: clamp(1.8rem, 2.4vw + .8rem, 2.6rem); outline: none; text-wrap: balance; }
+.step .hint { color: var(--ink-3); font-size: .9375rem; margin: 6px 0 26px; }
+.fields { display: grid; gap: 18px; }
+.fields--2 { grid-template-columns: 1fr; }
+@media (min-width: 560px) { .fields--2 { grid-template-columns: 1fr 1fr; } }
+.field { display: grid; gap: 7px; }
+.field label, .field .lbl { font-weight: 600; font-size: .9375rem; }
+.field label .opt, .lbl .opt { font-weight: 400; color: var(--ink-3); font-size: .8125rem; margin-left: 4px; }
+.field input, .field select, .field textarea {
+  font: inherit; color: var(--ink); background: #fff; border: 1.5px solid rgba(28, 26, 22, .2); border-radius: 12px;
+  padding: 12px 14px; min-height: 50px; width: 100%; transition: border-color .2s, box-shadow .2s;
+}
+.field textarea { min-height: 150px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ink); box-shadow: 0 0 0 4px rgba(179, 138, 60, .22); outline: none; }
+.field [aria-invalid="true"] { border-color: var(--err); }
+.field .err { color: var(--err); font-size: .875rem; min-height: 0; display: flex; gap: 6px; align-items: flex-start; }
+.field .err:empty { display: none; }
+.step-error { color: var(--err); font-size: .9rem; margin-top: 14px; }
+.step-error:empty { display: none; }
+.nights { font-size: .9375rem; color: var(--ink-2); margin-top: 14px; min-height: 1.5em; }
+
+.choices { display: grid; gap: 8px; }
+.choices h4 { font: 600 .75rem/1 var(--f-text); letter-spacing: .14em; text-transform: uppercase; color: var(--gilt-ink); margin: 14px 0 4px; }
+.choice { position: relative; }
+.choice input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.choice span { display: flex; justify-content: space-between; gap: 12px; align-items: center; border: 1.5px solid rgba(28, 26, 22, .16); border-radius: 12px; padding: 12px 14px; background: #fff; transition: border-color .2s, background .2s; min-height: 50px; }
+.choice span small { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.choice input:checked + span { border-color: var(--ink); background: var(--paper); box-shadow: inset 0 0 0 1px var(--ink); }
+.choice input:focus-visible + span { outline: 2px solid var(--gilt); outline-offset: 2px; }
+@media (min-width: 620px) { .choices--2 { grid-template-columns: 1fr 1fr; } .choices--2 h4 { grid-column: 1 / -1; } }
+
+.stepper { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.stepper .lbl small { display: block; font-weight: 400; color: var(--ink-3); font-size: .8125rem; }
+.stepper .ctrl { display: flex; align-items: center; gap: 6px; }
+.stepper button { width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid rgba(28,26,22,.2); background: #fff; font-size: 1.25rem; cursor: pointer; color: var(--ink); }
+.stepper button:disabled { opacity: .35; cursor: not-allowed; }
+.stepper input { width: 56px; text-align: center; font: 600 1.125rem/1 var(--f-text); border: 0; background: transparent; color: var(--ink); -moz-appearance: textfield; }
+.stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.check { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; font-size: .9375rem; }
+.check input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--ok); }
+
+.plan-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 32px; }
+.plan-nav .btn--quiet[hidden] { display: none; }
+.plan-nav .spacer { flex: 1; }
+
+.review { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.review li { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.review dt, .review .k { font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.review .v { grid-column: 1; white-space: pre-line; overflow-wrap: anywhere; }
+.review button { grid-column: 2; grid-row: 1 / span 2; align-self: center; background: none; border: 0; color: var(--gilt-ink); font: 600 .875rem/1 var(--f-text); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 10px; min-height: 44px; }
+.result { display: grid; gap: 16px; align-content: start; }
+.result__icon { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; }
+.result--ok .result__icon { background: var(--ok); color: #fff; }
+.result--fail .result__icon, .result--setup .result__icon { background: var(--paper-2); color: var(--err); }
+.result h3 { font-size: clamp(1.8rem, 2vw + 1rem, 2.4rem); outline: none; }
+
+@media (min-width: 1020px) { .plan__shell { grid-template-columns: .75fr 1.25fr; } .plan__aside { position: sticky; top: calc(var(--header-h) + 40px); align-self: start; } }
+
+/* ==========================================================================
+   7. LOCATION
+   ========================================================================== */
+.where { display: grid; gap: clamp(32px, 5vw, 72px); }
+.map {
+  position: relative; border-radius: var(--r-l); overflow: hidden; min-height: 420px; background: var(--night-2); color: var(--paper);
+  display: grid; isolation: isolate;
+}
+.map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map__gate { position: relative; display: grid; align-content: end; gap: 14px; padding: clamp(24px, 4vw, 44px); }
+.map__gate::before { content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(circle at 74% 24%, rgba(230, 196, 44, .9) 0 6px, rgba(230,196,44,.25) 7px 18px, transparent 19px),
+    linear-gradient(90deg, transparent 0 calc(50% - 1px), rgba(244,239,231,.08) calc(50% - 1px) calc(50% + 1px), transparent 0) 0 0 / 120px 120px,
+    linear-gradient(0deg, transparent 0 calc(50% - 1px), rgba(244,239,231,.08) calc(50% - 1px) calc(50% + 1px), transparent 0) 0 0 / 120px 120px,
+    linear-gradient(28deg, transparent 47%, rgba(244,239,231,.12) 47% 49%, transparent 49%),
+    linear-gradient(160deg, #2a261f, #15130f);
+}
+.map__gate h3 { font-size: 2rem; }
+.map__gate p { color: rgba(244, 239, 231, .75); max-width: 44ch; font-size: .9375rem; margin: 0; }
+.map__gate .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.map__gate .btn--ghost { color: var(--paper); }
+.ways { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.ways li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.ways .icon { width: 26px; height: 26px; color: var(--gilt-ink); margin-top: 2px; }
+.ways h3 { font: 600 1rem/1.3 var(--f-text); margin-bottom: 6px; }
+.ways p { margin: 0; color: var(--ink-2); font-size: .9375rem; }
+.address-block { font: 400 1.5rem/1.35 var(--f-display); margin: 0 0 18px; font-style: normal; }
+@media (min-width: 960px) { .where { grid-template-columns: 1.15fr .85fr; } .map { min-height: 620px; } }
+
+/* ==========================================================================
+   8. FOOTER
+   ========================================================================== */
+.site-footer { background: var(--night); color: var(--paper); padding: clamp(64px, 9vw, 120px) 0 36px; }
+.footer-top { display: grid; gap: 40px; }
+.footer-word { font: 400 clamp(3.4rem, 11vw, 9rem)/.85 var(--f-display); letter-spacing: -.03em; }
+.footer-word em { color: var(--gilt); }
+.footer-cols { display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.footer-cols h3 { font: 600 .75rem/1 var(--f-text); letter-spacing: .14em; text-transform: uppercase; color: var(--salon); margin-bottom: 16px; }
+.footer-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.footer-cols a, .footer-cols button { color: rgba(244, 239, 231, .85); text-decoration: none; font-size: .9375rem; }
+.footer-cols a:hover, .footer-cols button:hover { color: var(--paper); text-decoration: underline; }
+.footer-cols button { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; text-align: left; }
+.footer-cols address { font-style: normal; color: rgba(244, 239, 231, .85); font-size: .9375rem; line-height: 1.7; }
+.footer-bottom { margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line-night); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: .8125rem; color: rgba(244, 239, 231, .55); }
+@media (min-width: 960px) { .footer-top { grid-template-columns: 1fr 1.4fr; align-items: end; } }
+
+/* ==========================================================================
+   9. LEGAL VIEWS (Impressum, Datenschutz, AGB)
+   Without JS they open via :target; with JS a tiny hash router shows one view
+   and hides the home page.
+   ========================================================================== */
+.view { display: none; background: var(--paper); padding: calc(var(--header-h) + 56px) 0 100px; }
+.view:target, .view.is-open { display: block; }
+body.has-view main#home, body.has-view .hero { display: none; }
+.legal { max-width: 760px; }
+.legal h1 { font-size: clamp(2.4rem, 4vw + .6rem, 4rem); margin: 18px 0 28px; }
+.legal .back { margin-bottom: 36px; display: inline-flex; }
+.legal-text { font-size: 1rem; line-height: 1.7; }
+.legal-text h2 { font: 600 1.125rem/1.4 var(--f-text); margin: 2em 0 .6em; }
+.legal-missing { border-radius: var(--r-m); border: 1.5px dashed var(--gilt); background: #f8f7f4; padding: 24px 26px; }
+.legal-missing h2 { font: 400 1.5rem/1.25 var(--f-display); margin: 0 0 12px; }
+.legal-missing p { color: var(--ink-2); }
+.legal-note { font-size: .875rem; color: var(--ink-3); margin-bottom: 26px; }
+
+/* ==========================================================================
+   10. CONSENT DIALOG
+   ========================================================================== */
+.consent { display: none; }
+.js .consent.is-open { display: block; position: fixed; z-index: 120; left: 12px; right: 12px; bottom: 12px; }
+.consent__box {
+  margin-left: auto; width: min(100%, 520px); max-height: calc(100svh - 24px); overflow: auto;
+  background: var(--paper); color: var(--ink); border-radius: var(--r-l); padding: 26px 24px 22px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .55), 0 0 0 1px var(--line);
+}
+.consent h2 { font-size: 1.75rem; margin-bottom: 10px; outline: none; }
+.consent p { font-size: .9375rem; color: var(--ink-2); }
+.consent .opts { display: grid; gap: 10px; margin: 16px 0 18px; }
+.consent .opt { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; align-items: center; border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.consent .opt small { grid-column: 1; color: var(--ink-3); font-size: .8125rem; line-height: 1.4; }
+.consent .opt b { font-weight: 600; font-size: .9375rem; }
+.switch { grid-row: 1 / span 2; grid-column: 2; position: relative; width: 48px; height: 28px; }
+.switch input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+.switch i { position: absolute; inset: 0; border-radius: 28px; background: rgba(28,26,22,.2); transition: background .2s; }
+.switch i::after { content: ""; position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .2s var(--ease); box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.switch input:checked + i { background: var(--ok); }
+.switch input:checked + i::after { transform: translateX(20px); }
+.switch input:disabled + i { opacity: .55; }
+.switch input:focus-visible + i { outline: 2px solid var(--gilt); outline-offset: 2px; }
+.consent .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.consent .actions .btn { flex: 1 1 140px; }
+.consent .links { margin-top: 14px; display: flex; gap: 16px; flex-wrap: wrap; font-size: .8125rem; }
+
+/* ==========================================================================
+   11. SCROLL-LINKED ELEMENTS
+   Initial states are written by JS from measured trigger positions, never by
+   CSS, so nothing is hidden when JS is off or motion is reduced.
+   ========================================================================== */
+.js:not(.rm) [data-reveal], .js:not(.rm) .offer, .js:not(.rm) .offer__img, .js:not(.rm) .offer__wm { will-change: transform, opacity; }
+
+/* ==========================================================================
+   12. REDUCED MOTION – final states, no transitions
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Debug overlay for ?debug=triggers */
+.dbg-line { position: absolute; left: 0; right: 0; height: 0; border-top: 1px dashed; z-index: 999; pointer-events: none; font: 11px/1.2 monospace; }
+.dbg-line span { position: absolute; right: 6px; top: -14px; background: #000; color: #fff; padding: 1px 4px; }
+
+/* ==========================================================================
+   13. ADDITIONS
+   ========================================================================== */
+[hidden] { display: none !important; }
+@media (max-width: 899px), (max-aspect-ratio: 1/1) { .hero--live { --hero-h: 340vh; } }
+@media (max-width: 519px) { .brand small { display: none; } .brand b { font-size: 1.375rem; } }
+.hero--live .hero__stage::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 170px; z-index: 1; pointer-events: none; background: linear-gradient(rgba(12, 10, 8, .55), rgba(12, 10, 8, 0)); }
+.hero--live .moment { z-index: 2; }
+@media (max-width: 899px), (max-aspect-ratio: 1/1) {
+  .hero--live .moment { padding-bottom: 76px; }
+  .hero--live .moment::before { background: linear-gradient(to top, rgba(12, 10, 8, .86) 0%, rgba(12, 10, 8, .55) 32%, rgba(12, 10, 8, 0) 58%); }
+  .moment h1, .moment h2 { font-size: clamp(2rem, 8.6vw, 2.75rem); margin-bottom: 14px; }
+  .moment p { font-size: .96875rem; line-height: 1.5; }
+  .moment__label { margin-bottom: 12px; font-size: .6875rem; letter-spacing: .12em; }
+  .moment .hero-actions .btn { min-height: 46px; padding: .7em 1.1em; }
+  .hero__hint { left: auto; right: var(--gut); transform: none; align-items: flex-end; bottom: 22px; }
+}
+.photo.is-placeholder .ph span { overflow-wrap: anywhere; }
+.moment.is-settling [data-line] { transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.moment.is-settling [data-line]:nth-child(2) { transition-delay: .12s; }
+.moment.is-settling [data-line]:nth-child(3) { transition-delay: .24s; }
+.moment.is-settling [data-line]:nth-child(4) { transition-delay: .36s; }
+</style>
+</head>
+<body>
+<!-- ======================= ICON SPRITE (inline SVG) ======================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-mark" viewBox="0 0 30 34"><g fill="currentColor"><path d="M15 1c3 2 6 2 9 1-1 3-4 5-9 5 1-2 1-4 0-6Z" opacity=".9"/><circle cx="9" cy="12" r="3.4"/><circle cx="15.5" cy="12" r="3.4"/><circle cx="22" cy="12" r="3.4"/><circle cx="12.2" cy="18" r="3.4"/><circle cx="18.8" cy="18" r="3.4"/><circle cx="15.5" cy="24" r="3.4"/><circle cx="15.5" cy="30" r="2.6" opacity=".7"/></g></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h3l2 5-2.5 1.5a11 11 0 0 0 7 7L16 14l5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 16V11l2-5h10l2 5v5M3 16h18M7 16v2M17 16v2"/><circle cx="7.5" cy="13" r=".8"/><circle cx="16.5" cy="13" r=".8"/></symbol>
+  <symbol id="i-train" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="13" rx="3"/><path d="M6 10h12M9 20l-2 2M15 20l2 2M9 13h.01M15 13h.01"/></symbol>
+  <symbol id="i-park" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r=".8"/></symbol>
+  <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9ZM17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3"/></symbol>
+  <symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="12" cy="12" r="3"/><path d="M12 9v-1M8 20v1M16 20v1"/></symbol>
+  <symbol id="i-robe" viewBox="0 0 24 24"><path d="M8 3 4 6v15h16V6l-4-3-4 5-4-5ZM12 8v13M8 13h3"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-desk" viewBox="0 0 24 24"><path d="M3 9h18M5 9v11M19 9v11M14 9v5h5"/></symbol>
+  <symbol id="i-fridge" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+
+<a class="skip" href="#content"><span lang="de">Zum Inhalt springen</span><span lang="en">Skip to content</span></a>
+
+<!-- ============================== PRELOADER ============================== -->
+<div class="loader" id="loader" role="status" aria-live="polite" hidden>
+  <div class="loader__inner">
+    <svg class="loader__mark" aria-hidden="true"><use href="#i-mark"/></svg>
+    <p class="loader__title">Hotel Rebstock<br><span lang="de">Würzburg</span><span lang="en">Würzburg</span></p>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <div class="loader__meta">
+      <span><span lang="de">Das Haus wird geöffnet</span><span lang="en">Opening the doors</span></span>
+      <span id="loaderPct">0 %</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================ HEADER ================================ -->
+<header class="site-header is-over" id="siteHeader">
+  <a class="brand" href="#top" aria-label="Hotel Rebstock Würzburg – Start">
+    <svg aria-hidden="true" style="color:var(--gilt)"><use href="#i-mark"/></svg>
+    <span><b>Rebstock</b><small>Best Western Premier · Würzburg</small></span>
+  </a>
+  <nav class="nav-main" aria-label="Hauptnavigation" data-aria-en="Main navigation">
+    <ul>
+      <li><a href="#haus"><span lang="de">Das Haus</span><span lang="en">The house</span></a></li>
+      <li><a href="#zimmer"><span lang="de">Zimmer</span><span lang="en">Rooms</span></a></li>
+      <li><a href="#restaurants">Restaurants</a></li>
+      <li><a href="#angebote"><span lang="de">Angebote</span><span lang="en">Offers</span></a></li>
+      <li><a href="#tagungen"><span lang="de">Tagungen</span><span lang="en">Meetings</span></a></li>
+      <li><a href="#anreise"><span lang="de">Anreise</span><span lang="en">Getting here</span></a></li>
+    </ul>
+  </nav>
+  <div class="lang" role="group" aria-label="Sprache / Language">
+    <a href="?lang=de" data-set-lang="de" aria-pressed="true" hreflang="de"><span>DE</span></a>
+    <a href="?lang=en" data-set-lang="en" aria-pressed="false" hreflang="en"><span>EN</span></a>
+  </div>
+  <a class="btn btn--gilt header-cta" href="#planen"><span lang="de">Aufenthalt planen</span><span lang="en">Plan your stay</span></a>
+  <details class="menu-toggle">
+    <summary>
+      <svg class="icon i-open" aria-hidden="true"><use href="#i-menu"/></svg>
+      <svg class="icon i-close" aria-hidden="true"><use href="#i-close"/></svg>
+      <span lang="de">Menü</span><span lang="en">Menu</span>
+    </summary>
+    <div class="menu-panel">
+      <nav aria-label="Mobile Navigation">
+        <ul>
+          <li><a href="#haus"><span lang="de">Das Haus</span><span lang="en">The house</span></a></li>
+          <li><a href="#zimmer"><span lang="de">Zimmer &amp; Suiten</span><span lang="en">Rooms &amp; suites</span></a></li>
+          <li><a href="#restaurants">Restaurants</a></li>
+          <li><a href="#angebote"><span lang="de">Angebote</span><span lang="en">Offers</span></a></li>
+          <li><a href="#tagungen"><span lang="de">Tagungen &amp; Feiern</span><span lang="en">Meetings &amp; events</span></a></li>
+          <li><a href="#anreise"><span lang="de">Anreise &amp; Parken</span><span lang="en">Getting here &amp; parking</span></a></li>
+          <li><a href="#kontakt"><span lang="de">Kontakt</span><span lang="en">Contact</span></a></li>
+        </ul>
+      </nav>
+      <a class="btn btn--gilt" href="#planen"><span lang="de">Aufenthalt planen</span><span lang="en">Plan your stay</span></a>
+    </div>
+  </details>
+</header>
+
+<!-- ================================= HERO =================================
+     Image sequence: assets/frames/f001.jpg … f300.jpg (300 frames from the
+     supplied ZIP, 720×1280, in their original order).
+       f001–f120  façade and portal on Neubaustraße
+       f121–f215  through the doors, up the steps, under the stone arch (foyer)
+       f216–f300  under the glass dome: breakfast and dining room
+     The three <article class="moment"> passages are tied to hero progress in
+     JS (HERO_TIMELINE). The <img class="moment__still"> elements are the
+     no-JS / reduced-motion fallback.
+     ======================================================================= -->
+<section class="hero" id="top" aria-label="Hotel Rebstock">
+  <div class="hero__stage" id="heroStage">
+    <canvas class="hero__bg" id="heroBg" aria-hidden="true"></canvas>
+    <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+
+    <ol class="hero__progress" aria-hidden="true">
+      <li data-chapter="0"><span lang="de">Portal</span><span lang="en">Portal</span></li>
+      <li data-chapter="1"><span lang="de">Foyer</span><span lang="en">Foyer</span></li>
+      <li data-chapter="2"><span lang="de">Restaurant</span><span lang="en">Restaurant</span></li>
+    </ol>
+
+    <!-- Moment 1 — the entrance -->
+    <article class="moment" data-moment="0">
+      <img class="moment__still" src="assets/frames/f001.jpg" width="720" height="1280" alt="Die Rokokofassade des Hotel Rebstock mit dem Portal und dem goldenen Schriftzug „Hotel Rebstock“" data-alt-en="The Rococo façade of Hotel Rebstock with its portal and gilt “Hotel Rebstock” lettering" fetchpriority="high">
+      <div class="moment__text">
+        <p class="moment__label" data-line><i>01</i><span lang="de">Neubaustraße 7 · Würzburg</span><span lang="en">Neubaustraße 7 · Würzburg</span></p>
+        <h1 data-line>
+          <span lang="de">Hinter der Rokoko&shy;fassade beginnt <em>Würzburg.</em></span>
+          <span lang="en">Würzburg begins behind a <em>Rococo façade.</em></span>
+        </h1>
+        <p data-line>
+          <span lang="de">Ein Vier-Sterne-Hotel mitten in der Altstadt: 125 Zimmer und Suiten, ein Gourmetrestaurant, ein Bistro mit Bar und die eigene Tiefgarage – in einem Haus, das 1408 erstmals als Gasthaus erwähnt wird.</span>
+          <span lang="en">A four-star hotel in the heart of the old town: 125 rooms and suites, a gourmet restaurant, a bistro with bar and our own underground garage – in a house first recorded as an inn in 1408.</span>
+        </p>
+        <div class="hero-actions" data-line>
+          <a class="btn btn--gilt" href="#planen"><span lang="de">Aufenthalt planen</span><span lang="en">Plan your stay</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--ghost" href="#zimmer"><span lang="de">Zimmer ansehen</span><span lang="en">See the rooms</span></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Moment 2 — the foyer -->
+    <article class="moment" data-moment="1">
+      <img class="moment__still" src="assets/frames/f185.jpg" width="720" height="1280" loading="lazy" alt="Steinerner Torbogen mit Figuren und Stufen hinauf ins Foyer" data-alt-en="Stone archway with statues and steps leading up into the foyer">
+      <div class="moment__text">
+        <p class="moment__label" data-line><i>02</i><span lang="de">Ankommen</span><span lang="en">Arriving</span></p>
+        <h2 data-line>
+          <span lang="de">Durch den Torbogen, <em>die Stufen hinauf.</em></span>
+          <span lang="en">Through the arch, <em>up the steps.</em></span>
+        </h2>
+        <p data-line>
+          <span lang="de">Seit 1977 führt die Familie Unckell den Rebstock, heute Christoph Unckell. In jedem Zimmer warten Bademantel und Slipper, Espressomaschine und schnelles WLAN.</span>
+          <span lang="en">The Unckell family has run the Rebstock since 1977, today Christoph Unckell. Every room has a bathrobe and slippers, an espresso machine and fast Wi-Fi.</span>
+        </p>
+      </div>
+    </article>
+
+    <!-- Moment 3 — restaurant & cuisine -->
+    <article class="moment" data-moment="2">
+      <img class="moment__still" src="assets/frames/f290.jpg" width="720" height="1280" loading="lazy" alt="Speiseraum unter der Glaskuppel mit gelb leuchtender Theke" data-alt-en="Dining room beneath the glass dome with a glowing yellow counter">
+      <div class="moment__text">
+        <p class="moment__label" data-line><i>03</i><span lang="de">Unter der Glaskuppel</span><span lang="en">Beneath the glass dome</span></p>
+        <h2 data-line>
+          <span lang="de">Vom Frühstück bis <em>zum Sternemenü.</em></span>
+          <span lang="en">From breakfast <em>to a starred menu.</em></span>
+        </h2>
+        <p data-line>
+          <span lang="de">Im SALON beginnt der Tag am Frühstücksbuffet und endet an der Bar mit fränkischen Cocktails. Im KUNO 1408 verbinden Patrick Grieshaber und Robin Hofmann fränkische Tradition mit internationalen Einflüssen.</span>
+          <span lang="en">At the SALON the day starts at the breakfast buffet and ends at the bar with Franconian cocktails. At KUNO 1408, Patrick Grieshaber and Robin Hofmann pair Franconian tradition with international influences.</span>
+        </p>
+        <div class="hero-actions" data-line>
+          <a class="btn btn--gilt" href="#restaurants"><span lang="de">Zu den Restaurants</span><span lang="en">Our restaurants</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </article>
+
+    <div class="hero__hint" aria-hidden="true"><span lang="de">Eintreten</span><span lang="en">Step inside</span><span class="bar"></span></div>
+  </div>
+</section>
+
+<main id="home">
+<span id="content" tabindex="-1"></span>
+
+<!-- ============================== DAS HAUS =============================== -->
+<section class="sec" id="haus" aria-labelledby="haus-h">
+  <div class="wrap">
+    <div class="house">
+      <div class="house__intro">
+        <p class="house__num" aria-hidden="true" data-reveal>1408</p>
+        <p class="eyebrow" data-reveal><span lang="de">Über 600 Jahre Tradition</span><span lang="en">Over 600 years of tradition</span></p>
+        <h2 id="haus-h" data-reveal style="margin-top:18px">
+          <span lang="de">Ein Gasthaus, das Würzburg nie verlassen hat.</span>
+          <span lang="en">An inn that never left Würzburg.</span>
+        </h2>
+        <p class="lede" data-reveal>
+          <span lang="de">Die Fassade von 1737 gilt als eines der Hauptdenkmäler des bürgerlichen Rokoko in Franken. Dahinter: ein modernes Vier-Sterne-Haus, seit 1979 Teil von Best Western.</span>
+          <span lang="en">Its 1737 façade is counted among Franconia’s principal monuments of bourgeois Rococo. Behind it: a modern four-star house, part of Best Western since 1979.</span>
+        </p>
+        <ol class="timeline" data-reveal>
+          <li><time datetime="1408">1408</time><p><span lang="de">Erste Erwähnung: Kunz Seyde betreibt das Haus als Gasthaus.</span><span lang="en">First record: Kunz Seyde runs the house as an inn.</span></p></li>
+          <li><time datetime="1737">1737</time><p><span lang="de">Hofkammerrat Anton Rossat lässt die gesamte Front im frühen Rokoko stuckieren. Sein Wappen und das seiner Frau zieren bis heute das Portal.</span><span lang="en">Court official Anton Rossat has the entire front decorated in early Rococo stucco. His and his wife’s coats of arms still crown the portal.</span></p></li>
+          <li><time datetime="1945">1945</time><p><span lang="de">Der Stadtbrand im März zerstört das Haus; Teile der Fassade bleiben erhalten.</span><span lang="en">The city fire of March destroys the house; parts of the façade survive.</span></p></li>
+          <li><time datetime="1970">1970</time><p><span lang="de">Nach dem Wiederaufbau mit originalgetreuer Rokokofassade öffnet der Rebstock im Mai wieder als Hotel.</span><span lang="en">Rebuilt with a faithful Rococo façade, the Rebstock reopens as a hotel in May.</span></p></li>
+          <li><time datetime="1977">1977</time><p><span lang="de">Familie Unckell übernimmt. Seit 1994 führt Christoph Unckell das Haus.</span><span lang="en">The Unckell family takes over. Christoph Unckell has led the house since 1994.</span></p></li>
+          <li><time datetime="2019">2019</time><p><span lang="de">Im September eröffnet der Hof Engelgarten mit 54 Zimmern und Suiten.</span><span lang="en">In September, Hof Engelgarten opens with 54 rooms and suites.</span></p></li>
+        </ol>
+      </div>
+      <div class="house__media">
+        <!-- Stills taken from the supplied hero sequence. REPLACE WITH HOTEL EXTERIOR PHOTO for a higher-resolution image. -->
+        <figure class="photo photo--arch" data-reveal>
+          <img src="assets/frames/f070.jpg" width="720" height="1280" loading="lazy" alt="Portal des Hotel Rebstock mit Wappen, Laternen und goldenem Schriftzug" data-alt-en="Hotel Rebstock’s portal with coats of arms, lanterns and gilt lettering">
+        </figure>
+        <figure class="photo" data-reveal>
+          <img src="assets/frames/f175.jpg" width="720" height="1280" loading="lazy" alt="Treppe und steinerner Torbogen im Eingangsbereich" data-alt-en="Steps and stone archway in the entrance hall">
+        </figure>
+      </div>
+    </div>
+
+    <dl class="facts" data-reveal>
+      <div><dt>125</dt><dd><span lang="de">Zimmer &amp; Suiten in zwei Häusern</span><span lang="en">rooms &amp; suites in two buildings</span></dd></div>
+      <div><dt>2</dt><dd><span lang="de">Restaurants: KUNO 1408 &amp; SALON</span><span lang="en">restaurants: KUNO 1408 &amp; SALON</span></dd></div>
+      <div><dt>30</dt><dd><span lang="de">Stellplätze in der eigenen Tiefgarage</span><span lang="en">spaces in our own underground garage</span></dd></div>
+      <div><dt>6&nbsp;<small style="font-size:.4em">min</small></dt><dd><span lang="de">mit der Straßenbahn vom Hauptbahnhof</span><span lang="en">by tram from the main station</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ================================ ZIMMER ================================ -->
+<section class="sec rooms" id="zimmer" aria-labelledby="zimmer-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-reveal><span lang="de">Zimmer &amp; Suiten</span><span lang="en">Rooms &amp; suites</span></p>
+      <h2 id="zimmer-h" data-reveal><span lang="de">Zwei Häuser, ein Gastgeber.</span><span lang="en">Two houses, one host.</span></h2>
+      <p class="lede" data-reveal><span lang="de">Im historischen Haupthaus wohnen Sie hinter der Rokokofassade, im Hof Engelgarten großzügig und modern.</span><span lang="en">Stay behind the Rococo façade in the historic main house, or in the spacious, modern Hof Engelgarten.</span></p>
+    </div>
+
+    <div class="rooms__grid">
+      <div class="house-block" data-reveal>
+        <h3><span lang="de">Haupthaus</span><span lang="en">Main house</span> <small><span lang="de">71 Zimmer</span><span lang="en">71 rooms</span></small></h3>
+        <ul class="room-list">
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Economy Einzelzimmer</span><span lang="en">Economy single room</span></span><span class="room__size">17 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Einzelbett 100 × 200 cm</span><span lang="en">Single bed 100 × 200 cm</span><ul><li>Safe</li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li><li><span lang="de">WLAN gratis</span><span lang="en">Free Wi-Fi</span></li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Standard Einzelzimmer</span><span lang="en">Standard single room</span></span><span class="room__size">18 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Bett 120/140 × 200 cm</span><span lang="en">Bed 120/140 × 200 cm</span><ul><li><span lang="de">Flachbild-TV</span><span lang="en">Flat-screen TV</span></li><li>Safe</li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Standard Doppelzimmer</span><span lang="en">Standard double room</span></span><span class="room__size">20 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 180 × 200 cm</span><span lang="en">Double bed 180 × 200 cm</span><ul><li>Safe</li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li><li><span lang="de">WLAN gratis</span><span lang="en">Free Wi-Fi</span></li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Komfort Doppelzimmer</span><span lang="en">Comfort double room</span></span><span class="room__size">23 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 180 × 200 cm</span><span lang="en">Double bed 180 × 200 cm</span><ul><li><span lang="de">Klimaanlage</span><span lang="en">Air conditioning</span></li><li>Safe</li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li><li><span lang="de">WLAN gratis</span><span lang="en">Free Wi-Fi</span></li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name">Junior Suite</span><span class="room__size">55 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 200 × 200 cm</span><span lang="en">Double bed 200 × 200 cm</span><ul><li><span lang="de">Voll ausgestattete Küche</span><span lang="en">Fully equipped kitchen</span></li><li><span lang="de">Dachterrasse</span><span lang="en">Roof terrace</span></li><li><span lang="de">Klimaanlage</span><span lang="en">Air conditioning</span></li><li><span lang="de">WLAN gratis</span><span lang="en">Free Wi-Fi</span></li></ul></div></details></li>
+        </ul>
+      </div>
+
+      <div class="house-block" data-reveal>
+        <h3>Hof Engelgarten <small><span lang="de">54 Zimmer &amp; Suiten · seit 2019</span><span lang="en">54 rooms &amp; suites · since 2019</span></small></h3>
+        <ul class="room-list">
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Premium Doppelzimmer</span><span lang="en">Premium double room</span></span><span class="room__size">29 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 180 × 200 cm</span><span lang="en">Double bed 180 × 200 cm</span><ul><li><span lang="de">Klimaanlage</span><span lang="en">Air conditioning</span></li><li>Safe</li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Executive Doppelzimmer</span><span lang="en">Executive double room</span></span><span class="room__size">32 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 200 × 200 cm</span><span lang="en">Double bed 200 × 200 cm</span><ul><li><span lang="de">Sitzbereich</span><span lang="en">Seating area</span></li><li><span lang="de">Klimaanlage</span><span lang="en">Air conditioning</span></li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name"><span lang="de">Superior Doppelzimmer</span><span lang="en">Superior double room</span></span><span class="room__size">39 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 200 × 200 cm</span><span lang="en">Double bed 200 × 200 cm</span><ul><li><span lang="de">Klimaanlage</span><span lang="en">Air conditioning</span></li><li><span lang="de">Flachbild-TV</span><span lang="en">Flat-screen TV</span></li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li></ul></div></details></li>
+          <li class="room"><details><summary><span class="room__name">Suite</span><span class="room__size">53 m²</span><span class="room__chev" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="room__body"><span lang="de">Doppelbett 200 × 200 cm, getrennter Wohn- und Schlafbereich</span><span lang="en">Double bed 200 × 200 cm, separate living and sleeping areas</span><ul><li><span lang="de">Klimaanlage</span><span lang="en">Air conditioning</span></li><li><span lang="de">Flachbild-TV</span><span lang="en">Flat-screen TV</span></li><li><span lang="de">Kaffee &amp; Tee</span><span lang="en">Coffee &amp; tea</span></li></ul></div></details></li>
+        </ul>
+        <p class="small muted" style="margin-top:18px"><span lang="de">Preise und Verfügbarkeit nennen wir Ihnen gern auf Anfrage.</span><span lang="en">We are happy to quote prices and availability on request.</span></p>
+      </div>
+    </div>
+
+    <div class="amenities" data-reveal>
+      <h3><span lang="de">In allen Zimmern</span><span lang="en">In every room</span></h3>
+      <ul>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-robe"/></svg><span lang="de">Bademantel &amp; Slipper</span><span lang="en">Bathrobe &amp; slippers</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-coffee"/></svg><span lang="de">Espressomaschine, Kaffee &amp; Tee</span><span lang="en">Espresso machine, coffee &amp; tea</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-wifi"/></svg><span lang="de">Schnelles WLAN</span><span lang="en">Fast Wi-Fi</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-tv"/></svg><span lang="de">Flachbild-TV, Sat-TV &amp; Streaming</span><span lang="en">Flat-screen, satellite TV &amp; streaming</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Safe</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-fridge"/></svg>Minibar</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg><span lang="de">Verdunkelung</span><span lang="en">Blackout</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-desk"/></svg><span lang="de">Schreibtisch</span><span lang="en">Desk</span></li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><span lang="de">Radiowecker</span><span lang="en">Clock radio</span></li>
+      </ul>
+    </div>
+
+    <div class="rooms__photos">
+      <!-- REPLACE WITH ROOM PHOTO: <img src="assets/photos/zimmer-komfort.jpg" alt="Komfort Doppelzimmer im Haupthaus"> and remove class "is-placeholder" -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Zimmer im Haupthaus</span><span lang="en">Room, main house</span></b><span>assets/photos/zimmer-haupthaus.jpg</span></div></figure>
+      <!-- REPLACE WITH SUITE PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Suite im Hof Engelgarten</span><span lang="en">Suite, Hof Engelgarten</span></b><span>assets/photos/suite-engelgarten.jpg</span></div></figure>
+      <!-- REPLACE WITH JUNIOR SUITE ROOF TERRACE PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Dachterrasse der Junior Suite</span><span lang="en">Junior Suite roof terrace</span></b><span>assets/photos/junior-suite-terrasse.jpg</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RESTAURANTS ============================= -->
+<section class="sec night dine" id="restaurants" aria-labelledby="dine-h">
+  <div class="wrap">
+    <div class="dine__kuno">
+      <div>
+        <p class="eyebrow" data-reveal><span lang="de">Sternerestaurant</span><span lang="en">Michelin-starred restaurant</span></p>
+        <h2 id="dine-h" class="kuno-word" data-reveal style="margin-top:22px">KUNO <span>1408</span></h2>
+        <p class="lede" data-reveal>
+          <span lang="de">Seit 2024 prägen Patrick Grieshaber und Robin Hofmann die Küche: Erfahrung aus der gehobenen Gastronomie im In- und Ausland, verbunden mit fränkischer Tradition und internationalen Einflüssen.</span>
+          <span lang="en">Since 2024, Patrick Grieshaber and Robin Hofmann have shaped the kitchen, bringing fine-dining experience from Germany and abroad to Franconian tradition and international influences.</span>
+        </p>
+        <dl class="hours" data-reveal>
+          <div><dt><span lang="de">Mittwoch – Samstag</span><span lang="en">Wednesday – Saturday</span></dt><dd>18:00 – 22:00</dd></div>
+          <div><dt><span lang="de">Annahmeschluss</span><span lang="en">Last orders</span></dt><dd>20:00</dd></div>
+          <div><dt><span lang="de">Gesetzliche Feiertage</span><span lang="en">Public holidays</span></dt><dd><span lang="de">geschlossen</span><span lang="en">closed</span></dd></div>
+        </dl>
+        <p data-reveal style="margin:4px 0 0"><a class="btn btn--gilt" href="tel:+4993130931408"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span lang="de">Tisch reservieren · 0931-3093-1408</span><span lang="en">Book a table · 0931-3093-1408</span></a></p>
+      </div>
+      <div class="dine__media">
+        <figure class="photo" data-reveal>
+          <img src="assets/frames/f270.jpg" width="720" height="1280" loading="lazy" alt="Gastraum unter der Glaskuppel mit gedeckten Tischen" data-alt-en="Dining room beneath the glass dome with laid tables" style="object-position:50% 70%">
+        </figure>
+        <!-- REPLACE WITH KUNO 1408 DISH PHOTO -->
+        <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Gericht aus dem KUNO 1408</span><span lang="en">A dish from KUNO 1408</span></b><span>assets/photos/kuno-gericht.jpg</span></div></figure>
+        <!-- REPLACE WITH KITCHEN TEAM PHOTO (Patrick Grieshaber & Robin Hofmann) -->
+        <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Küchenteam</span><span lang="en">Kitchen team</span></b><span>assets/photos/kuno-kueche.jpg</span></div></figure>
+      </div>
+    </div>
+
+    <div class="salon">
+      <div class="salon__card" data-reveal>
+        <p class="eyebrow" style="color:var(--ink)"><span lang="de">Frühstück · Bistro · Bar</span><span lang="en">Breakfast · Bistro · Bar</span></p>
+        <h3 style="margin-top:18px">SALON</h3>
+        <p><span lang="de">Frühstücksbuffet am Morgen, Bistroküche mittags und abends, an der kleinen Bar kreative fränkische Cocktails sowie Gin- und Whiskey-Spezialitäten aus der Region.</span><span lang="en">A breakfast buffet in the morning, bistro dishes at lunch and dinner, and at the small bar creative Franconian cocktails plus regional gin and whiskey.</span></p>
+        <dl class="hours">
+          <div><dt><span lang="de">Frühstück Mo – Fr</span><span lang="en">Breakfast Mon – Fri</span></dt><dd>06:30 – 10:00</dd></div>
+          <div><dt><span lang="de">Frühstück Sa, So &amp; Feiertag</span><span lang="en">Breakfast Sat, Sun &amp; holidays</span></dt><dd>07:00 – 11:00</dd></div>
+          <div><dt><span lang="de">Bistroküche Mo – Sa</span><span lang="en">Bistro Mon – Sat</span></dt><dd>12:00 – 14:00<br>18:00 – 22:00</dd></div>
+          <div><dt><span lang="de">Bar Mo – Sa</span><span lang="en">Bar Mon – Sat</span></dt><dd>17:30 – 00:00</dd></div>
+        </dl>
+        <a class="btn" href="tel:+4993130930"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span lang="de">Reservierung · 0931-3093-0</span><span lang="en">Reservations · 0931-3093-0</span></a>
+      </div>
+      <div class="salon__media">
+        <!-- REPLACE WITH SALON BAR PHOTO -->
+        <figure class="photo photo--arch is-placeholder" style="aspect-ratio:4/5" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">SALON Bar am Abend</span><span lang="en">SALON bar in the evening</span></b><span>assets/photos/salon-bar.jpg</span></div></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================ OFFERS ================================
+     Offer cut-outs: assets/offers/offer-*.png are genuinely transparent PNGs,
+     arch-shaped crops of the supplied frames (dining room, portal). Each card
+     drives in from its side, scrubbed by scroll (see initOffers in JS).
+     ======================================================================= -->
+<section class="sec offers" id="angebote" aria-labelledby="offers-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-reveal><span lang="de">Aktuelle Angebote</span><span lang="en">Current offers</span></p>
+      <h2 id="offers-h" data-reveal><span lang="de">Ein Grund mehr, länger zu bleiben.</span><span lang="en">One more reason to stay longer.</span></h2>
+    </div>
+    <div class="offer-list">
+      <div class="offer-slot offer-slot--left" data-offer="left">
+        <article class="offer">
+          <div class="offer__wm" aria-hidden="true" style="inset:-6% -4% auto auto; width:70%; aspect-ratio:1">
+            <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M100 30c30 0 60 22 60 58 0 30-24 46-36 52 6-14 4-30-6-40-8 16-18 26-18 52-10-14-34-24-34-58 0-34 16-64 34-64Z"/><path d="M100 30v150M100 80l26-20M100 110l-24-18M100 140l20-14"/><text x="100" y="196" text-anchor="middle" font-size="40" font-family="Georgia,serif" fill="currentColor" stroke="none">1408</text></svg>
+          </div>
+          <div class="offer__img"><img src="assets/offers/offer-genuss.png" width="560" height="777" loading="lazy" alt="Bogenförmiger Ausschnitt des Speiseraums unter der Glaskuppel" data-alt-en="Arched cut-out of the dining room beneath the glass dome"></div>
+          <div>
+            <p class="offer__tag"><span lang="de">Genuss-Paket</span><span lang="en">Gourmet package</span></p>
+            <h3><span lang="de">Genussreise nach Würzburg</span><span lang="en">A gourmet trip to Würzburg</span></h3>
+            <p><span lang="de">Übernachten im Rebstock und genießen im Haus. Leistungen und Preis nennen wir Ihnen mit der Verfügbarkeit.</span><span lang="en">Stay at the Rebstock and dine in-house. We will confirm inclusions and price along with availability.</span></p>
+            <!-- PLACEHOLDER: add the package inclusions and price exactly as published on rebstock.com/aktuelleangebote.html -->
+            <p class="offer__kw"><span lang="de">Stichwort</span><span lang="en">Keyword</span> <code>Genussreise</code></p>
+            <a class="link-arrow" href="mailto:reservierung@rebstock.com?subject=Genussreise"><span lang="de">Verfügbarkeit anfragen</span><span lang="en">Check availability</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+      </div>
+
+      <div class="offer-slot offer-slot--right" data-offer="right">
+        <article class="offer">
+          <div class="offer__wm" aria-hidden="true" style="inset:auto auto -10% -6%; width:72%; aspect-ratio:1">
+            <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M70 170V30l60 22-60 22"/><ellipse cx="70" cy="172" rx="46" ry="10"/><circle cx="140" cy="150" r="22"/><g fill="currentColor" stroke="none"><circle cx="132" cy="142" r="2"/><circle cx="142" cy="140" r="2"/><circle cx="150" cy="146" r="2"/><circle cx="134" cy="152" r="2"/><circle cx="144" cy="152" r="2"/><circle cx="140" cy="161" r="2"/><circle cx="151" cy="157" r="2"/></g></svg>
+          </div>
+          <div class="offer__img"><img src="assets/offers/offer-golf.png" width="560" height="746" loading="lazy" alt="Bogenförmiger Ausschnitt des Portals mit dem Schriftzug „Hotel Rebstock“" data-alt-en="Arched cut-out of the portal with the “Hotel Rebstock” lettering"></div>
+          <div>
+            <p class="offer__tag"><span lang="de">Golf-Paket</span><span lang="en">Golf package</span></p>
+            <h3><span lang="de">Aktivurlaub Golf</span><span lang="en">Active golf break</span></h3>
+            <p><span lang="de">Übernachtung im Rebstock, Küche im KUNO 1408 und ein Besuch auf dem Golfplatz in Würzburg.</span><span lang="en">A stay at the Rebstock, dinner at KUNO 1408 and a round at the golf course in Würzburg.</span></p>
+            <!-- PLACEHOLDER: add the package inclusions and price exactly as published on rebstock.com/aktuelleangebote.html -->
+            <p class="offer__kw"><span lang="de">Stichwort</span><span lang="en">Keyword</span> <code>Aktivurlaub Golf</code></p>
+            <a class="link-arrow" href="mailto:reservierung@rebstock.com?subject=Aktivurlaub%20Golf"><span lang="de">Verfügbarkeit anfragen</span><span lang="en">Check availability</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PEOPLE / PHOTOS ===========================
+     All placeholders below: replace the inner <div class="ph"> with an <img>
+     (path suggested in each) and remove the "is-placeholder" class.
+     ======================================================================= -->
+<section class="sec" id="menschen" aria-labelledby="people-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-reveal><span lang="de">Gastgeber</span><span lang="en">Your hosts</span></p>
+      <h2 id="people-h" data-reveal><span lang="de">Die Menschen hinter dem Rebstock.</span><span lang="en">The people behind the Rebstock.</span></h2>
+    </div>
+    <div class="people__grid">
+      <!-- REPLACE WITH HOTEL TEAM PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Das Rebstock-Team</span><span lang="en">The Rebstock team</span></b><span>assets/photos/team.jpg</span></div></figure>
+      <!-- REPLACE WITH RECEPTION PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Empfang</span><span lang="en">Reception</span></b><span>assets/photos/empfang.jpg</span></div></figure>
+      <!-- REPLACE WITH HOST / OWNER PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Gastgeber</span><span lang="en">Host</span></b><span>assets/photos/gastgeber.jpg</span></div></figure>
+      <!-- REPLACE WITH BREAKFAST PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Frühstück im SALON</span><span lang="en">Breakfast at the SALON</span></b><span>assets/photos/fruehstueck.jpg</span></div></figure>
+      <!-- REPLACE WITH SERVICE MOMENT PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Service</span><span lang="en">Service</span></b><span>assets/photos/service.jpg</span></div></figure>
+      <!-- REPLACE WITH WÜRZBURG SURROUNDINGS PHOTO -->
+      <figure class="photo is-placeholder" data-reveal><div class="ph"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg><b><span lang="de">Würzburg vor der Tür</span><span lang="en">Würzburg on the doorstep</span></b><span>assets/photos/wuerzburg.jpg</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== TAGUNGEN & PARTNER ========================= -->
+<section class="sec rooms" id="tagungen" aria-labelledby="meet-h">
+  <div class="wrap">
+    <div class="meet">
+      <div class="sec-head" style="margin:0">
+        <p class="eyebrow" data-reveal><span lang="de">Tagungen &amp; Feiern</span><span lang="en">Meetings &amp; events</span></p>
+        <h2 id="meet-h" data-reveal><span lang="de">Tagen mitten in der Altstadt.</span><span lang="en">Meet in the heart of the old town.</span></h2>
+        <p class="lede" data-reveal><span lang="de">Moderne Tagungsräume, Küche aus dem eigenen Haus und Zimmer direkt über dem Seminar.</span><span lang="en">Modern meeting rooms, food from our own kitchens and rooms right upstairs.</span></p>
+        <!-- PLACEHOLDER: number and capacity of meeting rooms – the old site states different figures on different pages; insert the confirmed values. -->
+      </div>
+      <ul class="meet__list" data-reveal>
+        <li>
+          <h3><span lang="de">Express-Anfrage</span><span lang="en">Express request</span></h3>
+          <p><span lang="de">Rückruf durch den BWH MICE Desk innerhalb von 60 Minuten während der Bürozeiten.</span><span lang="en">A call back from the BWH MICE Desk within 60 minutes during office hours.</span></p>
+          <!-- CONFIG: link to the MICE express request form (SITE_CONFIG.miceExpressUrl) -->
+          <p><a class="link-arrow" data-config-href="miceExpressUrl" href="#kontakt"><span lang="de">Express-Anfrage starten</span><span lang="en">Start an express request</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </li>
+        <li>
+          <h3><span lang="de">Tagung direkt online buchen</span><span lang="en">Book a meeting online</span></h3>
+          <p><span lang="de">Für ein individuelles Angebot: Tagungsanfrage an den MICE Desk – oder direkt online buchen.</span><span lang="en">For a tailored quote, send a request to the MICE Desk – or book directly online.</span></p>
+          <p><a class="link-arrow" data-config-href="meetingBookingUrl" href="#kontakt"><span lang="de">Zur Online-Buchung</span><span lang="en">Book online</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </li>
+        <li>
+          <h3><span lang="de">Weihnachtsfeiern &amp; Bankett</span><span lang="en">Christmas parties &amp; banquets</span></h3>
+          <p><span lang="de">Bitte frühzeitig reservieren, die Plätze sind begrenzt.</span><span lang="en">Please book early – places are limited.</span></p>
+          <p><a href="mailto:bankett@rebstock.com">bankett@rebstock.com</a> · <a href="tel:+499313093292">0931-3093-292</a></p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="partners" id="partner" data-reveal>
+      <p class="eyebrow"><span lang="de">Unsere Partner</span><span lang="en">Our partners</span></p>
+      <!-- Partner list as shown on rebstock.com/partner.html (please re-check: the German and English pages listed slightly different partners). -->
+      <ul>
+        <li>PALUX</li><li>Wertheim Village</li><li>DECORENT</li><li>Staatlicher Hofkeller</li><li>Köller Chauffeurservice</li><li>Maingeschenk24</li><li>Golf Club Würzburg</li><li>Teeth &amp; Aesthetics</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PLAN YOUR STAY =============================
+     Step-by-step enquiry. Field names mirror the contact form on
+     rebstock.com/kontakt.html (Firma, Anrede, Vorname, Nachname, Straße,
+     PLZ/Ort, Telefon, E-Mail, Mein Anliegen, Einverständnis). The stay steps
+     (dates, room, guests) are written into "Mein Anliegen" on submit.
+     Submission target: SITE_CONFIG.enquiryEndpoint in the script below.
+     ======================================================================= -->
+<section class="sec plan" id="planen" aria-labelledby="plan-h">
+  <div class="wrap plan__shell">
+    <div class="plan__aside">
+      <p class="eyebrow"><span lang="de">Ihr Concierge</span><span lang="en">Your concierge</span></p>
+      <h2 id="plan-h"><span lang="de">Aufenthalt planen</span><span lang="en">Plan your stay</span></h2>
+      <p class="lede"><span lang="de">Ein paar kurze Fragen – wir melden uns mit Verfügbarkeit und Angebot.</span><span lang="en">A few short questions – we will reply with availability and a quote.</span></p>
+      <div class="direct" id="kontakt">
+        <a href="tel:+4993130930"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>++49 (0) 931-30930</span></a>
+        <a href="mailto:reservierung@rebstock.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span>reservierung@rebstock.com</span></a>
+        <a href="mailto:rebstock@rebstock.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><span>rebstock@rebstock.com</span></a>
+      </div>
+    </div>
+
+    <div class="planner" id="planner">
+      <noscript>
+        <p><strong>Die Online-Anfrage benötigt JavaScript.</strong> Sie erreichen uns direkt telefonisch unter <a href="tel:+4993130930">++49 (0) 931-30930</a> oder per E-Mail an <a href="mailto:reservierung@rebstock.com">reservierung@rebstock.com</a>.</p>
+        <p lang="en"><strong>The online enquiry needs JavaScript.</strong> Please call <a href="tel:+4993130930">++49 (0) 931-30930</a> or email <a href="mailto:reservierung@rebstock.com">reservierung@rebstock.com</a>.</p>
+      </noscript>
+      <form id="planForm" novalidate>
+        <div class="steps-meta" aria-hidden="true"><span id="stepCount"></span><span id="stepLeft"></span></div>
+        <ol class="steps" id="stepDots" aria-hidden="true"></ol>
+        <p class="sr-only" id="stepLive" aria-live="polite"></p>
+
+        <!-- 1 Dates -->
+        <fieldset class="step" data-step="dates">
+          <legend><h3 tabindex="-1"><span lang="de">Wann dürfen wir Sie begrüßen?</span><span lang="en">When can we welcome you?</span></h3></legend>
+          <p class="hint"><span lang="de">Ihre An- und Abreise.</span><span lang="en">Your arrival and departure.</span></p>
+          <div class="fields fields--2">
+            <div class="field"><label for="f-arr"><span lang="de">Anreise</span><span lang="en">Arrival</span></label><input type="date" id="f-arr" name="anreise" required aria-describedby="e-arr"><p class="err" id="e-arr"></p></div>
+            <div class="field"><label for="f-dep"><span lang="de">Abreise</span><span lang="en">Departure</span></label><input type="date" id="f-dep" name="abreise" required aria-describedby="e-dep"><p class="err" id="e-dep"></p></div>
+          </div>
+          <p class="nights" id="nights" aria-live="polite"></p>
+        </fieldset>
+
+        <!-- 2 Room -->
+        <fieldset class="step" data-step="room">
+          <legend><h3 tabindex="-1"><span lang="de">Wie möchten Sie wohnen?</span><span lang="en">How would you like to stay?</span></h3></legend>
+          <p class="hint"><span lang="de">Wählen Sie eine Zimmerkategorie – oder lassen Sie sich beraten.</span><span lang="en">Choose a room category – or let us advise you.</span></p>
+          <div class="choices choices--2" role="radiogroup" aria-describedby="e-room">
+            <h4><span lang="de">Haupthaus</span><span lang="en">Main house</span></h4>
+            <label class="choice"><input type="radio" name="zimmer" value="Economy Einzelzimmer (17 m²)"><span><span><span lang="de">Economy Einzelzimmer</span><span lang="en">Economy single</span></span><small>17 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Standard Einzelzimmer (18 m²)"><span><span><span lang="de">Standard Einzelzimmer</span><span lang="en">Standard single</span></span><small>18 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Standard Doppelzimmer (20 m²)"><span><span><span lang="de">Standard Doppelzimmer</span><span lang="en">Standard double</span></span><small>20 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Komfort Doppelzimmer (23 m²)"><span><span><span lang="de">Komfort Doppelzimmer</span><span lang="en">Comfort double</span></span><small>23 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Junior Suite (55 m²)"><span><span>Junior Suite</span><small>55 m²</small></span></label>
+            <h4>Hof Engelgarten</h4>
+            <label class="choice"><input type="radio" name="zimmer" value="Premium Doppelzimmer (29 m²)"><span><span><span lang="de">Premium Doppelzimmer</span><span lang="en">Premium double</span></span><small>29 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Executive Doppelzimmer (32 m²)"><span><span><span lang="de">Executive Doppelzimmer</span><span lang="en">Executive double</span></span><small>32 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Superior Doppelzimmer (39 m²)"><span><span><span lang="de">Superior Doppelzimmer</span><span lang="en">Superior double</span></span><small>39 m²</small></span></label>
+            <label class="choice"><input type="radio" name="zimmer" value="Suite (53 m²)"><span><span>Suite</span><small>53 m²</small></span></label>
+            <h4><span lang="de">Noch unentschieden?</span><span lang="en">Not sure yet?</span></h4>
+            <label class="choice" style="grid-column:1/-1"><input type="radio" name="zimmer" value="Beratung gewünscht"><span><span lang="de">Bitte beraten Sie mich</span><span lang="en">Please advise me</span></span></label>
+          </div>
+          <p class="step-error" id="e-room"></p>
+        </fieldset>
+
+        <!-- 3 Guests -->
+        <fieldset class="step" data-step="guests">
+          <legend><h3 tabindex="-1"><span lang="de">Wer reist mit?</span><span lang="en">Who is travelling?</span></h3></legend>
+          <p class="hint"><span lang="de">Anzahl der Zimmer und Gäste.</span><span lang="en">Number of rooms and guests.</span></p>
+          <div class="stepper"><span class="lbl" id="l-rooms"><span lang="de">Zimmer</span><span lang="en">Rooms</span></span><span class="ctrl"><button type="button" data-dec="f-rooms" aria-label="weniger" data-aria-en="fewer">−</button><input id="f-rooms" name="zimmeranzahl" type="number" inputmode="numeric" min="1" max="20" value="1" aria-labelledby="l-rooms"><button type="button" data-inc="f-rooms" aria-label="mehr" data-aria-en="more">+</button></span></div>
+          <div class="stepper"><span class="lbl" id="l-adults"><span lang="de">Erwachsene</span><span lang="en">Adults</span></span><span class="ctrl"><button type="button" data-dec="f-adults" aria-label="weniger" data-aria-en="fewer">−</button><input id="f-adults" name="erwachsene" type="number" inputmode="numeric" min="1" max="40" value="2" aria-labelledby="l-adults"><button type="button" data-inc="f-adults" aria-label="mehr" data-aria-en="more">+</button></span></div>
+          <div class="stepper"><span class="lbl" id="l-kids"><span lang="de">Kinder</span><span lang="en">Children</span><small><span lang="de">0 – 17 Jahre</span><span lang="en">aged 0 – 17</span></small></span><span class="ctrl"><button type="button" data-dec="f-kids" aria-label="weniger" data-aria-en="fewer">−</button><input id="f-kids" name="kinder" type="number" inputmode="numeric" min="0" max="10" value="0" aria-labelledby="l-kids"><button type="button" data-inc="f-kids" aria-label="mehr" data-aria-en="more">+</button></span></div>
+          <p class="step-error" id="e-guests"></p>
+        </fieldset>
+
+        <!-- 3b Children's ages (conditional: only when children > 0) -->
+        <fieldset class="step" data-step="ages">
+          <legend><h3 tabindex="-1"><span lang="de">Wie alt sind die Kinder?</span><span lang="en">How old are the children?</span></h3></legend>
+          <p class="hint"><span lang="de">Damit wir passende Betten einplanen können.</span><span lang="en">So we can plan suitable beds.</span></p>
+          <div class="fields fields--2" id="agesWrap"></div>
+          <p class="step-error" id="e-ages"></p>
+        </fieldset>
+
+        <!-- 4 Name -->
+        <fieldset class="step" data-step="name">
+          <legend><h3 tabindex="-1"><span lang="de">Wie dürfen wir Sie ansprechen?</span><span lang="en">How may we address you?</span></h3></legend>
+          <div class="fields">
+            <div class="field"><label for="f-anrede"><span lang="de">Anrede</span><span lang="en">Salutation</span> <span class="opt"><span lang="de">(optional)</span><span lang="en">(optional)</span></span></label>
+              <select id="f-anrede" name="anrede" autocomplete="honorific-prefix"><option value="" data-en="Please choose">Bitte wählen</option><option value="Frau" data-en="Ms">Frau</option><option value="Herr" data-en="Mr">Herr</option><option value="Keine Angabe" data-en="Prefer not to say">Keine Angabe</option></select></div>
+            <div class="fields fields--2">
+              <div class="field"><label for="f-vor"><span lang="de">Vorname</span><span lang="en">First name</span></label><input id="f-vor" name="vorname" autocomplete="given-name" required aria-describedby="e-vor"><p class="err" id="e-vor"></p></div>
+              <div class="field"><label for="f-nach"><span lang="de">Nachname</span><span lang="en">Last name</span></label><input id="f-nach" name="nachname" autocomplete="family-name" required aria-describedby="e-nach"><p class="err" id="e-nach"></p></div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 5 Company -->
+        <fieldset class="step" data-step="company">
+          <legend><h3 tabindex="-1"><span lang="de">Reisen Sie für ein Unternehmen?</span><span lang="en">Are you travelling for a company?</span></h3></legend>
+          <p class="hint"><span lang="de">Nur ausfüllen, wenn die Rechnung an eine Firma gehen soll.</span><span lang="en">Only if the invoice should go to a company.</span></p>
+          <div class="field"><label for="f-firma"><span lang="de">Firma</span><span lang="en">Company</span> <span class="opt">(optional)</span></label><input id="f-firma" name="firma" autocomplete="organization"></div>
+        </fieldset>
+
+        <!-- 6 Address -->
+        <fieldset class="step" data-step="address">
+          <legend><h3 tabindex="-1"><span lang="de">Ihre Anschrift</span><span lang="en">Your address</span></h3></legend>
+          <p class="hint"><span lang="de">Hilfreich für Angebot und Rechnung.</span><span lang="en">Helpful for your quote and invoice.</span></p>
+          <div class="fields">
+            <div class="field"><label for="f-str"><span lang="de">Straße</span><span lang="en">Street</span> <span class="opt">(optional)</span></label><input id="f-str" name="strasse" autocomplete="street-address"></div>
+            <div class="field"><label for="f-ort"><span lang="de">PLZ / Ort</span><span lang="en">Postcode / City</span> <span class="opt">(optional)</span></label><input id="f-ort" name="plz_ort" autocomplete="address-level2"></div>
+          </div>
+        </fieldset>
+
+        <!-- 7 Email -->
+        <fieldset class="step" data-step="email">
+          <legend><h3 tabindex="-1"><span lang="de">Wohin dürfen wir Ihnen antworten?</span><span lang="en">Where should we send our reply?</span></h3></legend>
+          <div class="field"><label for="f-mail"><span lang="de">E-Mail</span><span lang="en">Email</span></label><input id="f-mail" name="email" type="email" inputmode="email" autocomplete="email" required aria-describedby="e-mail" spellcheck="false"><p class="err" id="e-mail"></p></div>
+        </fieldset>
+
+        <!-- 8 Phone -->
+        <fieldset class="step" data-step="phone">
+          <legend><h3 tabindex="-1"><span lang="de">Und telefonisch?</span><span lang="en">And by phone?</span></h3></legend>
+          <p class="hint"><span lang="de">Für Rückfragen – gern mit Ländervorwahl.</span><span lang="en">For quick questions – international format welcome.</span></p>
+          <div class="field"><label for="f-tel"><span lang="de">Telefon</span><span lang="en">Phone</span> <span class="opt">(optional)</span></label><input id="f-tel" name="telefon" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="e-tel"><p class="err" id="e-tel"></p></div>
+        </fieldset>
+
+        <!-- 9 Message -->
+        <fieldset class="step" data-step="message">
+          <legend><h3 tabindex="-1"><span lang="de">Haben Sie besondere Wünsche?</span><span lang="en">Any special requests?</span></h3></legend>
+          <p class="hint"><span lang="de">Tisch im KUNO 1408, Stellplatz in der Tiefgarage, ein Anlass – alles, was uns hilft.</span><span lang="en">A table at KUNO 1408, a garage space, a special occasion – anything that helps.</span></p>
+          <div class="field"><label for="f-msg"><span lang="de">Mein Anliegen</span><span lang="en">My request</span> <span class="opt">(optional)</span></label><textarea id="f-msg" name="nachricht" maxlength="2000"></textarea></div>
+        </fieldset>
+
+        <!-- 10 Consent -->
+        <fieldset class="step" data-step="consent">
+          <legend><h3 tabindex="-1"><span lang="de">Ihr Einverständnis</span><span lang="en">Your consent</span></h3></legend>
+          <p class="hint"><span lang="de">Ihre Angaben bleiben im Hotel und werden nicht an Dritte weitergegeben.</span><span lang="en">Your details stay with the hotel and are not passed on to third parties.</span></p>
+          <!-- REPLACE WITH ORIGINAL WORDING: the consent sentence must match the "Einverständnis" checkbox on rebstock.com/kontakt.html exactly. -->
+          <label class="check"><input type="checkbox" id="f-consent" name="einverstaendnis" value="ja" required aria-describedby="e-consent">
+            <span><span lang="de">Ich bin einverstanden, dass das Hotel Rebstock mich zur Bearbeitung meiner Anfrage per Post, E-Mail oder Telefon kontaktiert. Hinweise in der <a href="#datenschutz">Datenschutzerklärung</a>.</span><span lang="en">I agree that Hotel Rebstock may contact me by post, email or phone to handle my request. See the <a href="#datenschutz">privacy policy</a>.</span></span></label>
+          <p class="step-error" id="e-consent"></p>
+        </fieldset>
+
+        <!-- 11 Review -->
+        <fieldset class="step" data-step="review">
+          <legend><h3 tabindex="-1"><span lang="de">Passt alles?</span><span lang="en">Is everything right?</span></h3></legend>
+          <p class="hint"><span lang="de">Prüfen Sie Ihre Angaben, bevor wir sie an das Hotel senden.</span><span lang="en">Check your details before we send them to the hotel.</span></p>
+          <ul class="review" id="reviewList"></ul>
+        </fieldset>
+
+        <!-- Result -->
+        <div class="step result" data-step="result" id="result" tabindex="-1"></div>
+
+        <div class="plan-nav" id="planNav">
+          <button type="button" class="btn btn--quiet" id="btnBack"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg><span lang="de">Zurück</span><span lang="en">Back</span></button>
+          <span class="spacer"></span>
+          <button type="submit" class="btn" id="btnNext"><span id="btnNextLabel"></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ================================ ANREISE =============================== -->
+<section class="sec" id="anreise" aria-labelledby="where-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow" data-reveal><span lang="de">Anreise &amp; Parken</span><span lang="en">Getting here &amp; parking</span></p>
+      <h2 id="where-h" data-reveal><span lang="de">Mitten in der Altstadt. Mit eigener Garage.</span><span lang="en">In the old town. With its own garage.</span></h2>
+    </div>
+    <div class="where">
+      <div class="map" id="map">
+        <!-- Google Maps loads only after consent ("Externe Medien"). Link supplied by the hotel: https://maps.app.goo.gl/MiHbzkv8fiYLyQRH8 -->
+        <div class="map__gate" id="mapGate">
+          <h3>Neubaustraße 7</h3>
+          <p><span lang="de">Zum Schutz Ihrer Daten laden wir die Google-Karte erst nach Ihrer Zustimmung. Dabei werden Daten an Google übertragen.</span><span lang="en">To protect your data, the Google map loads only after you agree. Data is then transferred to Google.</span></p>
+          <div class="row">
+            <button type="button" class="btn btn--gilt" id="mapLoad"><span lang="de">Karte laden</span><span lang="en">Load map</span></button>
+            <a class="btn btn--ghost" href="https://maps.app.goo.gl/MiHbzkv8fiYLyQRH8" target="_blank" rel="noopener"><span lang="de">In Google Maps öffnen</span><span lang="en">Open in Google Maps</span><svg class="icon" aria-hidden="true"><use href="#i-ext"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <address class="address-block">Best Western Premier<br>Hotel Rebstock<br>Neubaustraße 7<br>97070 Würzburg</address>
+        <p style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Best%20Western%20Premier%20Hotel%20Rebstock%2C%20Neubaustra%C3%9Fe%207%2C%2097070%20W%C3%BCrzburg" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg><span lang="de">Route planen</span><span lang="en">Get directions</span></a>
+          <a class="btn btn--quiet" href="https://maps.app.goo.gl/MiHbzkv8fiYLyQRH8" target="_blank" rel="noopener"><span lang="de">Bewertungen auf Google</span><span lang="en">Reviews on Google</span><svg class="icon" aria-hidden="true"><use href="#i-ext"/></svg></a>
+        </p>
+        <!-- Google rating: intentionally not shown as a number. Only add a star rating / review count if it is verified and kept current. -->
+        <ul class="ways" style="margin-top:28px">
+          <li><svg class="icon" aria-hidden="true"><use href="#i-train"/></svg><div><h3><span lang="de">Mit der Bahn</span><span lang="en">By train</span></h3><p><span lang="de">Die Straßenbahn hält direkt vor dem Hauptbahnhof. Nach ca. 6 Minuten an der Haltestelle Neubaustraße aussteigen.</span><span lang="en">Trams stop right outside the main station. Get off at Neubaustraße after about 6 minutes.</span></p></div></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg><div><h3><span lang="de">Mit dem Auto</span><span lang="en">By car</span></h3><p><span lang="de">Über die Neubaustraße: Das Hotel liegt ca. 50 m nach der Einmündung zum Parkhaus auf der rechten Seite.</span><span lang="en">Via Neubaustraße: the hotel is about 50 m past the car-park entrance, on the right.</span></p></div></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-park"/></svg><div><h3><span lang="de">Eigene Tiefgarage</span><span lang="en">Our underground garage</span></h3><p><span lang="de">30 Stellplätze, Einfahrt per Autoaufzug, 25,00 € pro Nacht. Fahrzeuge bis 2,00 m Höhe, 2,40 m Breite, 5,00 m Länge und 5 t. Die Zufahrtskarte erhalten Sie an der Rezeption. Ein öffentliches Parkhaus liegt direkt hinter dem Hotel.</span><span lang="en">30 spaces, entry by car lift, €25.00 per night. Vehicles up to 2.00 m high, 2.40 m wide, 5.00 m long and 5 t. Collect your access card at reception. A public car park is directly behind the hotel.</span></p></div></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg><div><h3><span lang="de">E-Mobilität</span><span lang="en">Electric vehicles</span></h3><p><span lang="de">2 Lademöglichkeiten in der Tiefgarage.</span><span lang="en">2 charging points in the garage.</span></p></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================================ FOOTER ================================ -->
+<footer class="site-footer" id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <p class="footer-word" aria-hidden="true">Reb<em>stock</em></p>
+      <div class="footer-cols">
+        <div>
+          <h3><span lang="de">Adresse</span><span lang="en">Address</span></h3>
+          <address>Best Western Premier Hotel Rebstock<br>Neubaustraße 7 | 97070 Würzburg</address>
+        </div>
+        <div>
+          <h3><span lang="de">Kontakt</span><span lang="en">Contact</span></h3>
+          <ul>
+            <li><span lang="de">Telefon:</span><span lang="en">Phone:</span> <a href="tel:+4993130930">++49 (0) 931-30930</a></li>
+            <li>Telefax: ++49 (0) 931-3093100</li>
+            <li>Mail: <a href="mailto:rebstock@rebstock.com">rebstock@rebstock.com</a></li>
+            <li><span lang="de">Reservierung:</span><span lang="en">Reservations:</span> <a href="mailto:reservierung@rebstock.com">reservierung@rebstock.com</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3><span lang="de">Rechtliches</span><span lang="en">Legal</span></h3>
+          <ul>
+            <li><a href="#impressum">Impressum</a></li>
+            <li><a href="#datenschutz"><span lang="de">Datenschutz</span><span lang="en">Privacy policy (Datenschutz)</span></a></li>
+            <li><a href="#agb"><span lang="de">AGB</span><span lang="en">Terms (AGB)</span></a></li>
+            <li><button type="button" data-open-consent><span lang="de">Cookie-Einstellungen</span><span lang="en">Cookie settings</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Best Western Premier Hotel Rebstock zu Würzburg GmbH</span>
+      <a href="#top"><span lang="de">Nach oben</span><span lang="en">Back to top</span></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================== LEGAL VIEWS =============================
+     The Impressum, Datenschutz and AGB texts must be copied VERBATIM from
+     rebstock.com. They could not be retrieved while this file was built (the
+     build environment had no network access to rebstock.com), so each view
+     contains a marked slot instead of invented text. Paste the original
+     German text into <div class="legal-text"> and delete the .legal-missing box.
+     ======================================================================= -->
+<section class="view" id="impressum" aria-labelledby="imp-h">
+  <div class="wrap legal">
+    <a class="link-arrow back" href="#top" data-close-view><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg><span lang="de">Zurück zur Startseite</span><span lang="en">Back to home</span></a>
+    <h1 id="imp-h">Impressum</h1>
+    <p class="legal-note" lang="en">The legal notice is published in German only.</p>
+    <div class="legal-text">
+      <!-- PASTE VERBATIM: https://www.rebstock.com/impressum.html -->
+      <div class="legal-missing">
+        <h2>Originaltext wird eingefügt</h2>
+        <p>Der Wortlaut des Impressums wird unverändert von der bisherigen Website übernommen und an dieser Stelle eingefügt.</p>
+        <p>Bis dahin gilt das Impressum unter <a href="https://www.rebstock.com/impressum.html" rel="noopener">rebstock.com/impressum.html</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="datenschutz" aria-labelledby="ds-h">
+  <div class="wrap legal">
+    <a class="link-arrow back" href="#top" data-close-view><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg><span lang="de">Zurück zur Startseite</span><span lang="en">Back to home</span></a>
+    <h1 id="ds-h">Datenschutz</h1>
+    <p class="legal-note" lang="en">The privacy policy is published in German only.</p>
+    <div class="legal-text">
+      <!-- PASTE VERBATIM: https://www.rebstock.com/datenschutz.html (and the Datenschutzerklärung PDF linked on rebstock.com/agb.html).
+           NOTE: this website additionally offers an optional Google Maps embed (loaded only after consent) and stores the
+           consent / language choice in the browser's localStorage. Have the privacy text reviewed so it covers these. -->
+      <div class="legal-missing">
+        <h2>Originaltext wird eingefügt</h2>
+        <p>Der Wortlaut der Datenschutzerklärung wird unverändert von der bisherigen Website übernommen und an dieser Stelle eingefügt.</p>
+        <p>Bis dahin gilt die Datenschutzerklärung unter <a href="https://www.rebstock.com/datenschutz.html" rel="noopener">rebstock.com/datenschutz.html</a>. Fragen zum Datenschutz: <a href="mailto:datenschutzbeauftragter@rebstock.com">datenschutzbeauftragter@rebstock.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="agb" aria-labelledby="agb-h">
+  <div class="wrap legal">
+    <a class="link-arrow back" href="#top" data-close-view><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg><span lang="de">Zurück zur Startseite</span><span lang="en">Back to home</span></a>
+    <h1 id="agb-h">Allgemeine Geschäftsbedingungen</h1>
+    <p class="legal-note" lang="en">Our terms and conditions are published in German only.</p>
+    <div class="legal-text">
+      <!-- PASTE VERBATIM: the AGB from https://www.rebstock.com/agb.html
+           (Allgemeine Geschäftsbedingungen für den Hotelaufnahmevertrag and the AGB for Veranstaltungen, currently PDF downloads). -->
+      <div class="legal-missing">
+        <h2>Originaltext wird eingefügt</h2>
+        <p>Die Allgemeinen Geschäftsbedingungen für den Hotelaufnahmevertrag und für Veranstaltungen werden unverändert von der bisherigen Website übernommen und an dieser Stelle eingefügt.</p>
+        <p>Bis dahin gelten die AGB unter <a href="https://www.rebstock.com/agb.html" rel="noopener">rebstock.com/agb.html</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CONSENT DIALOG ============================ -->
+<div class="consent" id="consent" role="dialog" aria-modal="false" aria-labelledby="consent-h">
+  <div class="consent__box">
+    <h2 id="consent-h" tabindex="-1"><span lang="de">Ihre Privatsphäre</span><span lang="en">Your privacy</span></h2>
+    <p><span lang="de">Wir setzen nur technisch notwendige Speicherungen ein (Ihre Sprach- und Cookie-Auswahl). Externe Inhalte wie Google Maps laden wir erst mit Ihrer Zustimmung. Datenschutzerklärung, Impressum und AGB finden Sie unten.</span><span lang="en">We only store what is technically necessary (your language and cookie choice). External content such as Google Maps loads only with your consent. Privacy policy, legal notice and terms (AGB) are linked below.</span></p>
+    <div class="opts">
+      <div class="opt"><b><span lang="de">Notwendig</span><span lang="en">Necessary</span></b><small><span lang="de">Sprache und diese Auswahl. Immer aktiv.</span><span lang="en">Language and this choice. Always on.</span></small><span class="switch"><input type="checkbox" checked disabled aria-label="Notwendig" data-aria-en="Necessary"><i></i></span></div>
+      <div class="opt"><b><span lang="de">Externe Medien</span><span lang="en">External media</span></b><small><span lang="de">Google Maps (Google Ireland Ltd.). Dabei werden Daten an Google übertragen.</span><span lang="en">Google Maps (Google Ireland Ltd.). Data is transferred to Google.</span></small><span class="switch"><input type="checkbox" id="cMaps" aria-label="Externe Medien zulassen" data-aria-en="Allow external media"><i></i></span></div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn--quiet" data-consent="necessary"><span lang="de">Nur notwendige</span><span lang="en">Necessary only</span></button>
+      <button type="button" class="btn btn--quiet" data-consent="save"><span lang="de">Auswahl speichern</span><span lang="en">Save choice</span></button>
+      <button type="button" class="btn" data-consent="all"><span lang="de">Alle akzeptieren</span><span lang="en">Accept all</span></button>
+    </div>
+    <p class="links"><a href="#datenschutz">Datenschutz</a><a href="#impressum">Impressum</a><a href="#agb">AGB</a></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==========================================================================
+     SITE_CONFIG – the only place you need to edit for integrations
+     ========================================================================== */
+  var SITE_CONFIG = {
+    // Where the "Plan your stay" enquiry is POSTed. Leave empty until a real
+    // backend or form service is connected; the planner then says honestly
+    // that nothing was sent and offers a pre-filled e-mail instead.
+    // The endpoint receives multipart/form-data with the field names of the
+    // old contact form (firma, anrede, vorname, nachname, strasse, plz_ort,
+    // telefon, email, anliegen, einverstaendnis) plus structured stay fields.
+    // A 2xx response counts as success; anything else is shown as a failure.
+    enquiryEndpoint: '',
+    enquiryMailFallback: 'reservierung@rebstock.com',
+    // Optional external links (left empty → link scrolls to the contact block)
+    miceExpressUrl: '',
+    meetingBookingUrl: '',
+    // Google Maps embed, loaded only after consent
+    mapsEmbedUrl: 'https://www.google.com/maps?q=Best+Western+Premier+Hotel+Rebstock,+Neubaustra%C3%9Fe+7,+97070+W%C3%BCrzburg&hl=de&z=16&output=embed',
+    // Hero frames: 300 frames from the supplied ZIP, numbered f001…f300
+    heroFrameCount: 300,
+    heroFrameSrc: function (n) { return 'assets/frames/f' + ('00' + n).slice(-3) + '.jpg'; }
+  };
+
+  /* Narrative timing, in hero progress (0 = first frame, 1 = last frame).
+     Frame ≈ 1 + progress × 299. Intervals never overlap, so no two passages
+     can be visible at once.
+       Moment 0  entrance   frames   1– 51 fully shown, gone by frame  81
+       Moment 1  foyer      enters 132–165, holds to 200, gone by 227
+       Moment 2  restaurant enters 242–278, holds to the last frame        */
+  var HERO_TIMELINE = [
+    { inn: null,         out: [0.17, 0.27] },
+    { inn: [0.44, 0.55], out: [0.67, 0.76] },
+    { inn: [0.81, 0.93], out: null }
+  ];
+
+  var root = document.documentElement;
+  var reducedMotion = root.classList.contains('rm');
+  var debug = /[?&]debug=triggers\b/.test(location.search);
+
+  /* ---------------------------------------------------------------- utils */
+  function $(s, c) { return (c || document).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function smooth(t) { return t * t * (3 - 2 * t); }
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function docTop(el) { return el.getBoundingClientRect().top + window.pageYOffset; }
+  var store = {
+    get: function (k, area) { try { return (area || window.localStorage).getItem(k); } catch (e) { return null; } },
+    set: function (k, v, area) { try { (area || window.localStorage).setItem(k, v); } catch (e) {} },
+    del: function (k, area) { try { (area || window.localStorage).removeItem(k); } catch (e) {} }
+  };
+
+  /* ================================================================ i18n */
+  var T = {
+    de: {
+      next: 'Weiter', send: 'Anfrage senden', sending: 'Wird gesendet …',
+      stepOf: 'Schritt {a} von {b}', left1: 'noch 1 Schritt', leftN: 'noch {n} Schritte', last: 'letzter Schritt',
+      nights1: '1 Nacht', nightsN: '{n} Nächte',
+      reqArr: 'Bitte wählen Sie Ihr Anreisedatum.', reqDep: 'Bitte wählen Sie Ihr Abreisedatum.',
+      pastArr: 'Das Anreisedatum liegt in der Vergangenheit.', depAfter: 'Die Abreise muss nach der Anreise liegen.',
+      reqRoom: 'Bitte wählen Sie eine Kategorie – oder „Bitte beraten Sie mich“.',
+      reqAdults: 'Bitte geben Sie mindestens einen Erwachsenen an.', badNum: 'Bitte geben Sie eine gültige Zahl an.',
+      reqAges: 'Bitte geben Sie das Alter jedes Kindes an.', child: 'Kind {n}', years: '{n} Jahre', year1: '1 Jahr', under1: 'unter 1 Jahr', choose: 'Bitte wählen',
+      reqFirst: 'Bitte geben Sie Ihren Vornamen an.', reqLast: 'Bitte geben Sie Ihren Nachnamen an.',
+      reqMail: 'Bitte geben Sie Ihre E-Mail-Adresse an.', badMail: 'Diese E-Mail-Adresse sieht unvollständig aus, z. B. name@beispiel.de.',
+      badTel: 'Bitte nur Ziffern, Leerzeichen und + ( ) - / verwenden.',
+      reqConsent: 'Wir brauchen Ihr Einverständnis, um Ihre Anfrage zu bearbeiten.',
+      change: 'Ändern',
+      rvStay: 'Aufenthalt', rvRoom: 'Zimmer', rvGuests: 'Gäste', rvName: 'Name', rvCompany: 'Firma', rvAddress: 'Anschrift', rvMail: 'E-Mail', rvTel: 'Telefon', rvMsg: 'Mein Anliegen', rvConsent: 'Einverständnis',
+      none: '–', yes: 'erteilt',
+      guestsFmt: '{r} Zimmer · {a} Erwachsene · {k} Kinder',
+      okH: 'Ihre Anfrage ist bei uns angekommen.', okP: 'Vielen Dank, {name}. Wir melden uns so bald wie möglich bei Ihnen unter {mail}.',
+      failH: 'Das hat leider nicht geklappt.', failP: 'Ihre Anfrage konnte nicht übermittelt werden. Ihre Angaben sind noch da – versuchen Sie es erneut oder senden Sie sie per E-Mail.',
+      setupH: 'Online-Versand ist noch nicht eingerichtet.', setupP: 'Ihre Anfrage wurde nicht gesendet. Mit einem Klick öffnen Sie eine vorbereitete E-Mail an {mail} mit allen Angaben – oder Sie rufen uns an.',
+      mailBtn: 'Per E-Mail senden', retry: 'Erneut versuchen', backReview: 'Zurück zur Übersicht', newReq: 'Neue Anfrage',
+      announce: 'Schritt {a} von {b}: {q}',
+      mapTitle: 'Google Maps: Best Western Premier Hotel Rebstock, Neubaustraße 7, Würzburg'
+    },
+    en: {
+      next: 'Continue', send: 'Send enquiry', sending: 'Sending …',
+      stepOf: 'Step {a} of {b}', left1: '1 step remaining', leftN: '{n} steps remaining', last: 'final step',
+      nights1: '1 night', nightsN: '{n} nights',
+      reqArr: 'Please choose your arrival date.', reqDep: 'Please choose your departure date.',
+      pastArr: 'The arrival date is in the past.', depAfter: 'Departure must be after arrival.',
+      reqRoom: 'Please choose a category – or “Please advise me”.',
+      reqAdults: 'Please enter at least one adult.', badNum: 'Please enter a valid number.',
+      reqAges: 'Please give each child’s age.', child: 'Child {n}', years: '{n} years', year1: '1 year', under1: 'under 1 year', choose: 'Please choose',
+      reqFirst: 'Please enter your first name.', reqLast: 'Please enter your last name.',
+      reqMail: 'Please enter your email address.', badMail: 'This email address looks incomplete, e.g. name@example.com.',
+      badTel: 'Please use digits, spaces and + ( ) - / only.',
+      reqConsent: 'We need your consent to handle your request.',
+      change: 'Edit',
+      rvStay: 'Stay', rvRoom: 'Room', rvGuests: 'Guests', rvName: 'Name', rvCompany: 'Company', rvAddress: 'Address', rvMail: 'Email', rvTel: 'Phone', rvMsg: 'My request', rvConsent: 'Consent',
+      none: '–', yes: 'given',
+      guestsFmt: '{r} room(s) · {a} adult(s) · {k} child(ren)',
+      okH: 'We have received your enquiry.', okP: 'Thank you, {name}. We will reply to {mail} as soon as possible.',
+      failH: 'Something went wrong.', failP: 'Your enquiry could not be sent. Your details are still here – try again or send them by email.',
+      setupH: 'Online sending is not set up yet.', setupP: 'Your enquiry has not been sent. One click opens a prepared email to {mail} with all your details – or give us a call.',
+      mailBtn: 'Send by email', retry: 'Try again', backReview: 'Back to summary', newReq: 'New enquiry',
+      announce: 'Step {a} of {b}: {q}',
+      mapTitle: 'Google Maps: Best Western Premier Hotel Rebstock, Neubaustraße 7, Würzburg'
+    }
+  };
+  function lang() { return root.lang === 'en' ? 'en' : 'de'; }
+  function t(k, v) {
+    var s = (T[lang()][k] || T.de[k] || k);
+    if (v) for (var x in v) s = s.split('{' + x + '}').join(v[x]);
+    return s;
+  }
+  var langListeners = [];
+  function setLang(l, persist) {
+    root.lang = l;
+    if (persist) store.set('rebstock.lang', l);
+    $$('[data-set-lang]').forEach(function (a) { a.setAttribute('aria-pressed', String(a.getAttribute('data-set-lang') === l)); });
+    [['alt', 'data-alt-en'], ['aria-label', 'data-aria-en']].forEach(function (pair) {
+      $$('[' + pair[1] + ']').forEach(function (el) {
+        if (!el.hasAttribute('data-' + pair[0] + '-de')) el.setAttribute('data-' + pair[0] + '-de', el.getAttribute(pair[0]) || '');
+        el.setAttribute(pair[0], el.getAttribute(l === 'en' ? pair[1] : 'data-' + pair[0] + '-de'));
+      });
+    });
+    $$('option[data-en]').forEach(function (o) {
+      if (!o.hasAttribute('data-de')) o.setAttribute('data-de', o.textContent);
+      o.textContent = o.getAttribute(l === 'en' ? 'data-en' : 'data-de');
+    });
+    document.title = l === 'en' ? 'Hotel Rebstock Würzburg – Best Western Premier' : 'Hotel Rebstock Würzburg – Best Western Premier';
+    langListeners.forEach(function (fn) { fn(l); });
+  }
+  function initLang() {
+    var q = /[?&]lang=(de|en)\b/.exec(location.search);
+    setLang(q ? q[1] : lang(), !!q);
+    $$('[data-set-lang]').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); setLang(a.getAttribute('data-set-lang'), true); });
+    });
+  }
+
+  /* ======================================================= SCROLL ENGINE
+     A tiny ScrollTrigger: every scroll-linked animation registers start/end
+     scroll positions computed from the element's real document position
+     (getBoundingClientRect().top + pageYOffset, with its own transform reset
+     while measuring). Progress p = (scrollY − start) / (end − start), clamped.
+     Because p is a pure function of scroll position, fast scrolling, reverse
+     scrolling, reloads and deep links all resolve to the same state.
+     ===================================================================== */
+  var triggers = [];
+  var ticking = false;
+  function addTrigger(t) { t.p = -1; triggers.push(t); return t; }
+  function measureAll() {
+    var vh = window.innerHeight;
+    triggers.forEach(function (t) { if (t.reset) t.reset(); });
+    triggers.forEach(function (t) { t.measure(vh); if (t.end <= t.start) t.end = t.start + 1; t.p = -1; });
+    updateAll();
+    if (debug) drawDebug();
+  }
+  function updateAll() {
+    var y = window.pageYOffset;
+    for (var i = 0; i < triggers.length; i++) {
+      var t = triggers[i];
+      var p = clamp((y - t.start) / (t.end - t.start), 0, 1);
+      if (p !== t.p) { t.p = p; t.update(p); }
+    }
+    headerState(y);
+  }
+  function requestTick() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { ticking = false; updateAll(); });
+  }
+  var measureQueued = false;
+  function requestMeasure() {
+    if (measureQueued) return;
+    measureQueued = true;
+    requestAnimationFrame(function () { measureQueued = false; measureAll(); });
+  }
+  // Inspection hook for QA: window.__rebstockTriggers() lists every trigger.
+  window.__rebstockTriggers = function () {
+    return triggers.map(function (t) {
+      return { name: t.name, start: Math.round(t.start), end: Math.round(t.end), elementDocTop: Math.round(t.elTop), elementDocBottom: Math.round(t.elBottom), rule: t.rule, progress: +t.p.toFixed(3) };
+    });
+  };
+  function drawDebug() {
+    $$('.dbg-line').forEach(function (n) { n.remove(); });
+    console.table(window.__rebstockTriggers());
+    triggers.forEach(function (t) {
+      [['start', t.start, '#2e7d4f'], ['end', t.end, '#a3322a']].forEach(function (d) {
+        var line = document.createElement('div');
+        line.className = 'dbg-line'; line.style.top = (d[1] + window.innerHeight) + 'px'; line.style.color = d[2];
+        line.innerHTML = '<span>' + t.name + ' ' + d[0] + ' (viewport bottom)</span>';
+        document.body.appendChild(line);
+      });
+    });
+  }
+
+  /* -------------------------------------------------------------- header */
+  var header = $('#siteHeader');
+  var hero = $('.hero');
+  var heroBottom = 0;
+  function headerState(y) {
+    var over = !document.body.classList.contains('has-view') && y < heroBottom - header.offsetHeight;
+    if (over !== header.classList.contains('is-over')) header.classList.toggle('is-over', over);
+  }
+  addTrigger({
+    name: 'header', rule: 'transparent while the hero is behind it',
+    measure: function () { this.elTop = docTop(hero); this.elBottom = heroBottom = this.elTop + hero.offsetHeight; this.start = 0; this.end = heroBottom; },
+    update: function () {}
+  });
+
+  /* ================================================================ HERO */
+  var Hero = (function () {
+    var section = hero, stage = $('#heroStage'), canvas = $('#heroCanvas'), bg = $('#heroBg');
+    var ctx, bgCtx, frames = [], loaded = [], total = SITE_CONFIG.heroFrameCount;
+    var stepN = 1, live = false, settled = false, current = -1, lastSizeKey = '';
+    var moments = $$('.moment', section).map(function (m) { return { el: m, lines: $$('[data-line]', m) }; });
+    var chapters = $$('.hero__progress li', section);
+    var hint = $('.hero__hint', section);
+    var progress = 0;
+    var desktopMQ = window.matchMedia('(min-width: 900px) and (min-aspect-ratio: 1/1)');
+
+    function lineValue(cfg, p, k, n) {
+      function win(range) {
+        var a = range[0], b = range[1], s = n > 1 ? (b - a) * 0.5 / (n - 1) : 0, d = n > 1 ? (b - a) * 0.5 : (b - a);
+        return clamp((p - (a + k * s)) / d, 0, 1);
+      }
+      var vin = cfg.inn ? win(cfg.inn) : 1;
+      var vout = cfg.out ? 1 - win(cfg.out) : 1;
+      return smooth(Math.min(vin, vout));
+    }
+    function renderMoments(p) {
+      moments.forEach(function (m, i) {
+        var max = 0, n = m.lines.length;
+        m.lines.forEach(function (line, k) {
+          var v = (i === 0 && !settled) ? 0 : lineValue(HERO_TIMELINE[i], p, k, n);
+          if (v > max) max = v;
+          line.style.opacity = v.toFixed(3);
+          line.style.transform = 'translate3d(0,' + ((1 - v) * 16).toFixed(2) + 'px,0)';
+        });
+        m.el.style.setProperty('--scrim', max.toFixed(3));
+        m.el.classList.toggle('is-on', max > 0.02);
+      });
+      var ch = p < 0.36 ? 0 : p < 0.785 ? 1 : 2;
+      chapters.forEach(function (c, i) { c.classList.toggle('is-on', i === ch); });
+      if (hint) hint.style.opacity = (1 - clamp(p / 0.05, 0, 1)).toFixed(3);
+    }
+
+    function nearestLoaded(n) {
+      if (loaded[n]) return n;
+      for (var d = 1; d < total; d++) {
+        if (n - d >= 1 && loaded[n - d]) return n - d;
+        if (n + d <= total && loaded[n + d]) return n + d;
+      }
+      return 0;
+    }
+    function sizeCanvases() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+      var key = w + 'x' + h + (desktopMQ.matches ? 'd' : 'm');
+      if (key === lastSizeKey) return;
+      lastSizeKey = key;
+      canvas.width = w; canvas.height = h;
+      bg.width = 64; bg.height = Math.max(1, Math.round(64 * bg.clientHeight / Math.max(1, bg.clientWidth)));
+      current = -1;
+    }
+    function drawCover(c, cx, img) {
+      var cw = c.width, ch = c.height, iw = img.naturalWidth, ih = img.naturalHeight;
+      var s = Math.max(cw / iw, ch / ih), dw = iw * s, dh = ih * s;
+      cx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    }
+    function draw(force) {
+      var target = 1 + Math.round(progress * (total - 1));
+      var n = nearestLoaded(target);
+      if (!n || (n === current && !force)) return;
+      current = n;
+      var img = frames[n];
+      canvas.setAttribute('data-frame', n); // QA: which frame is on screen
+      drawCover(canvas, ctx, img);
+      if (desktopMQ.matches) drawCover(bg, bgCtx, img);
+    }
+    function setProgress(p) {
+      progress = p;
+      if (!live) return;
+      draw(false);
+      renderMoments(p);
+    }
+
+    /* ---- frame loading with real progress ---- */
+    function load(n) {
+      return new Promise(function (resolve) {
+        var img = new Image();
+        img.decoding = 'async';
+        var done = function (ok) {
+          if (ok) { frames[n] = img; loaded[n] = true; if (live && Math.abs(n - (1 + Math.round(progress * (total - 1)))) < Math.abs(current - (1 + Math.round(progress * (total - 1))))) draw(false); }
+          resolve(ok);
+        };
+        img.onload = function () {
+          if (img.decode) img.decode().then(function () { done(true); }, function () { done(true); });
+          else done(true);
+        };
+        img.onerror = function () { done(false); };
+        img.src = SITE_CONFIG.heroFrameSrc(n);
+      });
+    }
+    function pool(list, concurrency, onEach) {
+      var i = 0;
+      return new Promise(function (resolve) {
+        var active = 0;
+        if (!list.length) return resolve();
+        function next() {
+          if (i >= list.length && active === 0) return resolve();
+          while (active < concurrency && i < list.length) {
+            active++;
+            load(list[i++]).then(function (ok) { active--; onEach(ok); next(); });
+          }
+        }
+        next();
+      });
+    }
+
+    var loader = $('#loader'), bar = $('#loaderBar'), pct = $('#loaderPct');
+    function setLoader(f) { bar.style.setProperty('--p', f.toFixed(3)); pct.textContent = Math.round(f * 100) + ' %'; }
+    function finishLoader() {
+      if (loader.classList.contains('is-done')) return;
+      loader.classList.add('is-done');
+      setTimeout(function () { loader.hidden = true; }, 800);
+      // "Settle" on the assembled first frame: moment 1 eases in once, then
+      // hands control back to scroll.
+      settled = true;
+      moments[0].el.classList.add('is-settling');
+      renderMoments(progress);
+      setTimeout(function () { moments[0].el.classList.remove('is-settling'); }, 1700);
+    }
+    function fallbackToStatic() {
+      live = false;
+      section.classList.remove('hero--live');
+      moments.forEach(function (m) { m.el.style.removeProperty('--scrim'); m.lines.forEach(function (l) { l.style.opacity = ''; l.style.transform = ''; }); });
+      finishLoader();
+      requestMeasure();
+    }
+
+    function start() {
+      if (reducedMotion || !canvas.getContext) return false; // static chapters remain
+      ctx = canvas.getContext('2d'); bgCtx = bg.getContext('2d');
+      if (!ctx) return false;
+      var small = window.matchMedia('(max-width: 767px), (pointer: coarse) and (max-width: 1024px)').matches;
+      stepN = small ? 2 : 1; // phones: every 2nd frame – half the decode/memory cost, still 150 frames
+      var all = [];
+      for (var n = 1; n <= total; n += stepN) all.push(n);
+      if (all[all.length - 1] !== total) all.push(total);
+      // Frames needed for an understandable first scroll: an even spread through
+      // the whole sequence, plus the three narrative anchor frames.
+      var required = all.filter(function (n, i) { return i % Math.round(10 / stepN) === 0; });
+      [1, 165, 278, total].forEach(function (n) { var m = nearestIn(all, n); if (required.indexOf(m) < 0) required.push(m); });
+      required.sort(function (a, b) { return a - b; });
+      var rest = all.filter(function (n) { return required.indexOf(n) < 0; });
+
+      live = true;
+      section.classList.add('hero--live');
+      loader.hidden = false;
+      renderMoments(0);
+      sizeCanvases();
+
+      var settledCount = 0, okCount = 0, req = required.length;
+      var safety = setTimeout(function () { if (!okCount) fallbackToStatic(); else finishLoader(); }, 15000);
+      // First frame alone, so something meaningful paints as early as possible.
+      load(1).then(function (ok) {
+        settledCount++; if (ok) okCount++;
+        setLoader(settledCount / req);
+        draw(true);
+        return pool(required.filter(function (n) { return n !== 1; }), 6, function (ok2) {
+          settledCount++; if (ok2) okCount++;
+          setLoader(settledCount / req);
+        });
+      }).then(function () {
+        clearTimeout(safety);
+        if (!okCount) { fallbackToStatic(); return; }
+        setLoader(1);
+        draw(true);
+        finishLoader();
+        // Remaining frames stream in the background; drawing always uses the
+        // nearest decoded frame, so scrolling never waits on the network.
+        return pool(rest, 4, function () {});
+      });
+      return true;
+    }
+    function nearestIn(list, n) { var best = list[0]; list.forEach(function (x) { if (Math.abs(x - n) < Math.abs(best - n)) best = x; }); return best; }
+
+    // Keyboard users: focusing a link inside a passage that is not on screen
+    // scrolls to the middle of that passage's interval.
+    moments.forEach(function (m, i) {
+      m.el.addEventListener('focusin', function () {
+        if (!live || m.el.classList.contains('is-on')) return;
+        var cfg = HERO_TIMELINE[i];
+        var target = cfg.inn ? (cfg.inn[1] + (cfg.out ? cfg.out[0] : 1)) / 2 : 0;
+        window.scrollTo(0, heroTrigger.start + target * (heroTrigger.end - heroTrigger.start));
+      });
+    });
+
+    var heroTrigger = addTrigger({
+      name: 'hero-sequence', rule: 'start = hero top at viewport top; end = hero bottom at viewport bottom',
+      measure: function (vh) {
+        this.elTop = docTop(section); this.elBottom = this.elTop + section.offsetHeight;
+        this.start = this.elTop; this.end = this.elBottom - vh;
+        if (live) { sizeCanvases(); draw(true); }
+      },
+      update: function (p) { setProgress(p); }
+    });
+    return { start: start, isLive: function () { return live; }, renderMoments: function () { renderMoments(progress); } };
+  })();
+
+  /* ============================================================== OFFERS
+     Each card drives in from its own side. Trigger window:
+       start: card slot top reaches the bottom of the viewport
+       end:   card slot centre reaches 55% of the viewport height
+     The slot wrapper is never transformed, so measurements stay true. */
+  function initOffers() {
+    $$('.offer-slot').forEach(function (slot, i) {
+      var card = $('.offer', slot), img = $('.offer__img', slot), wm = $('.offer__wm', slot);
+      var dir = slot.getAttribute('data-offer') === 'left' ? -1 : 1;
+      addTrigger({
+        name: 'offer-' + (i + 1) + '-' + (dir < 0 ? 'from-left' : 'from-right'), rule: 'start = slot top at viewport bottom; end = slot centre at 55% viewport',
+        measure: function (vh) {
+          this.elTop = docTop(slot); this.elBottom = this.elTop + slot.offsetHeight;
+          this.start = this.elTop - vh;
+          this.end = this.elTop + slot.offsetHeight / 2 - vh * 0.55;
+        },
+        update: function (p) {
+          var e = easeOut(p), r = 1 - e;
+          card.style.opacity = clamp(p * 2.2, 0, 1).toFixed(3);
+          card.style.transform = 'translate3d(' + (dir * r * 70).toFixed(2) + '%,0,0)';
+          img.style.transform = 'translate3d(' + (dir * r * 45).toFixed(2) + '%,' + (r * 30).toFixed(1) + 'px,0) rotate(' + (dir * r * -7).toFixed(2) + 'deg)';
+          wm.style.transform = 'translate3d(' + (-dir * r * 25).toFixed(2) + '%,0,0) rotate(' + (dir * r * 12).toFixed(1) + 'deg)';
+        }
+      });
+    });
+  }
+
+  /* ============================================================= REVEALS
+     start: element top at 95% of the viewport (just visible)
+     end:   element top at 72% of the viewport */
+  function initReveals() {
+    $$('[data-reveal]').forEach(function (el, i) {
+      addTrigger({
+        name: 'reveal-' + (el.id || el.className.split(' ')[0] || el.tagName.toLowerCase()) + '-' + i,
+        rule: 'start = top at 95% viewport; end = top at 72% viewport',
+        reset: function () { el.style.transform = 'none'; },
+        measure: function (vh) {
+          if (!el.offsetParent && getComputedStyle(el).position !== 'fixed') { this.elTop = this.elBottom = 0; this.start = -2; this.end = -1; return; }
+          this.elTop = docTop(el); this.elBottom = this.elTop + el.offsetHeight;
+          this.start = this.elTop - vh * 0.95; this.end = this.elTop - vh * 0.72;
+        },
+        update: function (p) {
+          var e = easeOut(p);
+          el.style.opacity = e.toFixed(3);
+          el.style.transform = 'translate3d(0,' + ((1 - e) * 26).toFixed(2) + 'px,0)';
+        }
+      });
+    });
+  }
+
+  /* ============================================================= CONSENT */
+  var consentEl = $('#consent'), cMaps = $('#cMaps');
+  var consent = (function () { try { return JSON.parse(store.get('rebstock.consent') || 'null'); } catch (e) { return null; } })();
+  function saveConsent(maps) {
+    consent = { v: 1, necessary: true, maps: !!maps, at: new Date().toISOString() };
+    store.set('rebstock.consent', JSON.stringify(consent));
+    consentEl.classList.remove('is-open');
+    if (consent.maps) loadMap(); else unloadMap();
+  }
+  function openConsent(focus) {
+    cMaps.checked = !!(consent && consent.maps);
+    consentEl.classList.add('is-open');
+    if (focus) $('#consent-h').focus();
+  }
+  $$('[data-consent]', consentEl).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var k = b.getAttribute('data-consent');
+      saveConsent(k === 'all' ? true : k === 'save' ? cMaps.checked : false);
+    });
+  });
+  $$('[data-open-consent]').forEach(function (b) { b.addEventListener('click', function () { openConsent(true); }); });
+
+  /* ================================================================= MAP */
+  var mapBox = $('#map'), mapGate = $('#mapGate');
+  function loadMap() {
+    if ($('iframe', mapBox)) return;
+    var f = document.createElement('iframe');
+    f.src = SITE_CONFIG.mapsEmbedUrl;
+    f.title = t('mapTitle');
+    f.loading = 'lazy';
+    f.referrerPolicy = 'no-referrer-when-downgrade';
+    f.setAttribute('allowfullscreen', '');
+    mapBox.appendChild(f);
+    mapGate.hidden = true;
+  }
+  function unloadMap() { var f = $('iframe', mapBox); if (f) f.remove(); mapGate.hidden = false; }
+  $('#mapLoad').addEventListener('click', function () { saveConsent(true); });
+
+  /* =============================================================== VIEWS */
+  var VIEWS = ['impressum', 'datenschutz', 'agb'];
+  var openView = null;
+  function route() {
+    var id = location.hash.slice(1);
+    var isView = VIEWS.indexOf(id) >= 0;
+    $$('.view').forEach(function (v) { v.classList.toggle('is-open', v.id === id); });
+    document.body.classList.toggle('has-view', isView);
+    if (isView) {
+      openView = id;
+      window.scrollTo(0, 0);
+      var h = $('#' + id + ' h1'); h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true });
+    } else if (openView) {
+      openView = null;
+      measureAll();
+      var target = id && document.getElementById(id);
+      if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+    }
+    requestMeasure();
+  }
+
+  /* ======================================================= CONFIG LINKS */
+  $$('[data-config-href]').forEach(function (a) {
+    var url = SITE_CONFIG[a.getAttribute('data-config-href')];
+    if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
+  });
+
+  /* ============================================================ PLANNER */
+  var Planner = (function () {
+    var form = $('#planForm');
+    if (!form) return null;
+    var fs = {}; $$('.step', form).forEach(function (s) { fs[s.getAttribute('data-step')] = s; });
+    var el = function (id) { return document.getElementById(id); };
+    var kids = el('f-kids'), adults = el('f-adults'), rooms = el('f-rooms');
+    var ORDER = ['dates', 'room', 'guests', 'ages', 'name', 'company', 'address', 'email', 'phone', 'message', 'consent', 'review'];
+    var COND = { ages: function () { return (parseInt(kids.value, 10) || 0) > 0; } };
+    var cur = 'dates', fromReview = false, sent = false, busy = false;
+
+    // Honeypot against bots (never shown, never filled by people)
+    var hp = document.createElement('input');
+    hp.type = 'text'; hp.name = 'website'; hp.tabIndex = -1; hp.autocomplete = 'off';
+    hp.setAttribute('aria-hidden', 'true'); hp.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0';
+    form.appendChild(hp);
+
+    function active() { return ORDER.filter(function (id) { return !COND[id] || COND[id](); }); }
+    function today() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
+    function fmtDate(v) { if (!v) return ''; var p = v.split('-'); return p[2] + '.' + p[1] + '.' + p[0]; }
+    function nights() {
+      var a = el('f-arr').value, b = el('f-dep').value;
+      if (!a || !b) return 0;
+      return Math.round((Date.parse(b + 'T12:00:00') - Date.parse(a + 'T12:00:00')) / 864e5);
+    }
+    function setErr(input, errEl, msg) {
+      if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (errEl) errEl.textContent = msg || '';
+      return !msg;
+    }
+    function clearErrors() {
+      $$('.err, .step-error', form).forEach(function (e) { e.textContent = ''; });
+      $$('[aria-invalid]', form).forEach(function (i) { i.setAttribute('aria-invalid', 'false'); });
+    }
+
+    var V = {
+      dates: function (show) {
+        var a = el('f-arr'), b = el('f-dep'), ok = true, m;
+        m = !a.value ? t('reqArr') : a.value < today() ? t('pastArr') : '';
+        if (show) setErr(a, el('e-arr'), m); ok = ok && !m;
+        m = !b.value ? t('reqDep') : (a.value && b.value <= a.value) ? t('depAfter') : '';
+        if (show) setErr(b, el('e-dep'), m); ok = ok && !m;
+        return ok;
+      },
+      room: function (show) { var ok = !!$('input[name="zimmer"]:checked', form); if (show) el('e-room').textContent = ok ? '' : t('reqRoom'); return ok; },
+      guests: function (show) {
+        var vals = [rooms, adults, kids].map(function (i) { return i.value === '' ? NaN : Number(i.value); });
+        var m = vals.some(function (v, i) { return !isFinite(v) || v % 1 || v < [1, 1, 0][i]; }) ? (vals[1] < 1 ? t('reqAdults') : t('badNum')) : '';
+        if (show) el('e-guests').textContent = m; return !m;
+      },
+      ages: function (show) {
+        var sels = $$('select', el('agesWrap')), ok = sels.every(function (s) { return s.value !== ''; });
+        if (show) { el('e-ages').textContent = ok ? '' : t('reqAges'); sels.forEach(function (s) { s.setAttribute('aria-invalid', s.value === '' ? 'true' : 'false'); }); }
+        return ok;
+      },
+      name: function (show) {
+        var a = el('f-vor'), b = el('f-nach');
+        var ma = a.value.trim() ? '' : t('reqFirst'), mb = b.value.trim() ? '' : t('reqLast');
+        if (show) { setErr(a, el('e-vor'), ma); setErr(b, el('e-nach'), mb); }
+        return !ma && !mb;
+      },
+      email: function (show) {
+        var i = el('f-mail'), v = i.value.trim();
+        var m = !v ? t('reqMail') : /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : t('badMail');
+        if (show) setErr(i, el('e-mail'), m); return !m;
+      },
+      phone: function (show) {
+        var i = el('f-tel'), v = i.value.trim();
+        var m = !v || (/^\+?[0-9\s()\/.\-]{5,25}$/.test(v) && v.replace(/\D/g, '').length >= 5) ? '' : t('badTel');
+        if (show) setErr(i, el('e-tel'), m); return !m;
+      },
+      consent: function (show) { var c = el('f-consent'); var ok = c.checked; if (show) setErr(c, el('e-consent'), ok ? '' : t('reqConsent')); return ok; }
+    };
+    function valid(id, show) { return V[id] ? V[id](show) : true; }
+
+    /* ---- children's ages (conditional step content) ---- */
+    function buildAges() {
+      var n = clamp(parseInt(kids.value, 10) || 0, 0, 10), wrap = el('agesWrap');
+      var prev = $$('select', wrap).map(function (s) { return s.value; });
+      wrap.innerHTML = '';
+      for (var i = 0; i < n; i++) {
+        var f = document.createElement('div'); f.className = 'field';
+        var id = 'f-age-' + i;
+        var opts = '<option value="">' + t('choose') + '</option>';
+        for (var y = 0; y <= 17; y++) opts += '<option value="' + y + '">' + (y === 0 ? t('under1') : y === 1 ? t('year1') : t('years', { n: y })) + '</option>';
+        f.innerHTML = '<label for="' + id + '">' + t('child', { n: i + 1 }) + '</label><select id="' + id + '" name="kind_' + (i + 1) + '_alter" aria-describedby="e-ages">' + opts + '</select>';
+        wrap.appendChild(f);
+        if (prev[i] != null) $('select', f).value = prev[i];
+      }
+    }
+
+    /* ---- progress + navigation ---- */
+    function renderProgress() {
+      var list = active(), idx = list.indexOf(cur), total = list.length;
+      var onResult = cur === 'result';
+      if (onResult) idx = total - 1;
+      el('stepCount').innerHTML = '<strong>' + t('stepOf', { a: idx + 1, b: total }) + '</strong>';
+      var left = total - idx - 1;
+      el('stepLeft').textContent = left === 0 ? t('last') : left === 1 ? t('left1') : t('leftN', { n: left });
+      var dots = el('stepDots');
+      dots.innerHTML = list.map(function (id, i) {
+        var cls = (i < idx || (onResult && sent)) ? 'is-done' : i === idx ? 'is-current' : '';
+        return '<li class="' + cls + '"><span class="dot"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg></span>' + (i < total - 1 ? '<span class="bar"></span>' : '') + '</li>';
+      }).join('');
+      el('btnBack').hidden = idx === 0 || onResult;
+      el('planNav').hidden = onResult;
+      el('btnNextLabel').textContent = cur === 'review' ? t('send') : t('next');
+    }
+    function show(id, focus) {
+      cur = id;
+      $$('.step', form).forEach(function (s) { s.classList.toggle('is-active', s.getAttribute('data-step') === id); });
+      if (id === 'ages') buildAgesKeep();
+      if (id === 'review') renderReview();
+      renderProgress();
+      saveDraft();
+      if (focus) {
+        var h = id === 'result' ? $('#result h3') : $('legend h3', fs[id]);
+        if (h) h.focus({ preventScroll: true });
+        var top = docTop(form.parentNode) - (header.offsetHeight + 16);
+        if (window.pageYOffset > top + 40 || window.pageYOffset < top - window.innerHeight * 0.5) window.scrollTo(0, top);
+        var list = active();
+        el('stepLive').textContent = id === 'result' ? '' : t('announce', { a: list.indexOf(id) + 1, b: list.length, q: h ? h.textContent.trim() : '' });
+      }
+    }
+    var agesBuiltFor = -1;
+    function buildAgesKeep() { var n = parseInt(kids.value, 10) || 0; if (n !== agesBuiltFor) { buildAges(); agesBuiltFor = n; } }
+    function next() {
+      if (!valid(cur, true)) {
+        var bad = $('[aria-invalid="true"]', fs[cur]) || $('input, select, textarea', fs[cur]);
+        if (bad) bad.focus();
+        return;
+      }
+      var list = active(), i = list.indexOf(cur);
+      if (fromReview) {
+        for (var j = i + 1; j < list.length; j++) {
+          if (list[j] === 'ages') buildAgesKeep();
+          if (list[j] === 'review' || !valid(list[j], false)) { if (list[j] === 'review') fromReview = false; show(list[j], true); return; }
+        }
+      }
+      show(list[i + 1], true);
+    }
+    function back() { var list = active(), i = list.indexOf(cur); if (i > 0) { clearErrors(); show(list[i - 1], true); } }
+
+    /* ---- review & message ---- */
+    function data() {
+      var g = function (n) { var i = form.elements[n]; return i ? String(i.value || '').trim() : ''; };
+      var room = $('input[name="zimmer"]:checked', form);
+      var ages = $$('select', el('agesWrap')).map(function (s) { return s.value; });
+      return {
+        anreise: g('anreise'), abreise: g('abreise'), naechte: nights(), zimmer: room ? room.value : '',
+        zimmerLabel: room ? roomLabel(room) : '',
+        zimmeranzahl: g('zimmeranzahl'), erwachsene: g('erwachsene'), kinder: g('kinder'),
+        kinderalter: (parseInt(g('kinder'), 10) || 0) > 0 ? ages.join(', ') : '',
+        anrede: g('anrede'), vorname: g('vorname'), nachname: g('nachname'), firma: g('firma'),
+        strasse: g('strasse'), plz_ort: g('plz_ort'), email: g('email'), telefon: g('telefon'),
+        nachricht: g('nachricht'), einverstaendnis: el('f-consent').checked ? 'ja' : 'nein'
+      };
+    }
+    function roomLabel(input) {
+      var span = input.nextElementSibling, own = span.querySelector('[lang="' + lang() + '"]');
+      var name = (own || span.firstElementChild || span).textContent.trim(), size = span.querySelector('small');
+      return size ? name + ' (' + size.textContent.trim() + ')' : name;
+    }
+    // The hotel always receives the request in German.
+    function composeAnliegen(d) {
+      var lines = [
+        'Anfrage über „Aufenthalt planen“ auf der Website',
+        'Anreise: ' + fmtDate(d.anreise),
+        'Abreise: ' + fmtDate(d.abreise) + ' (' + d.naechte + (d.naechte === 1 ? ' Nacht' : ' Nächte') + ')',
+        'Zimmerkategorie: ' + d.zimmer,
+        'Zimmer: ' + d.zimmeranzahl + ' · Erwachsene: ' + d.erwachsene + ' · Kinder: ' + d.kinder + (d.kinderalter ? ' (Alter: ' + d.kinderalter + ')' : ''),
+        'Sprache des Gastes: ' + (lang() === 'en' ? 'Englisch' : 'Deutsch')
+      ];
+      if (d.nachricht) lines.push('', 'Nachricht des Gastes:', d.nachricht);
+      return lines.join('\n');
+    }
+    function renderReview() {
+      var d = data(), n = d.naechte;
+      var stay = fmtDate(d.anreise) + ' – ' + fmtDate(d.abreise) + ' · ' + (n === 1 ? t('nights1') : t('nightsN', { n: n }));
+      var guests = t('guestsFmt', { r: d.zimmeranzahl, a: d.erwachsene, k: d.kinder }) + (d.kinderalter ? ' (' + d.kinderalter + ')' : '');
+      var rows = [
+        ['rvStay', stay, 'dates'], ['rvRoom', d.zimmerLabel, 'room'], ['rvGuests', guests, 'guests'],
+        ['rvName', [d.anrede, d.vorname, d.nachname].filter(Boolean).join(' '), 'name'],
+        ['rvCompany', d.firma, 'company'], ['rvAddress', [d.strasse, d.plz_ort].filter(Boolean).join('\n'), 'address'],
+        ['rvMail', d.email, 'email'], ['rvTel', d.telefon, 'phone'], ['rvMsg', d.nachricht, 'message'],
+        ['rvConsent', d.einverstaendnis === 'ja' ? t('yes') : '', 'consent']
+      ];
+      var ul = el('reviewList'); ul.innerHTML = '';
+      rows.forEach(function (r) {
+        var li = document.createElement('li');
+        var k = document.createElement('span'); k.className = 'k'; k.textContent = t(r[0]);
+        var v = document.createElement('span'); v.className = 'v'; v.textContent = r[1] || t('none');
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = t('change');
+        b.setAttribute('aria-label', t('change') + ': ' + t(r[0]));
+        b.addEventListener('click', function () { fromReview = true; show(r[2], true); });
+        li.appendChild(k); li.appendChild(v); li.appendChild(b); ul.appendChild(li);
+      });
+    }
+    function mailtoHref(d) {
+      var body = composeAnliegen(d) + '\n\n' + [
+        'Firma: ' + (d.firma || '–'), 'Anrede: ' + (d.anrede || '–'), 'Vorname: ' + d.vorname, 'Nachname: ' + d.nachname,
+        'Straße: ' + (d.strasse || '–'), 'PLZ/Ort: ' + (d.plz_ort || '–'), 'Telefon: ' + (d.telefon || '–'), 'E-Mail: ' + d.email,
+        'Einverständnis zur Kontaktaufnahme: ' + d.einverstaendnis
+      ].join('\n');
+      return 'mailto:' + SITE_CONFIG.enquiryMailFallback + '?subject=' + encodeURIComponent('Anfrage ' + fmtDate(d.anreise) + ' – ' + fmtDate(d.abreise) + ' · ' + d.vorname + ' ' + d.nachname) + '&body=' + encodeURIComponent(body);
+    }
+    function result(kind) {
+      var d = data(), box = el('result');
+      var icon = kind === 'ok' ? '<svg class="icon" style="width:28px;height:28px" aria-hidden="true"><use href="#i-check"/></svg>' : '<svg class="icon" style="width:28px;height:28px" aria-hidden="true"><use href="#i-alert"/></svg>';
+      var h = kind === 'ok' ? t('okH') : kind === 'fail' ? t('failH') : t('setupH');
+      var p = kind === 'ok' ? t('okP', { name: d.vorname, mail: d.email }) : kind === 'fail' ? t('failP') : t('setupP', { mail: SITE_CONFIG.enquiryMailFallback });
+      box.className = 'step result result--' + kind;
+      box.innerHTML = '<div class="result__icon">' + icon + '</div><h3 tabindex="-1"></h3><p></p><div class="row" style="display:flex;flex-wrap:wrap;gap:10px"></div>';
+      $('h3', box).textContent = h; $('p', box).textContent = p;
+      box.setAttribute('role', kind === 'ok' ? 'status' : 'alert');
+      var row = $('.row', box);
+      function btn(label, cls, fn, href) {
+        var b = document.createElement(href ? 'a' : 'button');
+        if (href) b.href = href; else b.type = 'button';
+        b.className = 'btn ' + cls; b.textContent = label;
+        if (fn) b.addEventListener('click', fn);
+        row.appendChild(b);
+      }
+      if (kind === 'ok') {
+        btn(t('newReq'), 'btn--quiet', function () { resetAll(); });
+      } else {
+        if (kind === 'fail') btn(t('retry'), '', function () { submit(); });
+        btn(t('mailBtn'), kind === 'fail' ? 'btn--quiet' : '', null, mailtoHref(d));
+        btn('++49 (0) 931-30930', 'btn--quiet', null, 'tel:+4993130930');
+        btn(t('backReview'), 'btn--quiet', function () { show('review', true); });
+      }
+      show('result', true);
+    }
+    function submit() {
+      if (busy) return;
+      if (!active().filter(function (id) { return V[id]; }).every(function (id) { return valid(id, false); })) {
+        var firstBad = active().filter(function (id) { return !valid(id, false); })[0];
+        show(firstBad, true); valid(firstBad, true); return;
+      }
+      if (hp.value) { result('fail'); return; }
+      if (!SITE_CONFIG.enquiryEndpoint) { result('setup'); return; }
+      busy = true;
+      var nb = el('btnNext'); nb.disabled = true; el('btnNextLabel').textContent = t('sending');
+      var d = data(), fd = new FormData();
+      Object.keys(d).forEach(function (k) { if (k !== 'nachricht') fd.append(k, d[k]); });
+      fd.append('anliegen', composeAnliegen(d));
+      fd.append('sprache', lang());
+      fd.append('_subject', 'Anfrage ' + fmtDate(d.anreise) + ' – ' + fmtDate(d.abreise) + ' · ' + d.vorname + ' ' + d.nachname);
+      var ctrl = window.AbortController ? new AbortController() : null;
+      var to = setTimeout(function () { if (ctrl) ctrl.abort(); }, 20000);
+      fetch(SITE_CONFIG.enquiryEndpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' }, signal: ctrl ? ctrl.signal : undefined })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); sent = true; store.del('rebstock.plan', window.sessionStorage); result('ok'); })
+        .catch(function () { result('fail'); })
+        .then(function () { clearTimeout(to); busy = false; nb.disabled = false; renderProgress(); });
+    }
+    function resetAll() {
+      form.reset(); sent = false; fromReview = false; agesBuiltFor = -1; el('agesWrap').innerHTML = '';
+      store.del('rebstock.plan', window.sessionStorage); updateNights(); show('dates', true);
+    }
+
+    /* ---- draft persistence (this browser tab only) ---- */
+    var draftTimer;
+    function saveDraft() {
+      clearTimeout(draftTimer);
+      draftTimer = setTimeout(function () {
+        if (sent) return;
+        var o = { step: cur === 'result' ? 'review' : cur, v: {} };
+        $$('input, select, textarea', form).forEach(function (i) {
+          if (!i.name || i === hp) return;
+          if (i.type === 'radio') { if (i.checked) o.v[i.name] = i.value; }
+          else if (i.type === 'checkbox') o.v[i.name] = i.checked;
+          else o.v[i.name] = i.value;
+        });
+        store.set('rebstock.plan', JSON.stringify(o), window.sessionStorage);
+      }, 250);
+    }
+    function restoreDraft() {
+      var o; try { o = JSON.parse(store.get('rebstock.plan', window.sessionStorage) || 'null'); } catch (e) { o = null; }
+      if (!o || !o.v) return 'dates';
+      var apply = function () {
+        Object.keys(o.v).forEach(function (n) {
+          $$('[name="' + n + '"]', form).forEach(function (i) {
+            if (i.type === 'radio') i.checked = i.value === o.v[n];
+            else if (i.type === 'checkbox') i.checked = !!o.v[n];
+            else i.value = o.v[n];
+          });
+        });
+      };
+      apply(); buildAges(); agesBuiltFor = parseInt(kids.value, 10) || 0; apply();
+      return active().indexOf(o.step) >= 0 ? o.step : 'dates';
+    }
+
+    function updateNights() {
+      var n = nights();
+      el('nights').textContent = n > 0 ? (n === 1 ? t('nights1') : t('nightsN', { n: n })) : '';
+    }
+
+    /* ---- wiring ---- */
+    el('f-arr').min = today(); el('f-dep').min = today();
+    el('f-arr').addEventListener('change', function () {
+      if (this.value) { var d = new Date(this.value + 'T12:00:00'); d.setDate(d.getDate() + 1); el('f-dep').min = d.toISOString().slice(0, 10); }
+      updateNights();
+    });
+    el('f-dep').addEventListener('change', updateNights);
+    form.addEventListener('submit', function (e) { e.preventDefault(); if (cur === 'review') submit(); else next(); });
+    el('btnBack').addEventListener('click', back);
+    form.addEventListener('input', function (e) {
+      var i = e.target;
+      if (i.getAttribute('aria-invalid') === 'true') valid(cur, true);
+      if (i === kids) { agesBuiltFor = -1; renderProgress(); }
+      saveDraft();
+    });
+    form.addEventListener('change', function (e) { if (e.target.name === 'zimmer') el('e-room').textContent = ''; saveDraft(); });
+    $$('[data-inc], [data-dec]', form).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = el(b.getAttribute('data-inc') || b.getAttribute('data-dec'));
+        var v = (parseInt(i.value, 10) || 0) + (b.hasAttribute('data-inc') ? 1 : -1);
+        i.value = clamp(v, Number(i.min), Number(i.max));
+        i.dispatchEvent(new Event('input', { bubbles: true }));
+        syncSteppers();
+      });
+    });
+    function syncSteppers() {
+      $$('.stepper', form).forEach(function (s) {
+        var i = $('input', s);
+        $('[data-dec]', s).disabled = Number(i.value) <= Number(i.min);
+        $('[data-inc]', s).disabled = Number(i.value) >= Number(i.max);
+      });
+    }
+    form.addEventListener('input', syncSteppers);
+
+    langListeners.push(function () {
+      clearErrors(); updateNights();
+      if ($$('select', el('agesWrap')).length) { buildAges(); }
+      if (cur === 'review') renderReview();
+      if (cur === 'result') { /* keep result in the language it was produced in until the next action */ }
+      renderProgress();
+      var f = $('iframe', mapBox); if (f) f.title = t('mapTitle');
+    });
+
+    var startStep = restoreDraft();
+    syncSteppers(); updateNights();
+    show(startStep, false);
+    return { show: show };
+  })();
+
+  /* ======================================================== MOBILE MENU */
+  var menu = $('.menu-toggle');
+  if (menu) {
+    $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { menu.open = false; }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.open) { menu.open = false; $('summary', menu).focus(); } });
+  }
+
+  /* =============================================================== BOOT */
+  initLang();
+  var heroLive = Hero.start();
+  if (!heroLive) { var l = $('#loader'); if (l) l.hidden = true; }
+  if (!reducedMotion) { initOffers(); initReveals(); }
+  if (consent && consent.maps) loadMap();
+  if (!consent) openConsent(false);
+
+  window.addEventListener('scroll', requestTick, { passive: true });
+  var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(measureAll, 120); });
+  window.addEventListener('orientationchange', function () { setTimeout(measureAll, 300); });
+  window.addEventListener('load', measureAll);
+  window.addEventListener('hashchange', route);
+  if (window.ResizeObserver) new ResizeObserver(requestMeasure).observe($('#home'));
+  measureAll();
+  if (VIEWS.indexOf(location.hash.slice(1)) >= 0) route();
+})();
+</script>
+</body>
+</html>
